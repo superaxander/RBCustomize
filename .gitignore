@@ -1,0 +1,11 @@
+build
+out
+*~
+*.class
+.idea
+.gradle
+run
+doc
+gamedata
+rockbottom
+*.launch

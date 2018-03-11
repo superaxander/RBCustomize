@@ -1,0 +1,8 @@
+{
+  "script.": {
+    "internalScript": {
+      "path": "/scripts/internalScript.lua",
+      "hookType": "init"
+    }
+  }
+}
