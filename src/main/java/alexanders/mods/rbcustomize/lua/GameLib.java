@@ -7,7 +7,7 @@ import org.luaj.vm2.Varargs;
 import org.luaj.vm2.lib.TwoArgFunction;
 
 public class GameLib extends TwoArgFunction {
-    private final IGameInstance game;
+    public final IGameInstance game;
 
     public GameLib(IGameInstance game) {
         this.game = game;

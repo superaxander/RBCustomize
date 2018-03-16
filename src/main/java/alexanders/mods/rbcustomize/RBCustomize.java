@@ -69,7 +69,7 @@ public class RBCustomize implements IMod {
 
     @Override
     public void postPostInit(IGameInstance game, IApiHandler apiHandler, IEventHandler eventHandler) {
-        LuaEnvironment.initExecution();
+        LuaEnvironment.initExecution(game);
         LuaEnvironment.executeScripts(HookType.INIT);
         
         if(ScriptContentLoader.loadedScripts.values().stream().anyMatch(it -> it.hookType == HookType.WORLD_TICK)) {

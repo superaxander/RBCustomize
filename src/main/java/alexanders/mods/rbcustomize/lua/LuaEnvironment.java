@@ -8,7 +8,9 @@ import de.ellpeck.rockbottom.api.event.EventResult;
 import de.ellpeck.rockbottom.api.event.impl.WorldLoadEvent;
 import de.ellpeck.rockbottom.api.event.impl.WorldTickEvent;
 import de.ellpeck.rockbottom.api.event.impl.WorldUnloadEvent;
-import org.luaj.vm2.*;
+import org.luaj.vm2.Globals;
+import org.luaj.vm2.LoadState;
+import org.luaj.vm2.LuaError;
 import org.luaj.vm2.compiler.LuaC;
 import org.luaj.vm2.lib.Bit32Lib;
 import org.luaj.vm2.lib.PackageLib;
@@ -44,8 +46,9 @@ public class LuaEnvironment {
         LoadState.install(globals);
         LuaC.install(globals);
     }
-    
-    public static void initExecution() {
+
+    public static void initExecution(IGameInstance game) {
+        globals.load(new ToastsLib(game.isDedicatedServer() ? null : game.getToaster()));
         RBCustomize.logger.config("Executing initialization script");
         ScriptContentLoader.internalScript.function.call();
     }
