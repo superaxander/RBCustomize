@@ -48,20 +48,26 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
         data.set("hasKey", new FunctionWrapper(this::hasKey));
         data.set("create", new FunctionWrapper(this::create));
         data.set("createModBased", new FunctionWrapper(this::createModBased));
+        data.set("equals", new FunctionWrapper(this::setEquals));
         env.set("data", data);
         return data;
     }
 
+    private Varargs setEquals(Varargs varargs) {
+        LuaValue lOp1 = varargs.arg(1);
+        LuaValue lOp2 = varargs.arg(2);
+        if (!(lOp1.isuserdata(AbstractDataSet.class) && lOp2.isuserdata(AbstractDataSet.class))) return error("Expected both operands to be DataSets");
+        return valueOf(lOp1.touserdata().equals(lOp2.touserdata()));
+    }
+
     private AbstractDataSet getDataSet(LuaValue lDataSet, int iArg, String argName) {
-        if (!lDataSet.isuserdata(AbstractDataSet.class))
-            return argerror(iArg, "Expected a DataSet value for argument '" + argName + "'").toboolean() ? null : null; //TODO: lol
+        if (!lDataSet.isuserdata(AbstractDataSet.class)) return argerror(iArg, "Expected a DataSet value for argument '" + argName + "'").toboolean() ? null : null; //TODO: lol
         return (AbstractDataSet) lDataSet.touserdata();
     }
 
     @Nonnull
     private String getString(LuaValue lString, int iArg, String argName) {
-        if (!lString.isstring())
-            return argerror(iArg, "Expected a string value for argument'" + argName + "'").toboolean() ? null : null;
+        if (!lString.isstring()) return argerror(iArg, "Expected a string value for argument'" + argName + "'").toboolean() ? null : null;
         return lString.tojstring();
     }
 
@@ -85,8 +91,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
         AbstractDataSet dataSet = getDataSet(varargs.arg(1), 1, "backingData");
         String key = getString(varargs.arg(2), 2, "key");
         LuaValue lValue = varargs.arg(3);
-        if (!lValue.isboolean())
-            return argerror(3, "Expected a boolean value for argument 'value'");
+        if (!lValue.isboolean()) return argerror(3, "Expected a boolean value for argument 'value'");
         boolean value = lValue.toboolean();
         if (dataSet instanceof DataSet) {
             ((DataSet) dataSet).addBoolean(key, value);
@@ -104,8 +109,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
         AbstractDataSet dataSet = getDataSet(varargs.arg(1), 1, "backingData");
         String key = getString(varargs.arg(2), 2, "key");
         LuaValue lValue = varargs.arg(3);
-        if (!lValue.isint())
-            return argerror(3, "Expected a byte value for argument 'value'");
+        if (!lValue.isint()) return argerror(3, "Expected a byte value for argument 'value'");
         byte value = lValue.tobyte();
         if (dataSet instanceof DataSet) {
             ((DataSet) dataSet).addByte(key, value);
@@ -123,8 +127,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
         AbstractDataSet dataSet = getDataSet(varargs.arg(1), 1, "backingData");
         String key = getString(varargs.arg(2), 2, "key");
         LuaValue lValue = varargs.arg(3);
-        if (!lValue.isint())
-            return argerror(3, "Expected a short value for argument 'value'");
+        if (!lValue.isint()) return argerror(3, "Expected a short value for argument 'value'");
         short value = lValue.toshort();
         if (dataSet instanceof DataSet) {
             ((DataSet) dataSet).addShort(key, value);
@@ -142,8 +145,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
         AbstractDataSet dataSet = getDataSet(varargs.arg(1), 1, "backingData");
         String key = getString(varargs.arg(2), 2, "key");
         LuaValue lValue = varargs.arg(3);
-        if (!lValue.isint())
-            return argerror(3, "Expected an int value for argument 'value'");
+        if (!lValue.isint()) return argerror(3, "Expected an int value for argument 'value'");
         int value = lValue.toint();
         if (dataSet instanceof DataSet) {
             ((DataSet) dataSet).addInt(key, value);
@@ -161,8 +163,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
         AbstractDataSet dataSet = getDataSet(varargs.arg(1), 1, "backingData");
         String key = getString(varargs.arg(2), 2, "key");
         LuaValue lValue = varargs.arg(3);
-        if (!lValue.islong())
-            return argerror(3, "Expected a long value for argument 'value'");
+        if (!lValue.islong()) return argerror(3, "Expected a long value for argument 'value'");
         long value = lValue.tolong();
         if (dataSet instanceof DataSet) {
             ((DataSet) dataSet).addLong(key, value);
@@ -180,8 +181,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
         AbstractDataSet dataSet = getDataSet(varargs.arg(1), 1, "backingData");
         String key = getString(varargs.arg(2), 2, "key");
         LuaValue lValue = varargs.arg(3);
-        if (!lValue.isnumber())
-            return argerror(3, "Expected a float value for argument 'value'");
+        if (!lValue.isnumber()) return argerror(3, "Expected a float value for argument 'value'");
         float value = lValue.tofloat();
         if (dataSet instanceof DataSet) {
             ((DataSet) dataSet).addFloat(key, value);
@@ -199,8 +199,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
         AbstractDataSet dataSet = getDataSet(varargs.arg(1), 1, "backingData");
         String key = getString(varargs.arg(2), 2, "key");
         LuaValue lValue = varargs.arg(3);
-        if (!lValue.isnumber())
-            return argerror(3, "Expected a double value for argument 'value'");
+        if (!lValue.isnumber()) return argerror(3, "Expected a double value for argument 'value'");
         double value = lValue.todouble();
         if (dataSet instanceof DataSet) {
             ((DataSet) dataSet).addDouble(key, value);
@@ -218,8 +217,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
         AbstractDataSet dataSet = getDataSet(varargs.arg(1), 1, "backingData");
         String key = getString(varargs.arg(2), 2, "key");
         AbstractDataSet setVal = getDataSet(varargs.arg(3), 3, "value");
-        if (!(setVal instanceof DataSet))
-            return argerror(3, "Expected a DataSet value for argument 'value'");
+        if (!(setVal instanceof DataSet)) return argerror(3, "Expected a DataSet value for argument 'value'");
         DataSet value = (DataSet) setVal;
         if (dataSet instanceof DataSet) {
             ((DataSet) dataSet).addDataSet(key, value);
@@ -237,8 +235,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
         AbstractDataSet dataSet = getDataSet(varargs.arg(1), 1, "backingData");
         String key = getString(varargs.arg(2), 2, "key");
         AbstractDataSet setVal = getDataSet(varargs.arg(3), 3, "value");
-        if (!(setVal instanceof ModBasedDataSet))
-            return argerror(3, "Expected a ModBasedDataSet value for argument 'value'");
+        if (!(setVal instanceof ModBasedDataSet)) return argerror(3, "Expected a ModBasedDataSet value for argument 'value'");
         ModBasedDataSet value = (ModBasedDataSet) setVal;
         if (dataSet instanceof DataSet) {
             ((DataSet) dataSet).addModBasedDataSet(key, value);
@@ -256,8 +253,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
         AbstractDataSet dataSet = getDataSet(varargs.arg(1), 1, "backingData");
         String key = getString(varargs.arg(2), 2, "key");
         LuaValue lValue = varargs.arg(3);
-        if (!lValue.istable())
-            return argerror(3, "Expected a table(array) value for argument 'value'");
+        if (!lValue.istable()) return argerror(3, "Expected a table(array) value for argument 'value'");
         byte[] value = new byte[lValue.length()];
         for (int i = 1; i <= value.length; i++) {
             value[i - 1] = (byte) lValue.checkint(i); // TODO: this is a bit hacky
@@ -279,8 +275,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
         AbstractDataSet dataSet = getDataSet(varargs.arg(1), 1, "backingData");
         String key = getString(varargs.arg(2), 2, "key");
         LuaValue lValue = varargs.arg(3);
-        if (!lValue.istable())
-            return argerror(3, "Expected a table(array) value for argument 'value'");
+        if (!lValue.istable()) return argerror(3, "Expected a table(array) value for argument 'value'");
         int[] value = new int[lValue.length()];
         for (int i = 1; i <= value.length; i++) {
             value[i - 1] = lValue.checkint(i); // TODO: this is a bit hacky
@@ -302,8 +297,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
         AbstractDataSet dataSet = getDataSet(varargs.arg(1), 1, "backingData");
         String key = getString(varargs.arg(2), 2, "key");
         LuaValue lValue = varargs.arg(3);
-        if (!lValue.istable())
-            return argerror(3, "Expected a table(array) value for argument 'value'");
+        if (!lValue.istable()) return argerror(3, "Expected a table(array) value for argument 'value'");
         short[] value = new short[lValue.length()];
         for (int i = 1; i <= value.length; i++) {
             value[i - 1] = (short) lValue.checkint(i); // TODO: this is a bit hacky
@@ -507,8 +501,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
         } else {
             return argerror(2, "Unrecognized DataSet type");
         }
-        if (array == null)
-            return NIL;
+        if (array == null) return NIL;
 
         LuaTable table = new LuaTable(array.length, 0);
         for (int i = 1; i <= array.length; i++) {
@@ -532,8 +525,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
         } else {
             return argerror(2, "Unrecognized DataSet type");
         }
-        if (array == null)
-            return NIL;
+        if (array == null) return NIL;
 
         LuaTable table = new LuaTable(array.length, 0);
         for (int i = 1; i <= array.length; i++) {
@@ -557,8 +549,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
         } else {
             return argerror(2, "Unrecognized DataSet type");
         }
-        if (array == null)
-            return NIL;
+        if (array == null) return NIL;
 
         LuaTable table = new LuaTable(array.length, 0);
         for (int i = 1; i <= array.length; i++) {
@@ -584,10 +575,8 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
 
     private Varargs copy(Varargs varargs) { // backingData --> value
         AbstractDataSet set = getDataSet(varargs.arg(1), 1, "backingData");
-        if (set instanceof DataSet)
-            return userdataOf(((DataSet) set).copy());
-        else if (set instanceof ModBasedDataSet)
-            return userdataOf(((ModBasedDataSet) set).copy());
+        if (set instanceof DataSet) return userdataOf(((DataSet) set).copy());
+        else if (set instanceof ModBasedDataSet) return userdataOf(((ModBasedDataSet) set).copy());
         return NIL;
     }
 

@@ -9,7 +9,10 @@ import de.ellpeck.rockbottom.api.construction.resource.ItemUseInfo;
 import de.ellpeck.rockbottom.api.construction.resource.ResUseInfo;
 import de.ellpeck.rockbottom.api.item.ItemInstance;
 import de.ellpeck.rockbottom.api.util.reg.IResourceName;
-import org.luaj.vm2.*;
+import org.luaj.vm2.LuaBoolean;
+import org.luaj.vm2.LuaTable;
+import org.luaj.vm2.LuaValue;
+import org.luaj.vm2.Varargs;
 import org.luaj.vm2.lib.TwoArgFunction;
 
 public class RecipesLib extends TwoArgFunction {
@@ -22,8 +25,7 @@ public class RecipesLib extends TwoArgFunction {
     }
 
     private Varargs addRecipe(Varargs varargs) { // type, name, output, inputs... --> recipe, ok //TODO: add support for supplying knowledge based recipe information names
-        if (varargs.narg() < 4)
-            return argerror("Expected at least 4 arguments");
+        if (varargs.narg() < 4) return argerror("Expected at least 4 arguments");
         LuaValue lType = varargs.arg(1);
         LuaValue lName = varargs.arg(2);
         LuaValue lOutput = varargs.arg(3);
@@ -42,24 +44,18 @@ public class RecipesLib extends TwoArgFunction {
                 inputs[i - 1] = new ItemUseInfo(ItemsLib.parseItemInstance(3 + i, lInput));
             } else {
                 LuaValue lAmount = lInput.get("amount");
-                if (!lAmount.isint())
-                    return argerror(3 + i, "Expected a number value for field 'amount' in ResUseInfo");
+                if (!lAmount.isint()) return argerror(3 + i, "Expected a number value for field 'amount' in ResUseInfo");
                 int amount = lAmount.toint();
-                if (!lResource.isstring())
-                    return argerror(3 + i, "Expected a string value for field 'name' in ResUseInfo");
+                if (!lResource.isstring()) return argerror(3 + i, "Expected a string value for field 'name' in ResUseInfo");
                 String resource = lResource.tojstring();
-                if (RockBottomAPI.getResourceRegistry().getResources(resource).isEmpty())
-                    return argerror(3 + i, "No items corresponding to that resource were found!");
+                if (RockBottomAPI.getResourceRegistry().getResources(resource).isEmpty()) return argerror(3 + i, "No items corresponding to that resource were found!");
                 inputs[i - 1] = new ResUseInfo(resource, amount);
             }
         }
 
-        if (!lType.isstring())
-            return argerror(1, "Expected a string value for argument 'type'");
-        if (!lName.isstring())
-            return argerror(2, "Expected a string value for argument 'name'");
-        if (!lOutput.istable())
-            return argerror(3, "Expected a table value for argument 'output'");
+        if (!lType.isstring()) return argerror(1, "Expected a string value for argument 'type'");
+        if (!lName.isstring()) return argerror(2, "Expected a string value for argument 'name'");
+        if (!lOutput.istable()) return argerror(3, "Expected a table value for argument 'output'");
 
         String type = lType.tojstring();
 

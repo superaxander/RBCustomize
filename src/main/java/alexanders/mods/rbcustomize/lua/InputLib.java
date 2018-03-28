@@ -156,29 +156,25 @@ public class InputLib extends TwoArgFunction {
 
     private Varargs isKeyDown(Varargs varargs) { // key -> boolean
         LuaValue lKey = varargs.arg1();
-        if(!lKey.isint())
-            return argerror(1, "Expected an int value for argument 'key'");
+        if (!lKey.isint()) return argerror(1, "Expected an int value for argument 'key'");
         return valueOf(input.isKeyDown(lKey.toint()));
     }
 
     private Varargs wasKeyPressed(Varargs varargs) { // key -> boolean
         LuaValue lKey = varargs.arg1();
-        if(!lKey.isint())
-            return argerror(1, "Expected an int value for argument 'key'");
+        if (!lKey.isint()) return argerror(1, "Expected an int value for argument 'key'");
         return valueOf(input.wasKeyPressed(lKey.toint()));
     }
 
     private Varargs isMouseDown(Varargs varargs) { // button -> boolean
         LuaValue lButton = varargs.arg1();
-        if(!lButton.isint())
-            return argerror(1, "Expected an int value for argument 'button'");
+        if (!lButton.isint()) return argerror(1, "Expected an int value for argument 'button'");
         return valueOf(input.isMouseDown(lButton.toint()));
     }
 
     private Varargs wasMousePressed(Varargs varargs) { // key -> boolean
         LuaValue lButton = varargs.arg1();
-        if(!lButton.isint())
-            return argerror(1, "Expected an int value for argument 'button'");
+        if (!lButton.isint()) return argerror(1, "Expected an int value for argument 'button'");
         return valueOf(input.wasMousePressed(lButton.toint()));
     }
 

@@ -8,34 +8,31 @@ import de.ellpeck.rockbottom.api.event.EventResult;
 import de.ellpeck.rockbottom.api.event.impl.WorldLoadEvent;
 import de.ellpeck.rockbottom.api.event.impl.WorldTickEvent;
 import de.ellpeck.rockbottom.api.event.impl.WorldUnloadEvent;
-import org.luaj.vm2.Globals;
-import org.luaj.vm2.LoadState;
-import org.luaj.vm2.LuaError;
+import org.luaj.vm2.*;
 import org.luaj.vm2.compiler.LuaC;
-import org.luaj.vm2.lib.Bit32Lib;
-import org.luaj.vm2.lib.PackageLib;
-import org.luaj.vm2.lib.StringLib;
-import org.luaj.vm2.lib.TableLib;
+import org.luaj.vm2.lib.*;
 import org.luaj.vm2.lib.jse.JseBaseLib;
-import org.luaj.vm2.lib.jse.JseMathLib;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 
-public class LuaEnvironment {
+public final class LuaEnvironment {
     public static Globals globals;
 
     public static void init(IGameInstance game) {
         globals = new Globals();
         globals.load(new JseBaseLib());
         globals.load(new PackageLib());
+        globals.load(new DebugLib());
+        globals.load(new CoroutineLib());
+        globals.load(new PackageLib());
         globals.load(new Bit32Lib());
         globals.load(new TableLib());
         globals.load(new StringLib());
-        globals.load(new JseMathLib());
+        globals.load(new RBJseMathLib());
         globals.load(new RecipesLib());
         globals.load(new ItemsLib());
-        //globals.load(new TilesLib());
+        globals.load(new TilesLib());
         globals.load(new WorldLib());
         globals.load(new EntityLib());
         globals.load(new InventoryLib());
@@ -50,6 +47,7 @@ public class LuaEnvironment {
     public static void initExecution(IGameInstance game) {
         globals.load(new ToastsLib(game.isDedicatedServer() ? null : game.getToaster()));
         RBCustomize.logger.config("Executing initialization script");
+        ScriptContentLoader.internalScript.function.initupvalue1(globals);
         ScriptContentLoader.internalScript.function.call();
     }
 
@@ -88,5 +86,15 @@ public class LuaEnvironment {
         WorldLib.world = event.world;
         executeScripts(HookType.WORLD_UNLOAD);
         return result;
+    }
+
+    public static boolean executeScript(LuaValue function, LuaValue... values) {
+        try {
+            Varargs ret = function.invoke(LuaValue.varargsOf(values));
+            return ret.arg1().isboolean() && ret.arg1().toboolean();
+        } catch (LuaError e) {
+            RBCustomize.logger.log(Level.WARNING, "Execution of script failed!", e);
+            return false;
+        }
     }
 }

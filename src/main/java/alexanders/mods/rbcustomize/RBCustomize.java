@@ -11,6 +11,8 @@ import de.ellpeck.rockbottom.api.event.impl.WorldUnloadEvent;
 import de.ellpeck.rockbottom.api.mod.IMod;
 import de.ellpeck.rockbottom.api.util.reg.IResourceName;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.logging.Logger;
 
 public class RBCustomize implements IMod {
@@ -47,7 +49,7 @@ public class RBCustomize implements IMod {
 
     @Override
     public String getContentLocation() {
-        return "assets/"+getId()+"/content";
+        return "assets/" + getId() + "/content";
     }
 
     @Override
@@ -68,19 +70,19 @@ public class RBCustomize implements IMod {
     }
 
     @Override
-    public void postPostInit(IGameInstance game, IApiHandler apiHandler, IEventHandler eventHandler) {
+    public void postInit(IGameInstance game, IApiHandler apiHandler, IEventHandler eventHandler) {
         LuaEnvironment.initExecution(game);
         LuaEnvironment.executeScripts(HookType.INIT);
-        
-        if(ScriptContentLoader.loadedScripts.values().stream().anyMatch(it -> it.hookType == HookType.WORLD_TICK)) {
+
+        if (ScriptContentLoader.loadedScripts.values().stream().anyMatch(it -> it.hookType == HookType.WORLD_TICK)) {
             eventHandler.registerListener(WorldTickEvent.class, LuaEnvironment::onWorldTick);
         }
 
-        if(ScriptContentLoader.loadedScripts.values().stream().anyMatch(it -> it.hookType == HookType.WORLD_LOAD)) {
+        if (ScriptContentLoader.loadedScripts.values().stream().anyMatch(it -> it.hookType == HookType.WORLD_LOAD)) {
             eventHandler.registerListener(WorldLoadEvent.class, LuaEnvironment::onWorldLoad);
         }
 
-        if(ScriptContentLoader.loadedScripts.values().stream().anyMatch(it -> it.hookType == HookType.WORLD_UNLOAD)) {
+        if (ScriptContentLoader.loadedScripts.values().stream().anyMatch(it -> it.hookType == HookType.WORLD_UNLOAD)) {
             eventHandler.registerListener(WorldUnloadEvent.class, LuaEnvironment::onWorldUnload);
         }
     }

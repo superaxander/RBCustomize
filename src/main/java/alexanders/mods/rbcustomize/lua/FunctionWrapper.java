@@ -17,9 +17,9 @@ public class FunctionWrapper extends VarArgFunction {
     public Varargs invoke(Varargs args) {
         try {
             return function.apply(args);
-        }catch (LuaError e){
+        } catch (LuaError e) {
             throw e;
-        }catch(Exception e) {
+        } catch (Exception e) {
             throw new LuaError(e);
         }
     }

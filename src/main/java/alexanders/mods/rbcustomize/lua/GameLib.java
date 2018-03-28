@@ -24,8 +24,7 @@ public class GameLib extends TwoArgFunction {
     }
 
     private Varargs getPlayer(Varargs varargs) {
-        if (game.isDedicatedServer())
-            return error("Can't get player on a dedicated server");
+        if (game.isDedicatedServer()) return error("Can't get player on a dedicated server");
         return valueOf(game.getPlayer().getUniqueId().toString());
     }
 

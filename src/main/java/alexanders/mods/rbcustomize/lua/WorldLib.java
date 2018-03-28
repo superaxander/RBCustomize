@@ -28,23 +28,19 @@ public class WorldLib extends TwoArgFunction {
     }
 
     private Varargs setState(Varargs varargs) { // x, y, layer, state -> NIL
-        if (world == null)
-            return error("The world is not available right now");
+        if (world == null) return error("The world is not available right now");
 
         LuaValue lX = varargs.arg(1);
-        if (!lX.isint())
-            return argerror(1, "Expected an int value for argument 'y'");
+        if (!lX.isint()) return argerror(1, "Expected an int value for argument 'y'");
         int x = lX.toint();
 
         LuaValue lY = varargs.arg(2);
-        if (!lY.isint())
-            return argerror(2, "Expected an int value for argument 'y'");
+        if (!lY.isint()) return argerror(2, "Expected an int value for argument 'y'");
         int y = lY.toint();
 
         TileLayer layer;
         LuaValue lLayer = varargs.arg(3);
-        if (!lLayer.isstring())
-            return argerror(3, "Expected a string value for argument 'layer'");
+        if (!lLayer.isstring()) return argerror(3, "Expected a string value for argument 'layer'");
         IResourceName name;
         try {
             name = RockBottomAPI.createRes(lLayer.tojstring());
@@ -52,8 +48,7 @@ public class WorldLib extends TwoArgFunction {
             return argerror(3, "Specified layer was not a resource name");
         }
         Optional<TileLayer> optionalLayer = TileLayer.getAllLayers().stream().filter(it -> it.getName().equals(name)).findAny();
-        if (!optionalLayer.isPresent())
-            return argerror(3, "Specified layer could not be found");
+        if (!optionalLayer.isPresent()) return argerror(3, "Specified layer could not be found");
         layer = optionalLayer.get();
 
         TileState state;
@@ -68,31 +63,26 @@ public class WorldLib extends TwoArgFunction {
             return argerror(4, "Specified state was not a resource name");
         }
         state = RockBottomAPI.TILE_STATE_REGISTRY.get(stateName);
-        if (state == null)
-            return argerror(4, "Specified state was not found");
-        
+        if (state == null) return argerror(4, "Specified state was not found");
+
         world.setState(layer, x, y, state);
         return NIL;
     }
 
     private Varargs getState(Varargs varargs) { // x, y, layer -> state
-        if (world == null)
-            return error("The world is not available right now");
+        if (world == null) return error("The world is not available right now");
 
         LuaValue lX = varargs.arg(1);
-        if (!lX.isint())
-            return argerror(1, "Expected an int value for argument 'y'");
+        if (!lX.isint()) return argerror(1, "Expected an int value for argument 'y'");
         int x = lX.toint();
 
         LuaValue lY = varargs.arg(2);
-        if (!lY.isint())
-            return argerror(2, "Expected an int value for argument 'y'");
+        if (!lY.isint()) return argerror(2, "Expected an int value for argument 'y'");
         int y = lY.toint();
 
         TileLayer layer;
         LuaValue lLayer = varargs.arg(3);
-        if (!lLayer.isstring())
-            return argerror(3, "Expected a string value for argument 'layer'");
+        if (!lLayer.isstring()) return argerror(3, "Expected a string value for argument 'layer'");
         IResourceName name;
         try {
             name = RockBottomAPI.createRes(lLayer.tojstring());
@@ -100,31 +90,26 @@ public class WorldLib extends TwoArgFunction {
             return argerror(3, "Specified layer was not a resource name");
         }
         Optional<TileLayer> optionalLayer = TileLayer.getAllLayers().stream().filter(it -> it.getName().equals(name)).findAny();
-        if (!optionalLayer.isPresent())
-            return argerror(3, "Specified layer could not be found");
+        if (!optionalLayer.isPresent()) return argerror(3, "Specified layer could not be found");
         layer = optionalLayer.get();
 
         return valueOf(world.getState(layer, x, y).getName().toString());
     }
 
     private Varargs destroyTile(Varargs varargs) { // x, y, layer, destroyer, shouldDrop --> NIL
-        if (world == null)
-            return error("The world is not available right now");
+        if (world == null) return error("The world is not available right now");
 
         LuaValue lX = varargs.arg(1);
-        if (!lX.isint())
-            return argerror(1, "Expected an int value for argument 'y'");
+        if (!lX.isint()) return argerror(1, "Expected an int value for argument 'y'");
         int x = lX.toint();
 
         LuaValue lY = varargs.arg(2);
-        if (!lY.isint())
-            return argerror(2, "Expected an int value for argument 'y'");
+        if (!lY.isint()) return argerror(2, "Expected an int value for argument 'y'");
         int y = lY.toint();
 
         TileLayer layer;
         LuaValue lLayer = varargs.arg(3);
-        if (!lLayer.isstring())
-            return argerror(3, "Expected a string value for argument 'layer'");
+        if (!lLayer.isstring()) return argerror(3, "Expected a string value for argument 'layer'");
         IResourceName name;
         try {
             name = RockBottomAPI.createRes(lLayer.tojstring());
@@ -132,8 +117,7 @@ public class WorldLib extends TwoArgFunction {
             return argerror(3, "Specified layer was not a resource name");
         }
         Optional<TileLayer> optionalLayer = TileLayer.getAllLayers().stream().filter(it -> it.getName().equals(name)).findAny();
-        if (!optionalLayer.isPresent())
-            return argerror(3, "Specified layer could not be found");
+        if (!optionalLayer.isPresent()) return argerror(3, "Specified layer could not be found");
         layer = optionalLayer.get();
 
         Entity destroyer;
@@ -141,8 +125,7 @@ public class WorldLib extends TwoArgFunction {
         if (lDestroyer.isstring()) {
             try {
                 destroyer = world.getEntity(UUID.fromString(lDestroyer.tojstring()));
-                if (destroyer == null)
-                    return argerror(4, "Specified destroyer was not found");
+                if (destroyer == null) return argerror(4, "Specified destroyer was not found");
             } catch (IllegalArgumentException e) {
                 return argerror(4, "Specified destroyer was not a valid UUID");
             }

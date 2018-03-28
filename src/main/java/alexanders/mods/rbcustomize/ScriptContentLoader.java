@@ -14,10 +14,9 @@ import java.util.HashMap;
 import java.util.Locale;
 
 public class ScriptContentLoader implements IContentLoader<Script> {
-    private static ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-    
     public static HashMap<IResourceName, Script> loadedScripts = new HashMap<>();
     public static Script internalScript;
+    private static ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
     @Override
     public IResourceName getContentIdentifier() {
@@ -34,7 +33,8 @@ public class ScriptContentLoader implements IContentLoader<Script> {
             if (pathElement != null && pathElement.isJsonPrimitive()) {
                 loc = pathElement.getAsString();
             } else {
-                RBCustomize.logger.warning("Script with name: " + resourceName + " could not be loaded for content pack: " + pack.getName() + " because it's path could not be interpreted.");
+                RBCustomize.logger
+                        .warning("Script with name: " + resourceName + " could not be loaded for content pack: " + pack.getName() + " because it's path could not be interpreted.");
                 return;
             }
             JsonElement hookTypeElement = obj.get("hookType");
@@ -42,15 +42,18 @@ public class ScriptContentLoader implements IContentLoader<Script> {
                 try {
                     hookType = HookType.valueOf(hookTypeElement.getAsString().toUpperCase(Locale.ROOT));
                 } catch (IllegalArgumentException e) {
-                    RBCustomize.logger.warning("Script with name: " + resourceName + " could not be loaded for content pack: " + pack.getName() + " because it's hookType was not recognized. Possible values are: " + Arrays.toString(HookType.values()));
+                    RBCustomize.logger.warning("Script with name: " + resourceName + " could not be loaded for content pack: " + pack
+                            .getName() + " because it's hookType was not recognized. Possible values are: " + Arrays.toString(HookType.values()));
                     return;
                 }
             } else {
-                RBCustomize.logger.warning("Script with name: " + resourceName + " could not be loaded for content pack: " + pack.getName() + " because it's hookType could not be interpreted");
+                RBCustomize.logger.warning(
+                        "Script with name: " + resourceName + " could not be loaded for content pack: " + pack.getName() + " because it's hookType could not be interpreted");
                 return;
             }
         } else {
-            RBCustomize.logger.warning("Script with name: " + resourceName + " could not be loaded for content pack: " + pack.getName() + " because we could not interpret the script's path and hookType");
+            RBCustomize.logger.warning("Script with name: " + resourceName + " could not be loaded for content pack: " + pack
+                    .getName() + " because we could not interpret the script's path and hookType");
             return;
         }
 
@@ -58,10 +61,13 @@ public class ScriptContentLoader implements IContentLoader<Script> {
         if (loadedScripts.containsKey(resourceName)) {
             RBCustomize.logger.config("Script with name:" + resourceName + " already exists, not loading script for content pack: " + pack.getName());
         } else {
-            if (pack.getId().equals(ContentPack.DEFAULT_PACK_ID))
-                internalScript = new Script(LuaEnvironment.globals.load(classLoader.getResourceAsStream(location), resourceName.getDomain() + "_" + resourceName.getResourceName(), "t", LuaEnvironment.globals), hookType);
-            else
-                loadedScripts.put(resourceName, new Script(LuaEnvironment.globals.load(classLoader.getResourceAsStream(location), resourceName.getDomain() + "_" + resourceName.getResourceName(), "t", LuaEnvironment.globals), hookType));
+            if (pack.getId().equals(ContentPack.DEFAULT_PACK_ID)) internalScript = new Script(LuaEnvironment.globals.load(classLoader.getResourceAsStream(location),
+                                                                                                                          resourceName.getDomain() + "_" + resourceName
+                                                                                                                                  .getResourceName(), "t", LuaEnvironment.globals),
+                                                                                              hookType);
+            else loadedScripts.put(resourceName, new Script(LuaEnvironment.globals.load(classLoader.getResourceAsStream(location),
+                                                                                        resourceName.getDomain() + "_" + resourceName.getResourceName(), "t",
+                                                                                        LuaEnvironment.globals), hookType));
             RBCustomize.logger.config("Script with name:" + resourceName + " was loaded for content pack: " + pack.getName());
         }
     }

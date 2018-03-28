@@ -25,108 +25,40 @@ public class EntityLib extends TwoArgFunction {
     }
 
     private Varargs isOnGround(Varargs varargs) { // uuid --> isOnGround
-        Entity entity;
-        LuaValue lUUID = varargs.arg(1);
-        if (!lUUID.isstring()) {
-            return argerror(1, "Expected a string value for argument 'uuid'");
-        }
-        try {
-            entity = WorldLib.world.getEntity(UUID.fromString(lUUID.tojstring()));
-            if (entity == null)
-                return argerror(1, "Specified uuid was not found");
-        } catch (IllegalArgumentException e) {
-            return argerror(1, "Specified uuid was not a valid UUID");
-        }
+        Entity entity = parseUUID(varargs, 1);
         return valueOf(entity.onGround);
     }
 
     private Varargs getMotionX(Varargs varargs) { // uuid --> motionX
-        Entity entity;
-        LuaValue lUUID = varargs.arg(1);
-        if (!lUUID.isstring()) {
-            return argerror(1, "Expected a string value for argument 'uuid'");
-        }
-        try {
-            entity = WorldLib.world.getEntity(UUID.fromString(lUUID.tojstring()));
-            if (entity == null)
-                return argerror(1, "Specified uuid was not found");
-        } catch (IllegalArgumentException e) {
-            return argerror(1, "Specified uuid was not a valid UUID");
-        }
+        Entity entity = parseUUID(varargs, 1);
         return valueOf(entity.motionX);
     }
 
     private Varargs getMotionY(Varargs varargs) { // uuid --> motionY
-        Entity entity;
-        LuaValue lUUID = varargs.arg(1);
-        if (!lUUID.isstring()) {
-            return argerror(1, "Expected a string value for argument 'uuid'");
-        }
-        try {
-            entity = WorldLib.world.getEntity(UUID.fromString(lUUID.tojstring()));
-            if (entity == null)
-                return argerror(1, "Specified uuid was not found");
-        } catch (IllegalArgumentException e) {
-            return argerror(1, "Specified uuid was not a valid UUID");
-        }
+        Entity entity = parseUUID(varargs, 1);
         return valueOf(entity.motionY);
     }
 
     private Varargs setMotionX(Varargs varargs) { // uuid, motion --> NIL
-        Entity entity;
-        LuaValue lUUID = varargs.arg(1);
-        if (!lUUID.isstring()) {
-            return argerror(1, "Expected a string value for argument 'uuid'");
-        }
-        try {
-            entity = WorldLib.world.getEntity(UUID.fromString(lUUID.tojstring()));
-            if (entity == null)
-                return argerror(1, "Specified uuid was not found");
-        } catch (IllegalArgumentException e) {
-            return argerror(1, "Specified uuid was not a valid UUID");
-        }
+        Entity entity = parseUUID(varargs, 1);
 
         LuaValue lMotion = varargs.arg(2);
-        if (!lMotion.isnumber())
-            return argerror(2, "Expected a number value for argument 'motion'");
+        if (!lMotion.isnumber()) return argerror(2, "Expected a number value for argument 'motion'");
         entity.motionX = lMotion.todouble();
         return NIL;
     }
 
     private Varargs setMotionY(Varargs varargs) { // uuid, motion --> NIL
-        Entity entity;
-        LuaValue lUUID = varargs.arg(1);
-        if (!lUUID.isstring()) {
-            return argerror(1, "Expected a string value for argument 'uuid'");
-        }
-        try {
-            entity = WorldLib.world.getEntity(UUID.fromString(lUUID.tojstring()));
-            if (entity == null)
-                return argerror(1, "Specified uuid was not found");
-        } catch (IllegalArgumentException e) {
-            return argerror(1, "Specified uuid was not a valid UUID");
-        }
+        Entity entity = parseUUID(varargs, 1);
 
         LuaValue lMotion = varargs.arg(2);
-        if (!lMotion.isnumber())
-            return argerror(2, "Expected a number value for argument 'motion'");
+        if (!lMotion.isnumber()) return argerror(2, "Expected a number value for argument 'motion'");
         entity.motionY = lMotion.todouble();
         return NIL;
     }
 
     private Varargs getInv(Varargs varargs) { // uuid -> inv
-        Entity entity;
-        LuaValue lUUID = varargs.arg(1);
-        if (!lUUID.isstring()) {
-            return argerror(1, "Expected a string value for argument 'uuid'");
-        }
-        try {
-            entity = WorldLib.world.getEntity(UUID.fromString(lUUID.tojstring()));
-            if (entity == null)
-                return argerror(1, "Specified uuid was not found");
-        } catch (IllegalArgumentException e) {
-            return argerror(1, "Specified uuid was not a valid UUID");
-        }
+        Entity entity = parseUUID(varargs, 1);
 
         if (entity instanceof AbstractEntityPlayer) {
             return LuaValue.userdataOf(((AbstractEntityPlayer) entity).getInv());
@@ -136,21 +68,9 @@ public class EntityLib extends TwoArgFunction {
     }
 
     private Varargs getSelectedSlot(Varargs varargs) { // uuid --> int
-        if (WorldLib.world == null)
-            return error("The world is not available right now");
+        if (WorldLib.world == null) return error("The world is not available right now");
 
-        Entity entity;
-        LuaValue lUUID = varargs.arg(1);
-        if (!lUUID.isstring()) {
-            return argerror(1, "Expected a string value for argument 'uuid'");
-        }
-        try {
-            entity = WorldLib.world.getEntity(UUID.fromString(lUUID.tojstring()));
-            if (entity == null)
-                return argerror(1, "Specified uuid was not found");
-        } catch (IllegalArgumentException e) {
-            return argerror(1, "Specified uuid was not a valid UUID");
-        }
+        Entity entity = parseUUID(varargs, 1);
 
         if (entity instanceof AbstractEntityPlayer) {
             return valueOf(((AbstractEntityPlayer) entity).getSelectedSlot());
@@ -158,4 +78,20 @@ public class EntityLib extends TwoArgFunction {
             return argerror(1, "Specified uuid did not correspond to a player");
         }
     }
+
+    public static Entity parseUUID(Varargs varargs, int i) {
+        Entity entity = null;
+        LuaValue lUUID = varargs.arg(i);
+        if (!lUUID.isstring()) {
+            argerror(i, "Expected a string value for argument 'uuid'");
+        }
+        try {
+            entity = WorldLib.world.getEntity(UUID.fromString(lUUID.tojstring()));
+            if (entity == null) argerror(i, "Specified uuid was not found");
+        } catch (IllegalArgumentException e) {
+            argerror(i, "Specified uuid was not a valid UUID");
+        }
+        return entity;
+    }
+
 }

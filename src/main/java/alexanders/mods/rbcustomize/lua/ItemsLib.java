@@ -10,6 +10,7 @@ import de.ellpeck.rockbottom.api.item.ItemBasic;
 import de.ellpeck.rockbottom.api.item.ItemInstance;
 import de.ellpeck.rockbottom.api.item.ToolType;
 import de.ellpeck.rockbottom.api.tile.Tile;
+import de.ellpeck.rockbottom.api.util.Util;
 import de.ellpeck.rockbottom.api.util.reg.IResourceName;
 import de.ellpeck.rockbottom.api.world.IWorld;
 import de.ellpeck.rockbottom.api.world.layer.TileLayer;
@@ -24,14 +25,12 @@ import java.util.logging.Level;
 
 public class ItemsLib extends TwoArgFunction {
     public static LuaValue itemInstanceToLua(ItemInstance instance) {
-        if (instance == null)
-            return NIL;
+        if (instance == null) return NIL;
         LuaTable table = new LuaTable();
         table.set("item", valueOf(instance.getItem().getName().toString()));
         table.set("meta", valueOf(instance.getMeta()));
         table.set("amount", valueOf(instance.getAmount()));
-        if (instance.hasAdditionalData())
-            table.set("set", LuaEnvironment.globals.get("DataSet").call(userdataOf(instance.getAdditionalData())));
+        if (instance.hasAdditionalData()) table.set("set", LuaEnvironment.globals.get("DataSet").call(userdataOf(instance.getAdditionalData())));
         return table;
     }
 
@@ -40,12 +39,9 @@ public class ItemsLib extends TwoArgFunction {
         LuaValue lMeta = table.get("meta");
         LuaValue lAmount = table.get("amount");
         LuaValue lSet = table.get("set");
-        if (!lItem.isstring())
-            throw new LuaError(argerror(i, "Expected a string value for field 'item' in ItemInstance"));
-        if (!lMeta.isint())
-            throw new LuaError(argerror(i, "Expected an int value for field 'meta' in ItemInstance"));
-        if (!lAmount.isint())
-            throw new LuaError(argerror(i, "Expected an int value for field 'amount' in ItemInstance"));
+        if (!lItem.isstring()) throw new LuaError(argerror(i, "Expected a string value for field 'item' in ItemInstance"));
+        if (!lMeta.isint()) throw new LuaError(argerror(i, "Expected an int value for field 'meta' in ItemInstance"));
+        if (!lAmount.isint()) throw new LuaError(argerror(i, "Expected an int value for field 'amount' in ItemInstance"));
         IResourceName name;
         try {
             name = RockBottomAPI.createRes(lItem.tojstring());
@@ -53,16 +49,13 @@ public class ItemsLib extends TwoArgFunction {
             throw new LuaError(argerror(i, "Specified name is not a valid resource name"));
         }
         Item item = RockBottomAPI.ITEM_REGISTRY.get(name);
-        if (item == null)
-            throw new LuaError(argerror(i, "No item with the specified name was found"));
+        if (item == null) throw new LuaError(argerror(i, "No item with the specified name was found"));
         int meta = lMeta.toint();
-        if (meta > item.getHighestPossibleMeta())
-            throw new LuaError(argerror(i, "The specified meta is too high for this item"));
+        if (meta > item.getHighestPossibleMeta()) throw new LuaError(argerror(i, "The specified meta is too high for this item"));
         ModBasedDataSet set;
         if (lSet.istable()) {
             LuaValue lBackingData = lSet.get("backingData");
-            if (!lBackingData.isuserdata(ModBasedDataSet.class))
-                throw new LuaError(argerror(i, "Specified data set was not of type ModBasedDataSet"));
+            if (!lBackingData.isuserdata(ModBasedDataSet.class)) throw new LuaError(argerror(i, "Specified data set was not of type ModBasedDataSet"));
             set = (ModBasedDataSet) lBackingData.touserdata();
         } else if (lSet.isnil()) {
             set = null;
@@ -75,20 +68,41 @@ public class ItemsLib extends TwoArgFunction {
         return instance;
     }
 
+    public static LuaValue argerror(int i, String expected) {
+        if (i == -1) return error(expected);
+        else return argerror(i, expected);
+    }
+
     @Override
     public LuaValue call(LuaValue arg1, LuaValue env) {
         LuaTable items = new LuaTable();
         items.set("add", new FunctionWrapper(this::addItem));
+        items.set("getMaxAmount", new FunctionWrapper(this::getMaxAmount));
+        items.set("isDataSensitive", new FunctionWrapper(this::isDataSensitive));
         env.set("items", items);
         return items;
     }
 
+    private Varargs isDataSensitive(Varargs varargs) {
+        String sItem = varargs.checkjstring(1);
+        if (!Util.isResourceName(sItem)) return argerror(1, "Expected a resource name for argument 'item'");
+        Item item = RockBottomAPI.ITEM_REGISTRY.get(RockBottomAPI.createRes(sItem));
+        if (item == null) return argerror(1, "No item with the specified name was found");
+        return valueOf(item.isDataSensitive(parseItemInstance(2, varargs.checktable(2))));
+    }
+
+    private Varargs getMaxAmount(Varargs varargs) {
+        String sItem = varargs.checkjstring(1);
+        if (!Util.isResourceName(sItem)) return argerror(1, "Expected a resource name for argument 'item'");
+        Item item = RockBottomAPI.ITEM_REGISTRY.get(RockBottomAPI.createRes(sItem));
+        if (item == null) return argerror(1, "No item with the specified name was found");
+        return valueOf(item.getMaxAmount());
+    }
+
     private Varargs addItem(Varargs varargs) { // name, description, max amount, tooltype, mining speed, interactionFunction -> item, ok
-        if (varargs.narg() < 1)
-            return argerror("Expected at leas 1 argument");
+        if (varargs.narg() < 1) return argerror("Expected at leas 1 argument");
         LuaValue lName = varargs.arg(1);
-        if (!lName.isstring())
-            return argerror(1, "Expected a string value for argument 'name'");
+        if (!lName.isstring()) return argerror(1, "Expected a string value for argument 'name'");
         IResourceName name;
         try {
             name = RockBottomAPI.createRes(lName.tojstring());
@@ -96,8 +110,7 @@ public class ItemsLib extends TwoArgFunction {
             return argerror(1, "Specified name was not a resource name");
         }
 
-        if (RockBottomAPI.ITEM_REGISTRY.get(name) != null)
-            return argerror(1, "Specified name already in use");
+        if (RockBottomAPI.ITEM_REGISTRY.get(name) != null) return argerror(1, "Specified name already in use");
 
         String[] description;
         LuaValue lDescription = varargs.arg(2);
@@ -105,8 +118,7 @@ public class ItemsLib extends TwoArgFunction {
             description = new String[lDescription.length()];
             for (int i = 1; i <= description.length; i++) {
                 LuaValue lLine = lDescription.get(i);
-                if (!lLine.isstring())
-                    return argerror(2, "Specified description table must contain only strings");
+                if (!lLine.isstring()) return argerror(2, "Specified description table must contain only strings");
                 description[i - 1] = lLine.tojstring();
             }
         } else if (lDescription.isstring()) {
@@ -132,15 +144,12 @@ public class ItemsLib extends TwoArgFunction {
         if (lToolTypes.istable()) {
             for (int i = 1; i <= lToolTypes.length(); i++) {
                 LuaValue lToolType = lToolTypes.get(i);
-                if (!lToolType.istable())
-                    return argerror(4, "Specified toolTypes table must contain only tables");
+                if (!lToolType.istable()) return argerror(4, "Specified toolTypes table must contain only tables");
                 try {
                     LuaValue lType = lToolType.get("tp");
-                    if (!lType.isstring())
-                        return argerror(4, "Specified type(tp) in ToolType table must be a string value");
+                    if (!lType.isstring()) return argerror(4, "Specified type(tp) in ToolType table must be a string value");
                     LuaValue lLevel = lToolType.get("level");
-                    if (!lLevel.isint())
-                        return argerror(4, "Specified level in ToolType table must be a int value");
+                    if (!lLevel.isint()) return argerror(4, "Specified level in ToolType table must be a int value");
                     toolTypes.put(ToolType.valueOf(lType.tojstring()), lLevel.toint());
                 } catch (IllegalArgumentException e) {
                     return argerror(4, "Specified ToolType was not recognized!");
@@ -208,8 +217,9 @@ public class ItemsLib extends TwoArgFunction {
         public boolean onInteractWith(IWorld world, int x, int y, TileLayer layer, double mouseX, double mouseY, AbstractEntityPlayer player, ItemInstance instance) {
             try {
                 WorldLib.world = world;
-                Varargs returnVal = function.invoke(varargsOf(new LuaValue[]{valueOf(x), valueOf(y), valueOf(layer.getName().toString()),
-                        valueOf(mouseX), valueOf(mouseY), valueOf(player.getUniqueId().toString()), itemInstanceToLua(instance)}));
+                Varargs returnVal = function.invoke(varargsOf(
+                        new LuaValue[]{valueOf(x), valueOf(y), valueOf(layer.getName().toString()), valueOf(mouseX), valueOf(mouseY), valueOf(player.getUniqueId().toString()),
+                                itemInstanceToLua(instance)}));
                 if (returnVal.arg1().isboolean()) {
                     return returnVal.arg1().toboolean();
                 }
