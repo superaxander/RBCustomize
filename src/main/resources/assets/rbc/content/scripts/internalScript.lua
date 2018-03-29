@@ -45,7 +45,7 @@ end
 
 DataSet = class(function(this, backingData)
     if not type(backingData) == "userdata" then
-        error("Invalid argument type expected a DataSet userdata object", 2)
+        error("Invalid argument type expected a DataSet userdata object", 3)
     end
     this.backingData = backingData;
 end)
@@ -194,7 +194,7 @@ end
 
 ItemInstance = class(function(this, item, amount, meta, set)
     if not item then
-        error("Item can not be nil!", 2)
+        error("Item can not be nil!", 3)
     end
 
     this.item = item
@@ -320,7 +320,7 @@ end
 
 ResUseInfo = class(function(this, name, amount)
     if not name then
-        error("Name can not be nil!", 2)
+        error("Name can not be nil!", 3)
     end
 
     this.name = name;
@@ -334,7 +334,7 @@ end)
 
 ToolLevel = class(function(this, tp, level)
     if not type(tp) == "string" or not type(level) == "number" then
-        error("Invalid argument types expected a string and a number", 2)
+        error("Invalid argument types expected a string and a number", 3)
     end
     this.tp = tp;
     this.level = level;
@@ -440,3 +440,223 @@ end
 function BoundBox:copy()
     return BoundBox().set(self)
 end
+
+TileProp = class(function(this, name)
+    this.name = name
+end)
+
+function TileProp.__eq(op1, op2)
+    return op1.name == op2.name
+end
+
+function TileProp.__lt(op1, op2)
+    return op1.name < op2.name
+end
+
+function TileProp.__le(op1, op2)
+    return op1.name <= op2.name
+end
+
+function TileProp:__tostring()
+    return self.name
+end
+
+IntProp = class(TileProp, function(this, name, def, possibilities)
+    TileProp.init(this, name)
+    this.def = def
+    this.possibilities = possibilities
+end)
+
+function IntProp:getVariants()
+    return self.possibilities
+end
+
+function IntProp:getValue(index)
+    return index
+end
+
+function IntProp:getIndex(value)
+    return value
+end
+
+EnumProp = class(TileProp, function(this, name, def, enumName)
+    TileProp.init(this, name)
+    this.def = def;
+    if type(enumName) == "string" then
+        this.enumName = enumName
+        this.values = utils.getEnumValues(enumName)
+    else
+        error(3, "Expected a string for argument 'enumName'")
+    end
+
+    for i = 1, #this.values do
+        if this.values[i] then
+            return
+        end
+    end
+    error(3, "The default value should be in the enum")
+end)
+
+function EnumProp:getVariants()
+    return #self.values
+end
+
+function EnumProp:getValue(index)
+    return self[index]
+end
+
+function EnumProp:getIndex(value)
+    for k, v in pairs(self.values) do
+        if v == value then
+            return k
+        end
+    end
+    error(2, "There is no index with that value")
+end
+
+StringProp = class(TileProp, function(this, name, def, allowedValues)
+    TileProp.init(this, name)
+    this.def = def;
+    if not type(allowedValues) == "table" then
+        error(3, "Allowed values must be a table")
+    end
+    this.allowedValues = allowedValues
+end)
+
+function StringProp:getVariants()
+    return #self.allowedValues
+end
+
+function StringProp:getValue(index)
+    return self.allowedValues[index]
+end
+
+function StringProp:getIndex(value)
+    for k, v in pairs(self.allowedValues) do
+        if v == value then
+            return k
+        end
+    end
+    error(2, "There is no index with that value")
+end
+
+BoolProp = class(TileProp, function(this, name, def)
+    TileProp.init(this, name)
+    this.def = def
+end)
+
+function BoolProp:getVariants()
+    return 2
+end
+
+function BoolProp:getValue(index)
+    return index == 1
+end
+
+function BoolProp:getIndex(value)
+    if value then
+        return 1
+    else
+        return 0
+    end
+end
+
+SpecificIntProp = class(TileProp, function(this, name, def, allowedValues)
+    TileProp.init(this, name)
+    this.def = def;
+    if not type(allowedValues) == "table" then
+        error(3, "Allowed values must be a table")
+    end
+    this.allowedValues = allowedValues
+end)
+
+function SpecificIntProp:getVariants()
+    return #self.allowedValues
+end
+
+function SpecificIntProp:getValue(index)
+    return self.allowedValues[index]
+end
+
+function SpecificIntProp:getIndex(value)
+    for k, v in pairs(self.allowedValues) do
+        if v == value then
+            return k
+        end
+    end
+    error(2, "There is no index with that value")
+end
+
+Texture = class(function(this, backingData)
+    this.backingData = backingData
+    this.renderWidth = textures.getRenderWidth(backingData)
+    this.renderHeight = textures.getRenderHeight(backingData)
+end)
+
+function Texture:draw(x, y, x2, y2, x3, y3, x4, y4, srcX, srcY, srcX2, srcY2, light, filter)
+    if not y then
+        error("Too few arguments")
+    end
+
+    if not x2 then -- 2 arguments
+        self:draw(x, y, 1.0)
+    elseif not y2 then -- 3 arguments
+        self:draw(x, y, self.renderWidth * x2, self.renderHeight * x2) -- x2 is scale
+    elseif not x3 then -- 4 arguments
+        self:draw(x, y, x2, y2, -1) -- -1 is filter
+    elseif not y3 then -- 5 arguments
+        if type(x3) == "table" then
+            self:draw(x, y, x2, y2, x3, -1) -- x3 is light, -1 is filter, x2 = width, y2 = height
+        else
+            self:draw(x, y, x + x2, y + y2, 0, 0, self.renderWidth, self.renderHeight, {}, x3) -- x2 = width, y2 = height, x3 = filter
+        end
+    elseif not x4 then -- 6 arguments
+        self:draw(x, y, x + x2, y + y2, 0, 0, self.renderWidth, self.renderHeight, x3, y3) -- x2 = width, y2 = height, x3 = light, y3 = filter
+    elseif not srcX then -- 8 arguments
+        self:draw(x, y, x2, y2, x3, y3, x4, y4, -1) -- -1 = filter
+    elseif not srcY then -- 9 arguments
+        if type(srcX) == "table" then
+            self:draw(x, y, x2, y2, x3, y3, x4, y4, srcX, -1) -- srcX = light, -1 = filter
+        else
+            self:draw(x, y, x2, y2, x3, y3, x4, y4, {}, srcX) -- srcX = filter
+        end
+    elseif not srcX2 then -- 10 arguments
+        self:draw(x, y, x, y2, x2, y2, x2, y, x3, y3, x4, y4, srcX, srcY) -- srcX = light, srcY = filter
+    elseif not filter then
+        error("Unsupported amount of arguments")
+    else
+        textures.draw(self.backingData, x, y, x2, y2, x3, y3, x4, y4, srcX, srcY, srcX2, srcY2, light, filter)
+    end
+end
+
+
+function Texture:getPositionalVariation(x, y)
+    return Texture(textures.getPositionalVariation(self.backingData, x, y))
+end
+
+Direction = class(function(this, x, y)
+    this.x = x
+    this.y = y
+end)
+
+Direction.NONE = Direction(0, 0)
+Direction.UP = Direction(0, 1)
+Direction.DOWN = Direction(0, -1)
+Direction.LEFT = Direction(-1, 0)
+Direction.RIGHT = Direction(1, 0)
+Direction.LEFT_UP = Direction(-1, 1)
+Direction.LEFT_DOWN = Direction(-1, -1)
+Direction.RIGHT_UP = Direction(1, 1)
+Direction.RIGHT_DOWN = Direction(1, -1)
+
+Direction.DIRECTIONS = { Direction.NONE, Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT, Direction.LEFT_UP, Direction.LEFT_DOWN, Direction.RIGHT_UP, Direction.RIGHT_DOWN }
+Direction.ADJACENT = { Direction.UP, Direction.RIGHT, Direction.DOWN, Direction.LEFT }
+Direction.ADJACENT_INCLUDING_NONE = { Direction.NONE, Direction.UP, Direction.RIGHT, Direction.DOWN, Direction.LEFT }
+Direction.DIAGONAL = { Direction.LEFT_UP, Direction.RIGHT_UP, Direction.RIGHT_DOWN, Direction.LEFT_DOWN }
+Direction.DIAGONAL_INCLUDING_NONE = { Direction.NONE, Direction.LEFT_UP, Direction.RIGHT_UP, Direction.RIGHT_DOWN, Direction.LEFT_DOWN }
+Direction.SURROUNDING = { Direction.LEFT_UP, Direction.UP, Direction.RIGHT_UP, Direction.RIGHT, Direction.RIGHT_DOWN, Direction.DOWN, Direction.LEFT_DOWN, Direction.LEFT }
+Direction.SURROUNDING_INCLUDING_NONE = { Direction.NONE, Direction.LEFT_UP, Direction.UP, Direction.RIGHT_UP, Direction.RIGHT, Direction.RIGHT_DOWN, Direction.DOWN, Direction.LEFT_DOWN, Direction.LEFT }
+
+-- Privatize constructor
+Direction.init = nil
+Direction.__call = nil

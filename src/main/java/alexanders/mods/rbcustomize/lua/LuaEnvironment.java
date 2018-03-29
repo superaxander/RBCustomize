@@ -40,6 +40,11 @@ public final class LuaEnvironment {
         globals.load(new InputLib(game.getInput()));
         globals.load(new DataLib());
         globals.load(new SandBoxedIoLib());
+        globals.load(new UtilsLib());
+        globals.load(new StatesLib());
+        globals.load(new RendererLib());
+        globals.load(new AssetManagerLib());
+        globals.load(new TexturesLib());
         LoadState.install(globals);
         LuaC.install(globals);
     }
@@ -88,7 +93,7 @@ public final class LuaEnvironment {
         return result;
     }
 
-    public static boolean executeScript(LuaValue function, LuaValue... values) {
+    static boolean executeScript(LuaValue function, LuaValue... values) {
         try {
             Varargs ret = function.invoke(LuaValue.varargsOf(values));
             return ret.arg1().isboolean() && ret.arg1().toboolean();

@@ -10,6 +10,21 @@ import org.luaj.vm2.lib.TwoArgFunction;
 import java.util.UUID;
 
 public class EntityLib extends TwoArgFunction {
+    public static Entity parseUUID(Varargs varargs, int i) {
+        Entity entity = null;
+        LuaValue lUUID = varargs.arg(i);
+        if (!lUUID.isstring()) {
+            argerror(i, "Expected a string value for argument 'uuid'");
+        }
+        try {
+            entity = WorldLib.world.getEntity(UUID.fromString(lUUID.tojstring()));
+            if (entity == null) argerror(i, "Specified uuid was not found");
+        } catch (IllegalArgumentException e) {
+            argerror(i, "Specified uuid was not a valid UUID");
+        }
+        return entity;
+    }
+
     @Override
     public LuaValue call(LuaValue arg1, LuaValue env) {
         LuaTable entity = new LuaTable();
@@ -20,8 +35,14 @@ public class EntityLib extends TwoArgFunction {
         entity.set("isOnGround", new FunctionWrapper(this::isOnGround));
         entity.set("getSelectedSlot", new FunctionWrapper(this::getSelectedSlot));
         entity.set("getInv", new FunctionWrapper(this::getInv));
+        entity.set("getFacing", new FunctionWrapper(this::getFacing));
         env.set("entity", entity);
         return entity;
+    }
+
+    private Varargs getFacing(Varargs varargs) {
+        Entity entity = parseUUID(varargs, 1);
+        return LuaEnvironment.globals.get("Direction").get(entity.facing.name());
     }
 
     private Varargs isOnGround(Varargs varargs) { // uuid --> isOnGround
@@ -77,21 +98,6 @@ public class EntityLib extends TwoArgFunction {
         } else {
             return argerror(1, "Specified uuid did not correspond to a player");
         }
-    }
-
-    public static Entity parseUUID(Varargs varargs, int i) {
-        Entity entity = null;
-        LuaValue lUUID = varargs.arg(i);
-        if (!lUUID.isstring()) {
-            argerror(i, "Expected a string value for argument 'uuid'");
-        }
-        try {
-            entity = WorldLib.world.getEntity(UUID.fromString(lUUID.tojstring()));
-            if (entity == null) argerror(i, "Specified uuid was not found");
-        } catch (IllegalArgumentException e) {
-            argerror(i, "Specified uuid was not a valid UUID");
-        }
-        return entity;
     }
 
 }
