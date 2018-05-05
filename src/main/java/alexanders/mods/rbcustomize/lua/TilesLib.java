@@ -55,7 +55,6 @@ public class TilesLib extends TwoArgFunction {
         String lName = varargs.checkjstring(1);
         if (!Util.isResourceName(lName)) return argerror(1, "Expected a ResourceName for argument 'tile'");
         ResourceName name = new ResourceName(lName);
-        Tile tile = RockBottomAPI.TILE_REGISTRY.get(name);
         RockBottomAPI.TILE_STATE_REGISTRY.keySet().stream().filter(it -> it.toString().startsWith(lName) && it.equals(name) || it.toString().charAt(lName.length()) == '@')
                 .forEach(RockBottomAPI.TILE_STATE_REGISTRY::unregister);
         RockBottomAPI.TILE_REGISTRY.unregister(name);
