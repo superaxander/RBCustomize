@@ -38,6 +38,7 @@ public class TilesLib extends TwoArgFunction {
     public LuaValue call(LuaValue arg1, LuaValue env) {
         LuaTable tiles = new LuaTable();
         tiles.set("add", new FunctionWrapper(this::addTile));
+        tiles.set("remove", new FunctionWrapper(this::remove));
         tiles.set("canBreak", new FunctionWrapper(this::canBreak));
         tiles.set("canPlace", new FunctionWrapper(this::canPlace));
         tiles.set("isFullTile", new FunctionWrapper(this::isFullTile));
@@ -48,6 +49,17 @@ public class TilesLib extends TwoArgFunction {
         tiles.set("getDefaultState", new FunctionWrapper(this::getDefaultState));
         env.set("tiles", tiles);
         return tiles;
+    }
+
+    private Varargs remove(Varargs varargs) {
+        String lName = varargs.checkjstring(1);
+        if (!Util.isResourceName(lName)) return argerror(1, "Expected a ResourceName for argument 'tile'");
+        ResourceName name = new ResourceName(lName);
+        Tile tile = RockBottomAPI.TILE_REGISTRY.get(name);
+        RockBottomAPI.TILE_STATE_REGISTRY.keySet().stream().filter(it -> it.toString().startsWith(lName) && it.equals(name) || it.toString().charAt(lName.length()) == '@')
+                .forEach(RockBottomAPI.TILE_STATE_REGISTRY::unregister);
+        RockBottomAPI.TILE_REGISTRY.unregister(name);
+        return NIL;
     }
 
     private Varargs getDefaultState(Varargs varargs) {

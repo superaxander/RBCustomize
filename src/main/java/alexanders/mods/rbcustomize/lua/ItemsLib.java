@@ -77,10 +77,19 @@ public class ItemsLib extends TwoArgFunction {
     public LuaValue call(LuaValue arg1, LuaValue env) {
         LuaTable items = new LuaTable();
         items.set("add", new FunctionWrapper(this::addItem));
+        items.set("remove", new FunctionWrapper(this::remove));
+        // TODO: ADD REMOVE TO ALL THE THINGS
         items.set("getMaxAmount", new FunctionWrapper(this::getMaxAmount));
         items.set("isDataSensitive", new FunctionWrapper(this::isDataSensitive));
         env.set("items", items);
         return items;
+    }
+
+    private Varargs remove(Varargs varargs) {
+        String lName = varargs.checkjstring(1);
+        if(!Util.isResourceName(lName)) return argerror(1, "Expected a ResourceName for argument 'item'");
+        RockBottomAPI.ITEM_REGISTRY.unregister(new ResourceName(lName));
+        return NIL;
     }
 
     private Varargs isDataSensitive(Varargs varargs) {

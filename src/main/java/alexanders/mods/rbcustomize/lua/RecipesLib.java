@@ -8,6 +8,7 @@ import de.ellpeck.rockbottom.api.construction.resource.IUseInfo;
 import de.ellpeck.rockbottom.api.construction.resource.ItemUseInfo;
 import de.ellpeck.rockbottom.api.construction.resource.ResUseInfo;
 import de.ellpeck.rockbottom.api.item.ItemInstance;
+import de.ellpeck.rockbottom.api.util.Util;
 import de.ellpeck.rockbottom.api.util.reg.ResourceName;
 import org.luaj.vm2.LuaBoolean;
 import org.luaj.vm2.LuaTable;
@@ -20,8 +21,19 @@ public class RecipesLib extends TwoArgFunction {
     public LuaValue call(LuaValue arg1, LuaValue env) {
         LuaTable recipes = new LuaTable();
         recipes.set("add", new FunctionWrapper(this::addRecipe));
+        recipes.set("remove", new FunctionWrapper(this::remove));
         env.set("recipes", recipes);
         return recipes;
+    }
+
+    private Varargs remove(Varargs varargs) {
+        String lName = varargs.checkjstring(1);
+        if(!Util.isResourceName(lName)) return argerror(1, "Expected a ResourceName for argument 'item'");
+        ResourceName name = new ResourceName(lName);
+        IRecipe recipe = RockBottomAPI.ALL_CONSTRUCTION_RECIPES.get(name);
+        if(recipe instanceof BasicRecipe) RockBottomAPI.MANUAL_CONSTRUCTION_RECIPES.unregister(name);
+        RockBottomAPI.ALL_CONSTRUCTION_RECIPES.unregister(name);
+        return NIL;
     }
 
     private Varargs addRecipe(Varargs varargs) { // type, name, output, inputs... --> recipe, ok //TODO: add support for supplying knowledge based recipe information names

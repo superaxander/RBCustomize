@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Locale;
 
 public class ScriptContentLoader implements IContentLoader<Script> {
-    public static HashMap<ResourceName, Script> loadedScripts = new HashMap<>();
+    public static final HashMap<ResourceName, Script> loadedScripts = new HashMap<>();
     public static Script internalScript;
     private static final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 

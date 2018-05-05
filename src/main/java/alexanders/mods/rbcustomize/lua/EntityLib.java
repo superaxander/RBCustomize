@@ -1,7 +1,10 @@
 package alexanders.mods.rbcustomize.lua;
 
+import de.ellpeck.rockbottom.api.RockBottomAPI;
 import de.ellpeck.rockbottom.api.entity.Entity;
 import de.ellpeck.rockbottom.api.entity.player.AbstractEntityPlayer;
+import de.ellpeck.rockbottom.api.util.Util;
+import de.ellpeck.rockbottom.api.util.reg.ResourceName;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.Varargs;
@@ -28,6 +31,7 @@ public class EntityLib extends TwoArgFunction {
     @Override
     public LuaValue call(LuaValue arg1, LuaValue env) {
         LuaTable entity = new LuaTable();
+        entity.set("remove", new FunctionWrapper(this::remove));
         entity.set("getMotionX", new FunctionWrapper(this::getMotionX));
         entity.set("getMotionY", new FunctionWrapper(this::getMotionY));
         entity.set("setMotionX", new FunctionWrapper(this::setMotionX));
@@ -38,6 +42,13 @@ public class EntityLib extends TwoArgFunction {
         entity.set("getFacing", new FunctionWrapper(this::getFacing));
         env.set("entity", entity);
         return entity;
+    }
+
+    private Varargs remove(Varargs varargs) {
+        String lName = varargs.checkjstring(1);
+        if(!Util.isResourceName(lName)) return argerror(1, "Expected a ResourceName for argument 'entity'");
+        RockBottomAPI.ENTITY_REGISTRY.unregister(new ResourceName(lName));
+        return NIL;
     }
 
     private Varargs getFacing(Varargs varargs) {
