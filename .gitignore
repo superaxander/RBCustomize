@@ -9,3 +9,4 @@ doc
 gamedata
 rockbottom
 *.launch
+/ignored/

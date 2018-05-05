@@ -3,7 +3,7 @@ package alexanders.mods.rbcustomize.lua;
 import de.ellpeck.rockbottom.api.RockBottomAPI;
 import de.ellpeck.rockbottom.api.entity.Entity;
 import de.ellpeck.rockbottom.api.tile.state.TileState;
-import de.ellpeck.rockbottom.api.util.reg.IResourceName;
+import de.ellpeck.rockbottom.api.util.reg.ResourceName;
 import de.ellpeck.rockbottom.api.world.IWorld;
 import de.ellpeck.rockbottom.api.world.layer.TileLayer;
 import org.luaj.vm2.LuaTable;
@@ -41,9 +41,9 @@ public class WorldLib extends TwoArgFunction {
         TileLayer layer;
         LuaValue lLayer = varargs.arg(3);
         if (!lLayer.isstring()) return argerror(3, "Expected a string value for argument 'layer'");
-        IResourceName name;
+        ResourceName name;
         try {
-            name = RockBottomAPI.createRes(lLayer.tojstring());
+            name = new ResourceName(lLayer.tojstring());
         } catch (IllegalArgumentException e) {
             return argerror(3, "Specified layer was not a resource name");
         }
@@ -56,9 +56,9 @@ public class WorldLib extends TwoArgFunction {
         if (!lState.isstring()) {
             return argerror(4, "Expected a string value for argument 'state'");
         }
-        IResourceName stateName;
+        ResourceName stateName;
         try {
-            stateName = RockBottomAPI.createRes(lState.tojstring());
+            stateName = new ResourceName(lState.tojstring());
         } catch (IllegalArgumentException e) {
             return argerror(4, "Specified state was not a resource name");
         }
@@ -83,9 +83,9 @@ public class WorldLib extends TwoArgFunction {
         TileLayer layer;
         LuaValue lLayer = varargs.arg(3);
         if (!lLayer.isstring()) return argerror(3, "Expected a string value for argument 'layer'");
-        IResourceName name;
+        ResourceName name;
         try {
-            name = RockBottomAPI.createRes(lLayer.tojstring());
+            name = new ResourceName(lLayer.tojstring());
         } catch (IllegalArgumentException e) {
             return argerror(3, "Specified layer was not a resource name");
         }
@@ -110,9 +110,9 @@ public class WorldLib extends TwoArgFunction {
         TileLayer layer;
         LuaValue lLayer = varargs.arg(3);
         if (!lLayer.isstring()) return argerror(3, "Expected a string value for argument 'layer'");
-        IResourceName name;
+        ResourceName name;
         try {
-            name = RockBottomAPI.createRes(lLayer.tojstring());
+            name = new ResourceName(lLayer.tojstring());
         } catch (IllegalArgumentException e) {
             return argerror(3, "Specified layer was not a resource name");
         }

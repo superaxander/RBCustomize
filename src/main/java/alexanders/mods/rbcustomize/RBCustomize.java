@@ -9,10 +9,8 @@ import de.ellpeck.rockbottom.api.event.impl.WorldLoadEvent;
 import de.ellpeck.rockbottom.api.event.impl.WorldTickEvent;
 import de.ellpeck.rockbottom.api.event.impl.WorldUnloadEvent;
 import de.ellpeck.rockbottom.api.mod.IMod;
-import de.ellpeck.rockbottom.api.util.reg.IResourceName;
+import de.ellpeck.rockbottom.api.util.reg.ResourceName;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.logging.Logger;
 
 public class RBCustomize implements IMod {
@@ -23,8 +21,8 @@ public class RBCustomize implements IMod {
         instance = this;
     }
 
-    public static IResourceName createRes(String resource) {
-        return RockBottomAPI.createRes(instance, resource);
+    public static ResourceName createRes(String resource) {
+        return new ResourceName(instance, resource);
     }
 
     @Override
@@ -44,12 +42,12 @@ public class RBCustomize implements IMod {
 
     @Override
     public String getResourceLocation() {
-        return "assets/" + getId();
+        return "assets/" + this.getId();
     }
 
     @Override
     public String getContentLocation() {
-        return "assets/" + getId() + "/content";
+        return "assets/" + this.getId() + "/content";
     }
 
     @Override

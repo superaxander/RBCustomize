@@ -16,7 +16,7 @@ import de.ellpeck.rockbottom.api.tile.TileLiquid;
 import de.ellpeck.rockbottom.api.tile.state.*;
 import de.ellpeck.rockbottom.api.util.BoundBox;
 import de.ellpeck.rockbottom.api.util.Util;
-import de.ellpeck.rockbottom.api.util.reg.IResourceName;
+import de.ellpeck.rockbottom.api.util.reg.ResourceName;
 import de.ellpeck.rockbottom.api.world.IWorld;
 import de.ellpeck.rockbottom.api.world.layer.TileLayer;
 import org.luaj.vm2.LuaError;
@@ -55,7 +55,7 @@ public class TilesLib extends TwoArgFunction {
         if (!lTile.isstring()) return argerror(1, "Expected a string value for argument 'tile'");
         String sTile = lTile.tojstring();
         if (!Util.isResourceName(sTile)) return argerror(1, "Specified tile was not a resource name");
-        Tile tile = RockBottomAPI.TILE_REGISTRY.get(RockBottomAPI.createRes(sTile));
+        Tile tile = RockBottomAPI.TILE_REGISTRY.get(new ResourceName(sTile));
         if (tile == null) return argerror(1, "Specified tile was not found");
 
         return valueOf(tile.getDefState().getName().toString());
@@ -67,7 +67,7 @@ public class TilesLib extends TwoArgFunction {
         if (!lTile.isstring()) return argerror(1, "Expected a string value for argument 'tile'");
         String sTile = lTile.tojstring();
         if (!Util.isResourceName(sTile)) return argerror(1, "Specified tile was not a resource name");
-        Tile tile = RockBottomAPI.TILE_REGISTRY.get(RockBottomAPI.createRes(sTile));
+        Tile tile = RockBottomAPI.TILE_REGISTRY.get(new ResourceName(sTile));
         if (tile == null) return argerror(1, "Specified tile was not found");
 
         LuaValue lX = varargs.arg(2);
@@ -81,9 +81,9 @@ public class TilesLib extends TwoArgFunction {
         TileLayer layer;
         LuaValue lLayer = varargs.arg(4);
         if (!lLayer.isstring()) return argerror(4, "Expected a string value for argument 'layer'");
-        IResourceName name;
+        ResourceName name;
         try {
-            name = RockBottomAPI.createRes(lLayer.tojstring());
+            name = new ResourceName(lLayer.tojstring());
         } catch (IllegalArgumentException e) {
             return argerror(4, "Specified layer was not a resource name");
         }
@@ -107,7 +107,7 @@ public class TilesLib extends TwoArgFunction {
         if (!lTile.isstring()) return argerror(1, "Expected a string value for argument 'tile'");
         String sTile = lTile.tojstring();
         if (!Util.isResourceName(sTile)) return argerror(1, "Specified tile was not a resource name");
-        Tile tile = RockBottomAPI.TILE_REGISTRY.get(RockBottomAPI.createRes(sTile));
+        Tile tile = RockBottomAPI.TILE_REGISTRY.get(new ResourceName(sTile));
         if (tile == null) return argerror(1, "Specified tile was not found");
 
         LuaValue lX = varargs.arg(2);
@@ -121,9 +121,9 @@ public class TilesLib extends TwoArgFunction {
         TileLayer layer;
         LuaValue lLayer = varargs.arg(4);
         if (!lLayer.isstring()) return argerror(4, "Expected a string value for argument 'layer'");
-        IResourceName name;
+        ResourceName name;
         try {
-            name = RockBottomAPI.createRes(lLayer.tojstring());
+            name = new ResourceName(lLayer.tojstring());
         } catch (IllegalArgumentException e) {
             return argerror(4, "Specified layer was not a resource name");
         }
@@ -148,7 +148,7 @@ public class TilesLib extends TwoArgFunction {
         if (!lTile.isstring()) return argerror(1, "Expected a string value for argument 'tile'");
         String sTile = lTile.tojstring();
         if (!Util.isResourceName(sTile)) return argerror(1, "Specified tile was not a resource name");
-        Tile tile = RockBottomAPI.TILE_REGISTRY.get(RockBottomAPI.createRes(sTile));
+        Tile tile = RockBottomAPI.TILE_REGISTRY.get(new ResourceName(sTile));
         if (tile == null) return argerror(1, "Specified tile was not found");
 
         return valueOf(tile.isFullTile());
@@ -159,7 +159,7 @@ public class TilesLib extends TwoArgFunction {
         if (!lTile.isstring()) return argerror(1, "Expected a string value for argument 'tile'");
         String sTile = lTile.tojstring();
         if (!Util.isResourceName(sTile)) return argerror(1, "Specified tile was not a resource name");
-        Tile tile = RockBottomAPI.TILE_REGISTRY.get(RockBottomAPI.createRes(sTile));
+        Tile tile = RockBottomAPI.TILE_REGISTRY.get(new ResourceName(sTile));
         if (tile == null) return argerror(1, "Specified tile was not found");
 
         return valueOf(tile.isLiquid());
@@ -171,7 +171,7 @@ public class TilesLib extends TwoArgFunction {
         if (!lTile.isstring()) return argerror(1, "Expected a string value for argument 'tile'");
         String sTile = lTile.tojstring();
         if (!Util.isResourceName(sTile)) return argerror(1, "Specified tile was not a resource name");
-        Tile tile = RockBottomAPI.TILE_REGISTRY.get(RockBottomAPI.createRes(sTile));
+        Tile tile = RockBottomAPI.TILE_REGISTRY.get(new ResourceName(sTile));
         if (tile == null) return argerror(1, "Specified tile was not found");
 
         LuaValue lX = varargs.arg(2);
@@ -185,9 +185,9 @@ public class TilesLib extends TwoArgFunction {
         TileLayer layer;
         LuaValue lLayer = varargs.arg(4);
         if (!lLayer.isstring()) return argerror(4, "Expected a string value for argument 'layer'");
-        IResourceName name;
+        ResourceName name;
         try {
-            name = RockBottomAPI.createRes(lLayer.tojstring());
+            name = new ResourceName(lLayer.tojstring());
         } catch (IllegalArgumentException e) {
             return argerror(4, "Specified layer was not a resource name");
         }
@@ -203,7 +203,7 @@ public class TilesLib extends TwoArgFunction {
         if (!lTile.isstring()) return argerror(1, "Expected a string value for argument 'tile'");
         String sTile = lTile.tojstring();
         if (!Util.isResourceName(sTile)) return argerror(1, "Specified tile was not a resource name");
-        Tile tile = RockBottomAPI.TILE_REGISTRY.get(RockBottomAPI.createRes(sTile));
+        Tile tile = RockBottomAPI.TILE_REGISTRY.get(new ResourceName(sTile));
         if (tile == null) return argerror(1, "Specified tile was not found");
 
         LuaValue lX = varargs.arg(2);
@@ -217,9 +217,9 @@ public class TilesLib extends TwoArgFunction {
         TileLayer layer;
         LuaValue lLayer = varargs.arg(4);
         if (!lLayer.isstring()) return argerror(4, "Expected a string value for argument 'layer'");
-        IResourceName name;
+        ResourceName name;
         try {
-            name = RockBottomAPI.createRes(lLayer.tojstring());
+            name = new ResourceName(lLayer.tojstring());
         } catch (IllegalArgumentException e) {
             return argerror(4, "Specified layer was not a resource name");
         }
@@ -245,7 +245,7 @@ public class TilesLib extends TwoArgFunction {
         if (!lTile.isstring()) return argerror(1, "Expected a string value for argument 'tile'");
         String sTile = lTile.tojstring();
         if (!Util.isResourceName(sTile)) return argerror(1, "Specified tile was not a resource name");
-        Tile tile = RockBottomAPI.TILE_REGISTRY.get(RockBottomAPI.createRes(sTile));
+        Tile tile = RockBottomAPI.TILE_REGISTRY.get(new ResourceName(sTile));
         if (tile == null) return argerror(1, "Specified tile was not found");
 
         LuaValue lX = varargs.arg(2);
@@ -259,9 +259,9 @@ public class TilesLib extends TwoArgFunction {
         TileLayer layer;
         LuaValue lLayer = varargs.arg(4);
         if (!lLayer.isstring()) return argerror(4, "Expected a string value for argument 'layer'");
-        IResourceName name;
+        ResourceName name;
         try {
-            name = RockBottomAPI.createRes(lLayer.tojstring());
+            name = new ResourceName(lLayer.tojstring());
         } catch (IllegalArgumentException e) {
             return argerror(4, "Specified layer was not a resource name");
         }
@@ -307,6 +307,7 @@ public class TilesLib extends TwoArgFunction {
         boolean canKeepPlants = false;
         boolean canLiquidSpreadInto = false;
         boolean isFullTile = true;
+        boolean doesSustainLeaves = false;
         float hardness = 1f;
         int interactionPriority = 0;
         TileProp[] props = new TileProp[0];
@@ -314,9 +315,9 @@ public class TilesLib extends TwoArgFunction {
         if (varargs.narg() < 1) return argerror("Expected at leas 1 argument");
         LuaValue lName = varargs.arg(1);
         if (!lName.isstring()) return argerror(1, "Expected a string value for argument 'name'");
-        IResourceName name;
+        ResourceName name;
         try {
-            name = RockBottomAPI.createRes(lName.tojstring());
+            name = new ResourceName(lName.tojstring());
         } catch (IllegalArgumentException e) {
             return argerror(1, "Specified name was not a resource name");
         }
@@ -368,6 +369,7 @@ public class TilesLib extends TwoArgFunction {
             tileTable.set("canKeepPlants", FALSE);
             tileTable.set("canLiquidSpreadInto", FALSE);
             tileTable.set("isFullTile", TRUE);
+            tileTable.set("doesSustainLeaves", FALSE);
             tileTable.set("hardness", valueOf(hardness));
             tileTable.set("interactionPriority", valueOf(0));
             tileTable.set("props", NIL);
@@ -407,8 +409,8 @@ public class TilesLib extends TwoArgFunction {
                     if (!lLayer.isstring()) return error("All values in the placeableLayers table must be strings");
                     String sLayer = lLayer.tojstring();
                     if (!Util.isResourceName(sLayer)) placeableLayers.add(i - 1,
-                                                                          TileLayer.getAllLayers().stream().filter((layer) -> layer.getName() == RockBottomAPI.createRes(sLayer))
-                                                                                  .findAny().orElseThrow(() -> new LuaError(valueOf("Invalid layer name"))));
+                                                                          TileLayer.getAllLayers().stream().filter((layer) -> layer.getName() == new ResourceName(sLayer)).findAny()
+                                                                                  .orElseThrow(() -> new LuaError(valueOf("Invalid layer name"))));
                 }
             }
             LuaValue lDrops = tileTable.get("drops");
@@ -427,6 +429,7 @@ public class TilesLib extends TwoArgFunction {
             canKeepPlants = tileTable.get("canKeepPlants").checkboolean();
             canLiquidSpreadInto = tileTable.get("canLiquidSpreadInto").checkboolean();
             isFullTile = tileTable.get("isFullTile").checkboolean();
+            doesSustainLeaves = tileTable.get("doesSustainLeaves").checkboolean();
             hardness = (float) tileTable.get("hardness").checkdouble();
             interactionPriority = tileTable.get("interactionPriority").checkint();
             LuaValue lProps = tileTable.get("props");
@@ -487,7 +490,7 @@ public class TilesLib extends TwoArgFunction {
         }
         new LuaTile(name, description, canBreak, canPlace, canStay, canReplace, onRemoved, onAdded, onDestroyed, onInteractWith, onChangeAround, onScheduledUpdate,
                     onCollideWithEntity, updateRandomly, render, renderItem, getPlacementState, bbs, placeableLayers, drops, hasItem, canClimb, canGrassSpreadTo, canKeepPlants,
-                    canLiquidSpreadInto, isFullTile, hardness, interactionPriority, props, bb).register();
+                    canLiquidSpreadInto, isFullTile, hardness, interactionPriority, props, bb, doesSustainLeaves).register();
         return valueOf(name.toString());
     }
 
@@ -523,8 +526,9 @@ public class TilesLib extends TwoArgFunction {
         private final boolean canLiquidSpreadInto;
         private final boolean isFullTile;
         private final int interactionPriority;
+        private final boolean doesSustainLeaves;
 
-        private LuaTile(IResourceName name, String[] description, LuaValue canBreak, LuaValue canPlace, LuaValue canStay, LuaValue canReplace, LuaValue onRemoved, LuaValue onAdded, LuaValue onDestroyed, LuaValue onInteractWith, LuaValue onChangeAround, LuaValue onScheduledUpdate, LuaValue onCollideWithEntity, LuaValue updateRandomly, LuaValue render, LuaValue renderItem, LuaValue getPlacementState, List<BoundBox> bbs, List<TileLayer> placeableLayers, List<ItemInstance> drops, boolean hasItem, boolean canClimb, boolean canGrassSpreadTo, boolean canKeepPlants, boolean canLiquidSpreadInto, boolean isFullTile, float hardness, int interactionPriority, TileProp[] props, BoundBox bb) {
+        private LuaTile(ResourceName name, String[] description, LuaValue canBreak, LuaValue canPlace, LuaValue canStay, LuaValue canReplace, LuaValue onRemoved, LuaValue onAdded, LuaValue onDestroyed, LuaValue onInteractWith, LuaValue onChangeAround, LuaValue onScheduledUpdate, LuaValue onCollideWithEntity, LuaValue updateRandomly, LuaValue render, LuaValue renderItem, LuaValue getPlacementState, List<BoundBox> bbs, List<TileLayer> placeableLayers, List<ItemInstance> drops, boolean hasItem, boolean canClimb, boolean canGrassSpreadTo, boolean canKeepPlants, boolean canLiquidSpreadInto, boolean isFullTile, float hardness, int interactionPriority, TileProp[] props, BoundBox bb, boolean doesSustainLeaves) {
             super(name);
             this.description = description;
             this.canBreak = canBreak;
@@ -552,6 +556,7 @@ public class TilesLib extends TwoArgFunction {
             this.canKeepPlants = canKeepPlants;
             this.canLiquidSpreadInto = canLiquidSpreadInto;
             this.isFullTile = isFullTile;
+            this.doesSustainLeaves = doesSustainLeaves;
             this.setHardness(hardness);
             this.interactionPriority = interactionPriority;
             this.addProps(props);
@@ -567,14 +572,14 @@ public class TilesLib extends TwoArgFunction {
                         valueOf(placer.getUniqueId().toString())}));
                 String sState = ret.checkjstring(1);
                 if (!Util.isResourceName(sState)) error("getPlacementState must return a valid resource name");
-                TileState state = RockBottomAPI.TILE_STATE_REGISTRY.get(RockBottomAPI.createRes(sState));
+                TileState state = RockBottomAPI.TILE_STATE_REGISTRY.get(new ResourceName(sState));
                 if (state == null) error("getPlacementState must return a registered state");
                 return state;
             }
         }
 
         @Override
-        protected ITileRenderer createRenderer(IResourceName name) {
+        protected ITileRenderer createRenderer(ResourceName name) {
             return new LuaTileRenderer(name);
         }
 
@@ -671,7 +676,7 @@ public class TilesLib extends TwoArgFunction {
 
         @Override
         public boolean doesSustainLeaves(IWorld world, int x, int y, TileLayer layer) {
-            return super.doesSustainLeaves(world, x, y, layer);
+            return doesSustainLeaves;
         }
 
         @Override
@@ -796,7 +801,7 @@ public class TilesLib extends TwoArgFunction {
         }
 
         private class LuaTileRenderer extends DefaultTileRenderer<LuaTile> {
-            private LuaTileRenderer(IResourceName texture) {
+            private LuaTileRenderer(ResourceName texture) {
                 super(texture);
             }
 

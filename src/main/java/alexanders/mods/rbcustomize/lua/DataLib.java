@@ -1,9 +1,9 @@
 package alexanders.mods.rbcustomize.lua;
 
-import de.ellpeck.rockbottom.api.RockBottomAPI;
 import de.ellpeck.rockbottom.api.data.set.AbstractDataSet;
 import de.ellpeck.rockbottom.api.data.set.DataSet;
 import de.ellpeck.rockbottom.api.data.set.ModBasedDataSet;
+import de.ellpeck.rockbottom.api.util.reg.ResourceName;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.Varargs;
@@ -79,7 +79,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
             ((DataSet) dataSet).addString(key, value);
         } else if (dataSet instanceof ModBasedDataSet) {
             try {
-                ((ModBasedDataSet) dataSet).addString(RockBottomAPI.createRes(key), value);
+                ((ModBasedDataSet) dataSet).addString(new ResourceName(key), value);
             } catch (IllegalArgumentException e) {
                 return argerror(2, "Key must be a resource name");
             }
@@ -97,7 +97,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
             ((DataSet) dataSet).addBoolean(key, value);
         } else if (dataSet instanceof ModBasedDataSet) {
             try {
-                ((ModBasedDataSet) dataSet).addBoolean(RockBottomAPI.createRes(key), value);
+                ((ModBasedDataSet) dataSet).addBoolean(new ResourceName(key), value);
             } catch (IllegalArgumentException e) {
                 return argerror(2, "Key must be a resource name");
             }
@@ -115,7 +115,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
             ((DataSet) dataSet).addByte(key, value);
         } else if (dataSet instanceof ModBasedDataSet) {
             try {
-                ((ModBasedDataSet) dataSet).addByte(RockBottomAPI.createRes(key), value);
+                ((ModBasedDataSet) dataSet).addByte(new ResourceName(key), value);
             } catch (IllegalArgumentException e) {
                 return argerror(2, "Key must be a resource name");
             }
@@ -133,7 +133,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
             ((DataSet) dataSet).addShort(key, value);
         } else if (dataSet instanceof ModBasedDataSet) {
             try {
-                ((ModBasedDataSet) dataSet).addShort(RockBottomAPI.createRes(key), value);
+                ((ModBasedDataSet) dataSet).addShort(new ResourceName(key), value);
             } catch (IllegalArgumentException e) {
                 return argerror(2, "Key must be a resource name");
             }
@@ -151,7 +151,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
             ((DataSet) dataSet).addInt(key, value);
         } else if (dataSet instanceof ModBasedDataSet) {
             try {
-                ((ModBasedDataSet) dataSet).addInt(RockBottomAPI.createRes(key), value);
+                ((ModBasedDataSet) dataSet).addInt(new ResourceName(key), value);
             } catch (IllegalArgumentException e) {
                 return argerror(2, "Key must be a resource name");
             }
@@ -169,7 +169,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
             ((DataSet) dataSet).addLong(key, value);
         } else if (dataSet instanceof ModBasedDataSet) {
             try {
-                ((ModBasedDataSet) dataSet).addLong(RockBottomAPI.createRes(key), value);
+                ((ModBasedDataSet) dataSet).addLong(new ResourceName(key), value);
             } catch (IllegalArgumentException e) {
                 return argerror(2, "Key must be a resource name");
             }
@@ -187,7 +187,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
             ((DataSet) dataSet).addFloat(key, value);
         } else if (dataSet instanceof ModBasedDataSet) {
             try {
-                ((ModBasedDataSet) dataSet).addFloat(RockBottomAPI.createRes(key), value);
+                ((ModBasedDataSet) dataSet).addFloat(new ResourceName(key), value);
             } catch (IllegalArgumentException e) {
                 return argerror(2, "Key must be a resource name");
             }
@@ -205,7 +205,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
             ((DataSet) dataSet).addDouble(key, value);
         } else if (dataSet instanceof ModBasedDataSet) {
             try {
-                ((ModBasedDataSet) dataSet).addDouble(RockBottomAPI.createRes(key), value);
+                ((ModBasedDataSet) dataSet).addDouble(new ResourceName(key), value);
             } catch (IllegalArgumentException e) {
                 return argerror(2, "Key must be a resource name");
             }
@@ -223,7 +223,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
             ((DataSet) dataSet).addDataSet(key, value);
         } else if (dataSet instanceof ModBasedDataSet) {
             try {
-                ((ModBasedDataSet) dataSet).addDataSet(RockBottomAPI.createRes(key), value);
+                ((ModBasedDataSet) dataSet).addDataSet(new ResourceName(key), value);
             } catch (IllegalArgumentException e) {
                 return argerror(2, "Key must be a resource name");
             }
@@ -241,7 +241,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
             ((DataSet) dataSet).addModBasedDataSet(key, value);
         } else if (dataSet instanceof ModBasedDataSet) {
             try {
-                ((ModBasedDataSet) dataSet).addModBasedDataSet(RockBottomAPI.createRes(key), value);
+                ((ModBasedDataSet) dataSet).addModBasedDataSet(new ResourceName(key), value);
             } catch (IllegalArgumentException e) {
                 return argerror(2, "Key must be a resource name");
             }
@@ -263,7 +263,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
             ((DataSet) dataSet).addByteArray(key, value);
         } else if (dataSet instanceof ModBasedDataSet) {
             try {
-                ((ModBasedDataSet) dataSet).addByteArray(RockBottomAPI.createRes(key), value);
+                ((ModBasedDataSet) dataSet).addByteArray(new ResourceName(key), value);
             } catch (IllegalArgumentException e) {
                 return argerror(2, "Key must be a resource name");
             }
@@ -285,7 +285,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
             ((DataSet) dataSet).addIntArray(key, value);
         } else if (dataSet instanceof ModBasedDataSet) {
             try {
-                ((ModBasedDataSet) dataSet).addIntArray(RockBottomAPI.createRes(key), value);
+                ((ModBasedDataSet) dataSet).addIntArray(new ResourceName(key), value);
             } catch (IllegalArgumentException e) {
                 return argerror(2, "Key must be a resource name");
             }
@@ -307,7 +307,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
             ((DataSet) dataSet).addShortArray(key, value);
         } else if (dataSet instanceof ModBasedDataSet) {
             try {
-                ((ModBasedDataSet) dataSet).addShortArray(RockBottomAPI.createRes(key), value);
+                ((ModBasedDataSet) dataSet).addShortArray(new ResourceName(key), value);
             } catch (IllegalArgumentException e) {
                 return argerror(2, "Key must be a resource name");
             }
@@ -325,7 +325,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
                 ((DataSet) dataSet).addUniqueId(key, value);
             } else if (dataSet instanceof ModBasedDataSet) {
                 try {
-                    ((ModBasedDataSet) dataSet).addUniqueId(RockBottomAPI.createRes(key), value);
+                    ((ModBasedDataSet) dataSet).addUniqueId(new ResourceName(key), value);
                 } catch (IllegalArgumentException e) {
                     return argerror(2, "Key must be a resource name");
                 }
@@ -343,7 +343,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
             return valueOf(((DataSet) dataSet).getString(key));
         } else if (dataSet instanceof ModBasedDataSet) {
             try {
-                return valueOf(((ModBasedDataSet) dataSet).getString(RockBottomAPI.createRes(key)));
+                return valueOf(((ModBasedDataSet) dataSet).getString(new ResourceName(key)));
             } catch (IllegalArgumentException e) {
                 return argerror(2, "Key must be a resource name");
             }
@@ -358,7 +358,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
             return valueOf(((DataSet) dataSet).getString(key));
         } else if (dataSet instanceof ModBasedDataSet) {
             try {
-                return valueOf(((ModBasedDataSet) dataSet).getBoolean(RockBottomAPI.createRes(key)));
+                return valueOf(((ModBasedDataSet) dataSet).getBoolean(new ResourceName(key)));
             } catch (IllegalArgumentException e) {
                 return argerror(2, "Key must be a resource name");
             }
@@ -373,7 +373,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
             return valueOf(((DataSet) dataSet).getByte(key));
         } else if (dataSet instanceof ModBasedDataSet) {
             try {
-                return valueOf(((ModBasedDataSet) dataSet).getByte(RockBottomAPI.createRes(key)));
+                return valueOf(((ModBasedDataSet) dataSet).getByte(new ResourceName(key)));
             } catch (IllegalArgumentException e) {
                 return argerror(2, "Key must be a resource name");
             }
@@ -388,7 +388,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
             return valueOf(((DataSet) dataSet).getShort(key));
         } else if (dataSet instanceof ModBasedDataSet) {
             try {
-                return valueOf(((ModBasedDataSet) dataSet).getShort(RockBottomAPI.createRes(key)));
+                return valueOf(((ModBasedDataSet) dataSet).getShort(new ResourceName(key)));
             } catch (IllegalArgumentException e) {
                 return argerror(2, "Key must be a resource name");
             }
@@ -403,7 +403,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
             return valueOf(((DataSet) dataSet).getInt(key));
         } else if (dataSet instanceof ModBasedDataSet) {
             try {
-                return valueOf(((ModBasedDataSet) dataSet).getInt(RockBottomAPI.createRes(key)));
+                return valueOf(((ModBasedDataSet) dataSet).getInt(new ResourceName(key)));
             } catch (IllegalArgumentException e) {
                 return argerror(2, "Key must be a resource name");
             }
@@ -418,7 +418,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
             return valueOf(((DataSet) dataSet).getLong(key));
         } else if (dataSet instanceof ModBasedDataSet) {
             try {
-                return valueOf(((ModBasedDataSet) dataSet).getLong(RockBottomAPI.createRes(key)));
+                return valueOf(((ModBasedDataSet) dataSet).getLong(new ResourceName(key)));
             } catch (IllegalArgumentException e) {
                 return argerror(2, "Key must be a resource name");
             }
@@ -433,7 +433,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
             return valueOf(((DataSet) dataSet).getFloat(key));
         } else if (dataSet instanceof ModBasedDataSet) {
             try {
-                return valueOf(((ModBasedDataSet) dataSet).getFloat(RockBottomAPI.createRes(key)));
+                return valueOf(((ModBasedDataSet) dataSet).getFloat(new ResourceName(key)));
             } catch (IllegalArgumentException e) {
                 return argerror(2, "Key must be a resource name");
             }
@@ -448,7 +448,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
             return valueOf(((DataSet) dataSet).getDouble(key));
         } else if (dataSet instanceof ModBasedDataSet) {
             try {
-                return valueOf(((ModBasedDataSet) dataSet).getDouble(RockBottomAPI.createRes(key)));
+                return valueOf(((ModBasedDataSet) dataSet).getDouble(new ResourceName(key)));
             } catch (IllegalArgumentException e) {
                 return argerror(2, "Key must be a resource name");
             }
@@ -463,7 +463,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
             return LuaEnvironment.globals.get("DataSet").call(userdataOf(((DataSet) dataSet).getDataSet(key)));
         } else if (dataSet instanceof ModBasedDataSet) {
             try {
-                return LuaEnvironment.globals.get("DataSet").call(userdataOf(((ModBasedDataSet) dataSet).getDataSet(RockBottomAPI.createRes(key))));
+                return LuaEnvironment.globals.get("DataSet").call(userdataOf(((ModBasedDataSet) dataSet).getDataSet(new ResourceName(key))));
             } catch (IllegalArgumentException e) {
                 return argerror(2, "Key must be a resource name");
             }
@@ -478,7 +478,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
             return LuaEnvironment.globals.get("DataSet").call(userdataOf(((DataSet) dataSet).getModBasedDataSet(key)));
         } else if (dataSet instanceof ModBasedDataSet) {
             try {
-                return LuaEnvironment.globals.get("DataSet").call(userdataOf(((ModBasedDataSet) dataSet).getModBasedDataSet(RockBottomAPI.createRes(key))));
+                return LuaEnvironment.globals.get("DataSet").call(userdataOf(((ModBasedDataSet) dataSet).getModBasedDataSet(new ResourceName(key))));
             } catch (IllegalArgumentException e) {
                 return argerror(2, "Key must be a resource name");
             }
@@ -494,7 +494,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
             array = ((DataSet) dataSet).getByteArray(key, 0);
         } else if (dataSet instanceof ModBasedDataSet) {
             try {
-                array = ((ModBasedDataSet) dataSet).getByteArray(RockBottomAPI.createRes(key), 0);
+                array = ((ModBasedDataSet) dataSet).getByteArray(new ResourceName(key), 0);
             } catch (IllegalArgumentException e) {
                 return argerror(2, "Key must be a resource name");
             }
@@ -518,7 +518,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
             array = ((DataSet) dataSet).getIntArray(key, 0);
         } else if (dataSet instanceof ModBasedDataSet) {
             try {
-                array = ((ModBasedDataSet) dataSet).getIntArray(RockBottomAPI.createRes(key), 0);
+                array = ((ModBasedDataSet) dataSet).getIntArray(new ResourceName(key), 0);
             } catch (IllegalArgumentException e) {
                 return argerror(2, "Key must be a resource name");
             }
@@ -542,7 +542,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
             array = ((DataSet) dataSet).getShortArray(key, 0);
         } else if (dataSet instanceof ModBasedDataSet) {
             try {
-                array = ((ModBasedDataSet) dataSet).getShortArray(RockBottomAPI.createRes(key), 0);
+                array = ((ModBasedDataSet) dataSet).getShortArray(new ResourceName(key), 0);
             } catch (IllegalArgumentException e) {
                 return argerror(2, "Key must be a resource name");
             }
@@ -565,7 +565,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
             return valueOf(((DataSet) dataSet).getUniqueId(key).toString());
         } else if (dataSet instanceof ModBasedDataSet) {
             try {
-                return valueOf(((ModBasedDataSet) dataSet).getUniqueId(RockBottomAPI.createRes(key)).toString());
+                return valueOf(((ModBasedDataSet) dataSet).getUniqueId(new ResourceName(key)).toString());
             } catch (IllegalArgumentException e) {
                 return argerror(2, "Key must be a resource name");
             }
@@ -587,7 +587,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
             return valueOf(dataSet.hasKey(key));
         } else if (dataSet instanceof ModBasedDataSet) {
             try {
-                return valueOf(dataSet.hasKey(RockBottomAPI.createRes(key).toString()));
+                return valueOf(dataSet.hasKey(new ResourceName(key).toString()));
             } catch (IllegalArgumentException e) {
                 return argerror(2, "Key must be a resource name");
             }

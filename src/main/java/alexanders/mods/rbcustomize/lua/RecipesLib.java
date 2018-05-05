@@ -8,7 +8,7 @@ import de.ellpeck.rockbottom.api.construction.resource.IUseInfo;
 import de.ellpeck.rockbottom.api.construction.resource.ItemUseInfo;
 import de.ellpeck.rockbottom.api.construction.resource.ResUseInfo;
 import de.ellpeck.rockbottom.api.item.ItemInstance;
-import de.ellpeck.rockbottom.api.util.reg.IResourceName;
+import de.ellpeck.rockbottom.api.util.reg.ResourceName;
 import org.luaj.vm2.LuaBoolean;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
@@ -59,9 +59,9 @@ public class RecipesLib extends TwoArgFunction {
 
         String type = lType.tojstring();
 
-        IResourceName name;
+        ResourceName name;
         try {
-            name = RockBottomAPI.createRes(lName.tojstring());
+            name = new ResourceName(lName.tojstring());
         } catch (IllegalArgumentException e) {
             return argerror(2, "Specified name is not a valid resource name");
         }

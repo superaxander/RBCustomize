@@ -7,24 +7,24 @@ import de.ellpeck.rockbottom.api.IGameInstance;
 import de.ellpeck.rockbottom.api.content.IContentLoader;
 import de.ellpeck.rockbottom.api.content.pack.ContentPack;
 import de.ellpeck.rockbottom.api.mod.IMod;
-import de.ellpeck.rockbottom.api.util.reg.IResourceName;
+import de.ellpeck.rockbottom.api.util.reg.ResourceName;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
 
 public class ScriptContentLoader implements IContentLoader<Script> {
-    public static HashMap<IResourceName, Script> loadedScripts = new HashMap<>();
+    public static HashMap<ResourceName, Script> loadedScripts = new HashMap<>();
     public static Script internalScript;
     private static ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
     @Override
-    public IResourceName getContentIdentifier() {
+    public ResourceName getContentIdentifier() {
         return Script.ID;
     }
 
     @Override
-    public void loadContent(IGameInstance game, IResourceName resourceName, String path, JsonElement element, String elementName, IMod loadingMod, ContentPack pack) throws Exception {
+    public void loadContent(IGameInstance game, ResourceName resourceName, String path, JsonElement element, String elementName, IMod loadingMod, ContentPack pack) throws Exception {
         String loc;
         HookType hookType;
         if (element.isJsonObject()) {
@@ -73,7 +73,7 @@ public class ScriptContentLoader implements IContentLoader<Script> {
     }
 
     @Override
-    public void disableContent(IGameInstance game, IResourceName resourceName) {
+    public void disableContent(IGameInstance game, ResourceName resourceName) {
         throw new UnsupportedOperationException("Disabling scripts is not yet possible");
     }
 }

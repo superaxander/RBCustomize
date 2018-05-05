@@ -3,6 +3,7 @@ package alexanders.mods.rbcustomize.lua;
 import de.ellpeck.rockbottom.api.RockBottomAPI;
 import de.ellpeck.rockbottom.api.tile.state.TileState;
 import de.ellpeck.rockbottom.api.util.Util;
+import de.ellpeck.rockbottom.api.util.reg.ResourceName;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.Varargs;
@@ -32,7 +33,7 @@ public class StatesLib extends TwoArgFunction {
     private Varargs getEnumValue(Varargs varargs) {
         String sState = varargs.checkjstring(1);
         if (!Util.isResourceName(sState)) argerror(1, "Specified state was not a resource name");
-        TileState state = RockBottomAPI.TILE_STATE_REGISTRY.get(RockBottomAPI.createRes(sState));
+        TileState state = RockBottomAPI.TILE_STATE_REGISTRY.get(new ResourceName(sState));
         if (state == null) argerror(1, "Specified state does not exist");
         String prop = varargs.checkjstring(2);
         return valueOf(callGet(Enum.class, state, prop).name());
@@ -41,7 +42,7 @@ public class StatesLib extends TwoArgFunction {
     private Varargs setEnumValue(Varargs varargs) {
         String sState = varargs.checkjstring(1);
         if (!Util.isResourceName(sState)) argerror(1, "Specified state was not a resource name");
-        TileState state = RockBottomAPI.TILE_STATE_REGISTRY.get(RockBottomAPI.createRes(sState));
+        TileState state = RockBottomAPI.TILE_STATE_REGISTRY.get(new ResourceName(sState));
         if (state == null) argerror(1, "Specified state does not exist");
         String prop = varargs.checkjstring(2);
         String sEnum = varargs.checkjstring(3);
@@ -73,7 +74,7 @@ public class StatesLib extends TwoArgFunction {
     private Varargs getIntValue(Varargs varargs) {
         String sState = varargs.checkjstring(1);
         if (!Util.isResourceName(sState)) argerror(1, "Specified state was not a resource name");
-        TileState state = RockBottomAPI.TILE_STATE_REGISTRY.get(RockBottomAPI.createRes(sState));
+        TileState state = RockBottomAPI.TILE_STATE_REGISTRY.get(new ResourceName(sState));
         if (state == null) argerror(1, "Specified state does not exist");
         String prop = varargs.checkjstring(2);
         return valueOf(callGet(int.class, state, prop));
@@ -82,7 +83,7 @@ public class StatesLib extends TwoArgFunction {
     private Varargs setIntValue(Varargs varargs) {
         String sState = varargs.checkjstring(1);
         if (!Util.isResourceName(sState)) argerror(1, "Specified state was not a resource name");
-        TileState state = RockBottomAPI.TILE_STATE_REGISTRY.get(RockBottomAPI.createRes(sState));
+        TileState state = RockBottomAPI.TILE_STATE_REGISTRY.get(new ResourceName(sState));
         if (state == null) argerror(1, "Specified state does not exist");
         String prop = varargs.checkjstring(2);
         int value = varargs.checkint(3);
@@ -92,7 +93,7 @@ public class StatesLib extends TwoArgFunction {
     private Varargs getStringValue(Varargs varargs) {
         String sState = varargs.checkjstring(1);
         if (!Util.isResourceName(sState)) argerror(1, "Specified state was not a resource name");
-        TileState state = RockBottomAPI.TILE_STATE_REGISTRY.get(RockBottomAPI.createRes(sState));
+        TileState state = RockBottomAPI.TILE_STATE_REGISTRY.get(new ResourceName(sState));
         if (state == null) argerror(1, "Specified state does not exist");
         String prop = varargs.checkjstring(2);
         return valueOf(callGet(String.class, state, prop));
@@ -101,7 +102,7 @@ public class StatesLib extends TwoArgFunction {
     private Varargs setStringValue(Varargs varargs) {
         String sState = varargs.checkjstring(1);
         if (!Util.isResourceName(sState)) argerror(1, "Specified state was not a resource name");
-        TileState state = RockBottomAPI.TILE_STATE_REGISTRY.get(RockBottomAPI.createRes(sState));
+        TileState state = RockBottomAPI.TILE_STATE_REGISTRY.get(new ResourceName(sState));
         if (state == null) argerror(1, "Specified state does not exist");
         String prop = varargs.checkjstring(2);
         String value = varargs.checkjstring(3);
@@ -111,7 +112,7 @@ public class StatesLib extends TwoArgFunction {
     private Varargs getBooleanValue(Varargs varargs) {
         String sState = varargs.checkjstring(1);
         if (!Util.isResourceName(sState)) argerror(1, "Specified state was not a resource name");
-        TileState state = RockBottomAPI.TILE_STATE_REGISTRY.get(RockBottomAPI.createRes(sState));
+        TileState state = RockBottomAPI.TILE_STATE_REGISTRY.get(new ResourceName(sState));
         if (state == null) argerror(1, "Specified state does not exist");
         String prop = varargs.checkjstring(2);
         return valueOf(callGet(boolean.class, state, prop));
@@ -120,7 +121,7 @@ public class StatesLib extends TwoArgFunction {
     private Varargs setBooleanValue(Varargs varargs) {
         String sState = varargs.checkjstring(1);
         if (!Util.isResourceName(sState)) argerror(1, "Specified state was not a resource name");
-        TileState state = RockBottomAPI.TILE_STATE_REGISTRY.get(RockBottomAPI.createRes(sState));
+        TileState state = RockBottomAPI.TILE_STATE_REGISTRY.get(new ResourceName(sState));
         if (state == null) argerror(1, "Specified state does not exist");
         String prop = varargs.checkjstring(2);
         boolean value = varargs.checkboolean(3);
@@ -130,7 +131,7 @@ public class StatesLib extends TwoArgFunction {
     private Varargs getSpecificIntValue(Varargs varargs) {
         String sState = varargs.checkjstring(1);
         if (!Util.isResourceName(sState)) argerror(1, "Specified state was not a resource name");
-        TileState state = RockBottomAPI.TILE_STATE_REGISTRY.get(RockBottomAPI.createRes(sState));
+        TileState state = RockBottomAPI.TILE_STATE_REGISTRY.get(new ResourceName(sState));
         if (state == null) argerror(1, "Specified state does not exist");
         String prop = varargs.checkjstring(2);
         return valueOf(callGet(int.class, state, prop));
@@ -139,7 +140,7 @@ public class StatesLib extends TwoArgFunction {
     private Varargs setSpecificIntValue(Varargs varargs) {
         String sState = varargs.checkjstring(1);
         if (!Util.isResourceName(sState)) argerror(1, "Specified state was not a resource name");
-        TileState state = RockBottomAPI.TILE_STATE_REGISTRY.get(RockBottomAPI.createRes(sState));
+        TileState state = RockBottomAPI.TILE_STATE_REGISTRY.get(new ResourceName(sState));
         if (state == null) argerror(1, "Specified state does not exist");
         String prop = varargs.checkjstring(2);
         int value = varargs.checkint(3);

@@ -6,6 +6,7 @@ import de.ellpeck.rockbottom.api.net.chat.component.ChatComponentText;
 import de.ellpeck.rockbottom.api.toast.IToaster;
 import de.ellpeck.rockbottom.api.toast.Toast;
 import de.ellpeck.rockbottom.api.util.Util;
+import de.ellpeck.rockbottom.api.util.reg.ResourceName;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.Varargs;
@@ -41,19 +42,19 @@ public class ToastsLib extends TwoArgFunction {
         if (!lTime.isint()) return argerror(1, "Expected an int value for argument 'time'");
         ChatComponent title;
         String sTitle = lTitle.tojstring();
-        if (Util.isResourceName(sTitle)) title = new ChatComponentText(RockBottomAPI.getGame().getAssetManager().localize(RockBottomAPI.createRes(sTitle)));
+        if (Util.isResourceName(sTitle)) title = new ChatComponentText(RockBottomAPI.getGame().getAssetManager().localize(new ResourceName(sTitle)));
         else title = new ChatComponentText(sTitle);
 
         ChatComponent description;
         String sDescription = lDescription.tojstring();
-        if (Util.isResourceName(sDescription)) description = new ChatComponentText(RockBottomAPI.getGame().getAssetManager().localize(RockBottomAPI.createRes(sDescription)));
+        if (Util.isResourceName(sDescription)) description = new ChatComponentText(RockBottomAPI.getGame().getAssetManager().localize(new ResourceName(sDescription)));
         else description = new ChatComponentText(sDescription);
 
         int displayTime = lTime.toint();
 
         if (lIcon.isstring()) {
             String sIcon = lIcon.tojstring();
-            if (Util.isResourceName(sIcon)) return userdataOf(new Toast(RockBottomAPI.createRes(sIcon), title, description, displayTime));
+            if (Util.isResourceName(sIcon)) return userdataOf(new Toast(new ResourceName(sIcon), title, description, displayTime));
             else return argerror(4, "Expected a resource name for argument 'icon'");
         } else if (lIcon.isnil()) {
             return userdataOf(new Toast(title, description, displayTime));
