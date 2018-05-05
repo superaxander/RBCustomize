@@ -7,9 +7,10 @@ import org.luaj.vm2.Varargs;
 import org.luaj.vm2.lib.TwoArgFunction;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class InputLib extends TwoArgFunction {
-    private static HashMap<String, Integer> keyMap = new HashMap<>();
+    private static final Map<String, Integer> keyMap = new HashMap<>();
 
     static {
         keyMap.put("SPACE", 32);
@@ -147,6 +148,8 @@ public class InputLib extends TwoArgFunction {
         input.set("getMouseY", new FunctionWrapper(this::getMouseY));
         input.set("isKeyDown", new FunctionWrapper(this::isKeyDown));
         input.set("wasKeyPressed", new FunctionWrapper(this::wasKeyPressed));
+        input.set("isMouseDown", new FunctionWrapper(this::isMouseDown));
+        input.set("wasMousePressed", new FunctionWrapper(this::wasMousePressed));
         LuaTable keys = new LuaTable();
         keyMap.forEach((name, key) -> keys.set(name, valueOf(key)));
         input.set("keys", keys);

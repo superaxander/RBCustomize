@@ -205,7 +205,7 @@ public class ItemsLib extends TwoArgFunction {
 
         @Override
         public Map<ToolType, Integer> getToolTypes(ItemInstance instance) {
-            return toolTypes;
+            return Collections.unmodifiableMap(toolTypes);
         }
 
         @Override

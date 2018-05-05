@@ -64,8 +64,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
         if (!lDataSet.isuserdata(AbstractDataSet.class)) return argerror(iArg, "Expected a DataSet value for argument '" + argName + "'").toboolean() ? null : null; //TODO: lol
         return (AbstractDataSet) lDataSet.touserdata();
     }
-
-    @Nonnull
+    
     private String getString(LuaValue lString, int iArg, String argName) {
         if (!lString.isstring()) return argerror(iArg, "Expected a string value for argument'" + argName + "'").toboolean() ? null : null;
         return lString.tojstring();

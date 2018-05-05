@@ -16,7 +16,7 @@ import java.util.Locale;
 public class ScriptContentLoader implements IContentLoader<Script> {
     public static HashMap<ResourceName, Script> loadedScripts = new HashMap<>();
     public static Script internalScript;
-    private static ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+    private static final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
     @Override
     public ResourceName getContentIdentifier() {
@@ -24,7 +24,7 @@ public class ScriptContentLoader implements IContentLoader<Script> {
     }
 
     @Override
-    public void loadContent(IGameInstance game, ResourceName resourceName, String path, JsonElement element, String elementName, IMod loadingMod, ContentPack pack) throws Exception {
+    public void loadContent(IGameInstance game, ResourceName resourceName, String path, JsonElement element, String elementName, IMod loadingMod, ContentPack pack) {
         String loc;
         HookType hookType;
         if (element.isJsonObject()) {

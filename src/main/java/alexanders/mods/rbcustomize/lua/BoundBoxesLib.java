@@ -5,7 +5,6 @@ import de.ellpeck.rockbottom.api.util.BoundBox;
 import org.luaj.vm2.LuaValue;
 
 public final class BoundBoxesLib {
-
     public static final LuaValue DEFAULT_BOUNDS = boundBoxToLua(Tile.DEFAULT_BOUNDS);
 
     public static LuaValue boundBoxToLua(BoundBox entityBox) {
