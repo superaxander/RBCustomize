@@ -4,6 +4,8 @@ import org.luaj.vm2.lib.jse.JseIoLib;
 
 import java.io.IOException;
 
+// THIS IS NOT AN ACTUAL SANDBOX!
+// USING SCRIPTS IS ALWAYS AT YOUR OWN RISK
 public class SandBoxedIoLib extends JseIoLib {
     @Override
     protected File openFile(String filename, boolean readMode, boolean appendMode, boolean updateMode, boolean binaryMode) throws IOException {

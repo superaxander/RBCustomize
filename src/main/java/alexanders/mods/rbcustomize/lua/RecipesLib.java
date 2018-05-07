@@ -28,10 +28,10 @@ public class RecipesLib extends TwoArgFunction {
 
     private Varargs remove(Varargs varargs) {
         String lName = varargs.checkjstring(1);
-        if(!Util.isResourceName(lName)) return argerror(1, "Expected a ResourceName for argument 'item'");
+        if (!Util.isResourceName(lName)) return argerror(1, "Expected a ResourceName for argument 'item'");
         ResourceName name = new ResourceName(lName);
         IRecipe recipe = RockBottomAPI.ALL_CONSTRUCTION_RECIPES.get(name);
-        if(recipe instanceof BasicRecipe) RockBottomAPI.MANUAL_CONSTRUCTION_RECIPES.unregister(name);
+        if (recipe instanceof BasicRecipe) RockBottomAPI.MANUAL_CONSTRUCTION_RECIPES.unregister(name);
         RockBottomAPI.ALL_CONSTRUCTION_RECIPES.unregister(name);
         return NIL;
     }

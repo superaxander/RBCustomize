@@ -70,7 +70,7 @@ public class ItemsLib extends TwoArgFunction {
 
     public static LuaValue argerror(int i, String expected) {
         if (i == -1) return error(expected);
-        else return argerror(i, expected);
+        else return LuaValue.argerror(i, expected);
     }
 
     @Override
@@ -78,7 +78,6 @@ public class ItemsLib extends TwoArgFunction {
         LuaTable items = new LuaTable();
         items.set("add", new FunctionWrapper(this::addItem));
         items.set("remove", new FunctionWrapper(this::remove));
-        // TODO: ADD REMOVE TO ALL THE THINGS
         items.set("getMaxAmount", new FunctionWrapper(this::getMaxAmount));
         items.set("isDataSensitive", new FunctionWrapper(this::isDataSensitive));
         env.set("items", items);
@@ -87,7 +86,7 @@ public class ItemsLib extends TwoArgFunction {
 
     private Varargs remove(Varargs varargs) {
         String lName = varargs.checkjstring(1);
-        if(!Util.isResourceName(lName)) return argerror(1, "Expected a ResourceName for argument 'item'");
+        if (!Util.isResourceName(lName)) return argerror(1, "Expected a ResourceName for argument 'item'");
         RockBottomAPI.ITEM_REGISTRY.unregister(new ResourceName(lName));
         return NIL;
     }

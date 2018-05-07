@@ -3,6 +3,7 @@ package alexanders.mods.rbcustomize.lua;
 import de.ellpeck.rockbottom.api.RockBottomAPI;
 import de.ellpeck.rockbottom.api.entity.Entity;
 import de.ellpeck.rockbottom.api.entity.player.AbstractEntityPlayer;
+import de.ellpeck.rockbottom.api.gui.Gui;
 import de.ellpeck.rockbottom.api.util.Util;
 import de.ellpeck.rockbottom.api.util.reg.ResourceName;
 import org.luaj.vm2.LuaTable;
@@ -40,13 +41,25 @@ public class EntityLib extends TwoArgFunction {
         entity.set("getSelectedSlot", new FunctionWrapper(this::getSelectedSlot));
         entity.set("getInv", new FunctionWrapper(this::getInv));
         entity.set("getFacing", new FunctionWrapper(this::getFacing));
+        entity.set("openGui", new FunctionWrapper(this::openGui));
         env.set("entity", entity);
         return entity;
     }
 
+    private Varargs openGui(Varargs varargs) { // uuid, gui
+        Entity entity = parseUUID(varargs, 1);
+        Gui gui = (Gui) varargs.checkuserdata(2, Gui.class);
+
+        if (entity instanceof AbstractEntityPlayer) {
+            return valueOf(((AbstractEntityPlayer) entity).openGui(gui));
+        } else {
+            return argerror(1, "Specified uuid did not correspond to a player");
+        }
+    }
+
     private Varargs remove(Varargs varargs) {
         String lName = varargs.checkjstring(1);
-        if(!Util.isResourceName(lName)) return argerror(1, "Expected a ResourceName for argument 'entity'");
+        if (!Util.isResourceName(lName)) return argerror(1, "Expected a ResourceName for argument 'entity'");
         RockBottomAPI.ENTITY_REGISTRY.unregister(new ResourceName(lName));
         return NIL;
     }
@@ -93,7 +106,7 @@ public class EntityLib extends TwoArgFunction {
         Entity entity = parseUUID(varargs, 1);
 
         if (entity instanceof AbstractEntityPlayer) {
-            return LuaValue.userdataOf(((AbstractEntityPlayer) entity).getInv());
+            return userdataOf(((AbstractEntityPlayer) entity).getInv());
         } else {
             return argerror(1, "Specified uuid did not correspond to a player");
         }

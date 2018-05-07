@@ -9,7 +9,6 @@ import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.Varargs;
 import org.luaj.vm2.lib.TwoArgFunction;
 
-import javax.annotation.Nonnull;
 import java.util.UUID;
 
 public class DataLib extends TwoArgFunction { //TODO: We should probably give an error when handling unknown DataSet types instead of doing nothing
@@ -64,7 +63,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
         if (!lDataSet.isuserdata(AbstractDataSet.class)) return argerror(iArg, "Expected a DataSet value for argument '" + argName + "'").toboolean() ? null : null; //TODO: lol
         return (AbstractDataSet) lDataSet.touserdata();
     }
-    
+
     private String getString(LuaValue lString, int iArg, String argName) {
         if (!lString.isstring()) return argerror(iArg, "Expected a string value for argument'" + argName + "'").toboolean() ? null : null;
         return lString.tojstring();

@@ -33,6 +33,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static alexanders.mods.rbcustomize.Util.nilToNull;
+
 public class TilesLib extends TwoArgFunction {
     @Override
     public LuaValue call(LuaValue arg1, LuaValue env) {
@@ -503,10 +505,6 @@ public class TilesLib extends TwoArgFunction {
                     onCollideWithEntity, updateRandomly, render, renderItem, getPlacementState, bbs, placeableLayers, drops, hasItem, canClimb, canGrassSpreadTo, canKeepPlants,
                     canLiquidSpreadInto, isFullTile, hardness, interactionPriority, props, bb, doesSustainLeaves).register();
         return valueOf(name.toString());
-    }
-
-    private LuaValue nilToNull(LuaValue val) {
-        return val.isnil() ? null : val;
     }
 
     private static class LuaTile extends TileBasic {

@@ -13,6 +13,7 @@ import org.luaj.vm2.compiler.LuaC;
 import org.luaj.vm2.lib.*;
 import org.luaj.vm2.lib.jse.JseBaseLib;
 
+import javax.annotation.Nonnull;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 
@@ -45,6 +46,7 @@ public final class LuaEnvironment {
         globals.load(new RendererLib());
         globals.load(new AssetManagerLib());
         globals.load(new TexturesLib());
+        globals.load(new GuiLib());
         LoadState.install(globals);
         LuaC.install(globals);
     }
@@ -93,7 +95,7 @@ public final class LuaEnvironment {
         return result;
     }
 
-    static boolean executeScript(LuaValue function, LuaValue... values) {
+    static boolean executeScript(@Nonnull LuaValue function, LuaValue... values) {
         try {
             Varargs ret = function.invoke(LuaValue.varargsOf(values));
             return ret.arg1().isboolean() && ret.arg1().toboolean();
