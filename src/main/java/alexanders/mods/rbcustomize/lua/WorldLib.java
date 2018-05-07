@@ -23,8 +23,16 @@ public class WorldLib extends TwoArgFunction {
         world.set("destroyTile", new FunctionWrapper(this::destroyTile));
         world.set("getState", new FunctionWrapper(this::getState));
         world.set("setState", new FunctionWrapper(this::setState));
+        world.set("getPlayers", new FunctionWrapper(this::getPlayers));
         env.set("world", world);
         return world;
+    }
+
+    private Varargs getPlayers(Varargs varargs) {
+        if (world == null) return error("The world is not available right now");
+        LuaTable table = new LuaTable();
+        world.getAllPlayers().forEach(it -> table.add(valueOf(it.getUniqueId().toString())));
+        return table;
     }
 
     private Varargs setState(Varargs varargs) { // x, y, layer, state -> NIL
