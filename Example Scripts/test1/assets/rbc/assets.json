@@ -1,0 +1,20 @@
+{
+  "tex.": {
+    "items.": {
+      "test_pick": "/item/test_pick.png",
+      "empty_bucket": "/item/empty_bucket.png",
+      "water_bucket": "/item/water_bucket.png",
+      "goo_bucket": "/item/goo_bucket.png",
+      "slimesling": "/item/slimesling.png",
+      "toast": "/item/toast.png",
+      "gui_item": "/item/gui_item.png",
+      "portable_chest": "/item/portable_chest.png"
+    },
+    "tiles.": {
+      "stone_steps": "/tile/stone.png"
+    }
+  },
+  "loc.": {
+    "us_english": "/loc/us_english.json"
+  }
+}

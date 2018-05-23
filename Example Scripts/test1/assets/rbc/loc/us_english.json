@@ -1,0 +1,14 @@
+{
+  "rbc": {
+    "item.": {
+      "test_pick": "Test Pickaxe",
+      "empty_bucket": "Bucket",
+      "water_bucket": "Water Bucket",
+      "goo_bucket": "Goo Bucket",
+      "slimesling": "Slime Sling",
+      "toast": "Toast",
+      "gui_item": "Gui Item",
+      "portable_chest": "Portable Chest"
+    }
+  }
+}

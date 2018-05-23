@@ -1,0 +1,36 @@
+{
+  "script.": {
+    "sandstone": {
+      "path": "/scripts/sandstone.lua",
+      "hookType": "init"
+    },
+    "pickaxe": {
+      "path": "/scripts/pickaxe.lua",
+      "hookType": "init"
+    },
+    "buckets": {
+      "path": "/scripts/buckets.lua",
+      "hookType": "init"
+    },
+    "slimesling": {
+      "path": "/scripts/slimesling.lua",
+      "hookType": "init"
+    },
+    "datalister": {
+      "path": "/scripts/datalister.lua",
+      "hookType": "world_tick"
+    },
+    "toast": {
+      "path": "/scripts/toast.lua",
+      "hookType": "init"
+    },
+    "decorativetiles": {
+      "path": "/scripts/decorativetiles.lua",
+      "hookType": "init"
+    }, 
+    "guitest": {
+      "path": "/scripts/guitest.lua",
+      "hookType": "init"
+    }
+  }
+}
