@@ -22,7 +22,7 @@ public class NetLib extends TwoArgFunction {
         env.set("net", net);
         return net;
     }
-    
+
     private Varargs addIdentifier(Varargs varargs) {
         IdentifierPacket.ownIdentifiers.add(varargs.checkjstring(1));
         return NIL;

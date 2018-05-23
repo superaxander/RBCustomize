@@ -76,9 +76,9 @@ public class RBCustomize implements IMod {
             eventHandler.registerListener(WorldTickEvent.class, LuaEnvironment::onWorldTick);
         }
 
-        if (ScriptContentLoader.loadedScripts.values().stream().anyMatch(it -> it.hookType == HookType.WORLD_LOAD)) {
-            eventHandler.registerListener(WorldLoadEvent.class, LuaEnvironment::onWorldLoad);
-        }
+        //if (ScriptContentLoader.loadedScripts.values().stream().anyMatch(it -> it.hookType == HookType.WORLD_LOAD)) { We don't check this one because WorldLib.world must be loaded somehow
+        eventHandler.registerListener(WorldLoadEvent.class, LuaEnvironment::onWorldLoad);
+        //}
 
         if (ScriptContentLoader.loadedScripts.values().stream().anyMatch(it -> it.hookType == HookType.WORLD_UNLOAD)) {
             eventHandler.registerListener(WorldUnloadEvent.class, LuaEnvironment::onWorldUnload);

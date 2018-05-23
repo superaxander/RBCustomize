@@ -48,6 +48,7 @@ public final class LuaEnvironment {
         globals.load(new TexturesLib());
         globals.load(new GuiLib());
         globals.load(new NetLib());
+        globals.load(new ContainerLib());
         LoadState.install(globals);
         LuaC.install(globals);
     }

@@ -511,7 +511,7 @@ function EnumProp:getIndex(value)
             return k
         end
     end
-    error(2, "There is no index with that value")
+    error("There is no index with that value", 2)
 end
 
 StringProp = class(TileProp, function(this, name, def, allowedValues)
@@ -537,7 +537,7 @@ function StringProp:getIndex(value)
             return k
         end
     end
-    error(2, "There is no index with that value")
+    error("There is no index with that value", 2)
 end
 
 BoolProp = class(TileProp, function(this, name, def)
@@ -584,7 +584,7 @@ function SpecificIntProp:getIndex(value)
             return k
         end
     end
-    error(2, "There is no index with that value")
+    error("There is no index with that value", 2)
 end
 
 Texture = class(function(this, backingData)
@@ -595,7 +595,7 @@ end)
 
 function Texture:draw(x, y, x2, y2, x3, y3, x4, y4, srcX, srcY, srcX2, srcY2, light, filter)
     if not y then
-        error("Too few arguments")
+        error("Too few arguments", 2)
     end
 
     if not x2 then -- 2 arguments
@@ -623,7 +623,7 @@ function Texture:draw(x, y, x2, y2, x3, y3, x4, y4, srcX, srcY, srcX2, srcY2, li
     elseif not srcX2 then -- 10 arguments
         self:draw(x, y, x, y2, x2, y2, x2, y, x3, y3, x4, y4, srcX, srcY) -- srcX = light, srcY = filter
     elseif not filter then
-        error("Unsupported amount of arguments")
+        error("Unsupported amount of arguments", 2)
     else
         textures.draw(self.backingData, x, y, x2, y2, x3, y3, x4, y4, srcX, srcY, srcX2, srcY2, light, filter)
     end
@@ -660,3 +660,140 @@ Direction.SURROUNDING_INCLUDING_NONE = { Direction.NONE, Direction.LEFT_UP, Dire
 -- Privatize constructor
 Direction.init = nil
 Direction.__call = nil
+
+GuiComponent = class()
+function GuiComponent:addToComponentList()
+    gui.addComponent(self.gui, self.backingData)
+end
+
+function GuiComponent:removeFromComponentList()
+    gui.removeComponent(self.gui, self.backingData)
+end
+
+ComponentButton = class(GuiComponent, function(this, gui, x, y, sizeX, sizeY, supplier, text, hover)
+    this.gui = gui
+    this.x = x
+    this.y = y
+    this.sizeX = sizeX
+    this.sizeY = sizeY
+    this.supplier = supplier
+    local status, errOrField = pcall(_G.gui.createButton, gui, x, y, sizeX, sizeY, supplier, text)
+    if not status then
+        error(errOrField, 2)
+    else
+        this.backingData = errOrField
+    end
+end)
+
+function ComponentButton:setText(text)
+    if type(text) == "string" then
+        gui.buttonSetText(self.backingData, text)
+    else
+        error("Expected a string value for argument 'text'", 2)
+    end
+end
+
+function ComponentButton:hasBackground()
+    return gui.buttonHasBackground(self.backingData)
+end
+
+function ComponentButton:setHasBackground(hasBackground)
+    if type(hasBackground) == "boolean" then
+        gui.buttonSetHasBackground(self.backingData, hasBackground)
+    else
+        error("Expected a boolean value for argument 'hasBackground'", 2)
+    end
+end
+
+ComponentInputField = class(GuiComponent, function(this, gui, x, y, sizeX, sizeY, renderBox, selectable, defaultActive, maxLength, displayMaxLength, consumer) -- TODO: Perhaps do type checking?
+    this.gui = gui
+    this.x = x
+    this.y = y
+    this.sizeX = sizeX
+    this.sizeY = sizeY
+    this.renderBox = not not renderBox -- quickly convert to boolean even if nil, will default to FALSE!!
+    this.selectable = not not selectable
+    this.defaultActive = not not defaultActive
+    this.maxLength = maxLength
+    this.displayMaxLenght = displayMaxLength
+    this.consumer = consumer
+    local status, errOrField = pcall(_G.gui.createInputField, gui, x, y, sizeX, sizeY, renderBox, selectable, defaultActive, maxLength, displayMaxLength, consumer)
+    if not status then
+        error(errOrField, 2)
+    else
+        this.backingData = errOrField
+    end
+end)
+
+ComponentText = class(GuiComponent, function(this, gui, x, y, width, height, scale, fromRight, text)
+    this.gui = gui
+    this.x = x
+    this.y = y
+    this.width = width
+    this.height = height
+    this.scale = scale
+    this.fromRight = not not fromRight
+    this.text = text
+    local status, errOrField = pcall(_G.gui.createText, gui, x, y, width, height, scale, fromRight, text)
+    if not status then
+        error(errOrField, 2)
+    else
+        this.backingData = errOrField
+    end
+end)
+
+function ComponentInputField:isSelected()
+    return gui.inputFieldIsSelected(self.backingData)
+end
+
+function ComponentInputField:setSelected(selected)
+    if type(selected) == "boolean" then
+        return gui.inputFieldSetSelected(self.backingData, selected)
+    else
+        error("Expected a boolean value for argument 'selected'", 2)
+    end
+end
+
+function ComponentInputField:isCensored()
+    return gui.inputFieldIsCensored(self.backingData)
+end
+
+function ComponentInputField:setCensored(censored)
+    if type(censored) == "boolean" then
+        return gui.inputFieldSetCensored(self.backingData, censored)
+    else
+        error("Expected a boolean value for argument 'censored'", 2)
+    end
+end
+
+function ComponentInputField:getText()
+    return gui.inputFieldGetText(self.backingData)
+end
+
+function ComponentInputField:setText(text)
+    if type(text) == "string" then
+        return gui.inputFieldSetText(self.backingData, text)
+    else
+        error("Expected a string value for argument 'text'", 2)
+    end
+end
+
+ContainerSlot = class(function(this, inventory, slot, x, y)
+    this.backingObject = container.instantiateSlot(inventory, slot, x, y)
+    this.inventory = inventory
+    this.slot = slot
+    this.x = x
+    this.y = y
+end)
+
+function ContainerSlot:addToContainer(containerObject)
+    container.addSlot(containerObject, self.backingObject);
+end
+
+function ContainerSlot:get()
+    return container.slotGet(self.backingObject)
+end
+
+function ContainerSlot:set(instance)
+    container.slotSet(self.backingObject, instance)
+end

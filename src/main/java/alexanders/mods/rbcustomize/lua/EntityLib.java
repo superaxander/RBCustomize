@@ -4,6 +4,8 @@ import de.ellpeck.rockbottom.api.RockBottomAPI;
 import de.ellpeck.rockbottom.api.entity.Entity;
 import de.ellpeck.rockbottom.api.entity.player.AbstractEntityPlayer;
 import de.ellpeck.rockbottom.api.gui.Gui;
+import de.ellpeck.rockbottom.api.gui.GuiContainer;
+import de.ellpeck.rockbottom.api.gui.container.ItemContainer;
 import de.ellpeck.rockbottom.api.util.Util;
 import de.ellpeck.rockbottom.api.util.reg.ResourceName;
 import org.luaj.vm2.LuaTable;
@@ -42,6 +44,7 @@ public class EntityLib extends TwoArgFunction {
         entity.set("getInv", new FunctionWrapper(this::getInv));
         entity.set("getFacing", new FunctionWrapper(this::getFacing));
         entity.set("openGui", new FunctionWrapper(this::openGui));
+        entity.set("openGuiContainer", new FunctionWrapper(this::openGuiContainer));
         env.set("entity", entity);
         return entity;
     }
@@ -52,6 +55,29 @@ public class EntityLib extends TwoArgFunction {
 
         if (entity instanceof AbstractEntityPlayer) {
             return valueOf(((AbstractEntityPlayer) entity).openGui(gui));
+        } else {
+            return argerror(1, "Specified uuid did not correspond to a player");
+        }
+    }
+
+    private Varargs openContainer(Varargs varargs) { // uuid, container
+        Entity entity = parseUUID(varargs, 1);
+        ItemContainer container = (ItemContainer) varargs.checkuserdata(3, ItemContainer.class);
+
+        if (entity instanceof AbstractEntityPlayer) {
+            return valueOf(((AbstractEntityPlayer) entity).openContainer(container));
+        } else {
+            return argerror(1, "Specified uuid did not correspond to a player");
+        }
+    }
+
+    private Varargs openGuiContainer(Varargs varargs) { // uuid, gui, container
+        Entity entity = parseUUID(varargs, 1);
+        GuiContainer gui = (GuiContainer) varargs.checkuserdata(2, GuiContainer.class);
+        ItemContainer container = (ItemContainer) varargs.checkuserdata(3, ItemContainer.class);
+        
+        if (entity instanceof AbstractEntityPlayer) {
+            return valueOf(((AbstractEntityPlayer) entity).openGuiContainer(gui, container));
         } else {
             return argerror(1, "Specified uuid did not correspond to a player");
         }

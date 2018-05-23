@@ -14,35 +14,41 @@ class LuaSupplier<T> implements Supplier<T> {
 
     LuaSupplier(LuaValue supplier, Class<T> clazz) {
         this.supplier = supplier;
-        if(Boolean.class.isAssignableFrom(clazz)) {
+        if (Boolean.class.isAssignableFrom(clazz)) {
             type = "Boolean";
-        }else if(Integer.class.isAssignableFrom(clazz)) {
+        } else if (Integer.class.isAssignableFrom(clazz)) {
             type = "Integer";
-        }else if(Long.class.isAssignableFrom(clazz)) {
+        } else if (Long.class.isAssignableFrom(clazz)) {
             type = "Long";
-        }else if(Double.class.isAssignableFrom(clazz)) {
+        } else if (Double.class.isAssignableFrom(clazz)) {
             type = "Double";
-        }else if(String.class.isAssignableFrom(clazz)) {
+        } else if (String.class.isAssignableFrom(clazz)) {
             type = "String";
-        }else {
+        } else {
             throw new IllegalArgumentException("Inconvertable type");
         }
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public T get() {
         try {
             Varargs out = supplier.invoke();
             switch (type) {
-                case "Boolean": return (T)(Boolean)out.checkboolean(1);
-                case "Integer": return (T)(Integer)out.checkint(1);
-                case "Long": return (T)(Long)out.checklong(1);
-                case "Double": return (T)(Double)out.checkdouble(1);
-                case "String": return (T)out.checkjstring(1);
-                default: throw new IllegalStateException("This is impossible");
+                case "Boolean":
+                    return (T) (Boolean) out.checkboolean(1);
+                case "Integer":
+                    return (T) (Integer) out.checkint(1);
+                case "Long":
+                    return (T) (Long) out.checklong(1);
+                case "Double":
+                    return (T) (Double) out.checkdouble(1);
+                case "String":
+                    return (T) out.checkjstring(1);
+                default:
+                    throw new IllegalStateException("This is impossible");
             }
-        }catch (LuaError e) {
+        } catch (LuaError e) {
             RBCustomize.logger.log(Level.WARNING, "Execution of script failed!", e);
             return null;
         }
