@@ -51,8 +51,8 @@ public class IdentifierPacket implements IPacket {
 
     @Override
     public void handle(IGameInstance game, ChannelHandlerContext context) {
+        confirmedIdentifiers.put(uuid, identifier);
         if (firstTime) {
-            confirmedIdentifiers.put(uuid, identifier);
             if (RockBottomAPI.getNet().isClient()) {
                 RockBottomAPI.getNet().sendToServer(new IdentifierPacket(RockBottomAPI.getGame().getPlayer().getUniqueId(), false, identifier));
             } else {
