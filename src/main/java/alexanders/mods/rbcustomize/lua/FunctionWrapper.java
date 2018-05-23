@@ -13,7 +13,7 @@ public class FunctionWrapper extends VarArgFunction {
     public FunctionWrapper(Function<Varargs, Varargs> function) {
         this.function = function;
     }
-    
+
     public FunctionWrapper(Supplier<Boolean> supplier) {
         this((in) -> valueOf(supplier.get()));
     }

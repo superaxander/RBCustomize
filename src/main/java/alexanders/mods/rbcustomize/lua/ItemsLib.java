@@ -3,6 +3,7 @@ package alexanders.mods.rbcustomize.lua;
 import alexanders.mods.rbcustomize.RBCustomize;
 import de.ellpeck.rockbottom.api.RockBottomAPI;
 import de.ellpeck.rockbottom.api.assets.IAssetManager;
+import de.ellpeck.rockbottom.api.data.set.DataSet;
 import de.ellpeck.rockbottom.api.data.set.ModBasedDataSet;
 import de.ellpeck.rockbottom.api.entity.player.AbstractEntityPlayer;
 import de.ellpeck.rockbottom.api.item.Item;
@@ -26,12 +27,10 @@ import java.util.logging.Level;
 public class ItemsLib extends TwoArgFunction {
     public static LuaValue itemInstanceToLua(ItemInstance instance) {
         if (instance == null) return NIL;
-        LuaTable table = new LuaTable();
-        table.set("item", valueOf(instance.getItem().getName().toString()));
-        table.set("meta", valueOf(instance.getMeta()));
-        table.set("amount", valueOf(instance.getAmount()));
-        if (instance.hasAdditionalData()) table.set("set", LuaEnvironment.globals.get("DataSet").call(userdataOf(instance.getAdditionalData())));
-        return table;
+        LuaValue set = NIL;
+        if (instance.hasAdditionalData()) set = LuaEnvironment.globals.get("DataSet").call(userdataOf(instance.getAdditionalData()));
+        return LuaEnvironment.globals.get("ItemInstance")
+                .invoke(new LuaValue[]{valueOf(instance.getItem().getName().toString()), valueOf(instance.getAmount()), valueOf(instance.getMeta()), set}).arg1();
     }
 
     public static ItemInstance parseItemInstance(int i, LuaValue table) {
@@ -224,10 +223,15 @@ public class ItemsLib extends TwoArgFunction {
         @Override
         public boolean onInteractWith(IWorld world, int x, int y, TileLayer layer, double mouseX, double mouseY, AbstractEntityPlayer player, ItemInstance instance) {
             try {
-                WorldLib.world = world;
+                LuaValue lInstance = itemInstanceToLua(instance);
                 Varargs returnVal = function.invoke(varargsOf(
                         new LuaValue[]{valueOf(x), valueOf(y), valueOf(layer.getName().toString()), valueOf(mouseX), valueOf(mouseY), valueOf(player.getUniqueId().toString()),
-                                itemInstanceToLua(instance)}));
+                                lInstance}));
+                instance.setAmount(lInstance.get("amount").checkint());
+                instance.setMeta(lInstance.get("meta").checkint());
+                LuaValue set = lInstance.get("set");
+                if(set.isnil()) instance.setAdditionalData(null);
+                else instance.setAdditionalData((ModBasedDataSet)set.get("backingData").checkuserdata(ModBasedDataSet.class));
                 if (returnVal.arg1().isboolean()) {
                     return returnVal.arg1().toboolean();
                 }
