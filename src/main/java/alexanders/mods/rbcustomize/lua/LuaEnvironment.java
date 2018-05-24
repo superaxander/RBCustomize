@@ -4,10 +4,13 @@ import alexanders.mods.rbcustomize.HookType;
 import alexanders.mods.rbcustomize.RBCustomize;
 import alexanders.mods.rbcustomize.ScriptContentLoader;
 import de.ellpeck.rockbottom.api.IGameInstance;
+import de.ellpeck.rockbottom.api.assets.font.FontProp;
+import de.ellpeck.rockbottom.api.assets.font.FormattingCode;
 import de.ellpeck.rockbottom.api.event.EventResult;
 import de.ellpeck.rockbottom.api.event.impl.WorldLoadEvent;
 import de.ellpeck.rockbottom.api.event.impl.WorldTickEvent;
 import de.ellpeck.rockbottom.api.event.impl.WorldUnloadEvent;
+import de.ellpeck.rockbottom.api.util.Colors;
 import org.luaj.vm2.*;
 import org.luaj.vm2.compiler.LuaC;
 import org.luaj.vm2.lib.*;
@@ -16,6 +19,8 @@ import org.luaj.vm2.lib.jse.JseBaseLib;
 import javax.annotation.Nonnull;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
+
+import static alexanders.mods.rbcustomize.Util.getColorName;
 
 public final class LuaEnvironment {
     public static Globals globals;
@@ -51,10 +56,21 @@ public final class LuaEnvironment {
         globals.load(new ContainerLib());
         LoadState.install(globals);
         LuaC.install(globals);
+        LuaTable codeTable = new LuaTable();
+        FormattingCode.getDefaultCodes().forEach((ch, code) -> {
+            String name;
+            if (code.getColor() == Colors.NO_COLOR) if (code.getProp() == FontProp.NONE) throw new IllegalStateException("FormattingCode without color or font prop found");
+            else name = code.getProp().name();
+            else name = getColorName(code.getColor());
+            if(name.equals("RESET")) name = "RESET_PROPS";
+            codeTable.set(name, code.toString());
+        });
+        globals.set("FormattingCode", codeTable);
     }
 
     public static void initExecution(IGameInstance game) {
         globals.load(new ToastsLib(game.isDedicatedServer() ? null : game.getToaster()));
+        globals.load(new ChatLib(game.getChatLog()));
         RBCustomize.logger.config("Executing initialization script");
         ScriptContentLoader.internalScript.function.initupvalue1(globals);
         ScriptContentLoader.internalScript.function.call();

@@ -797,3 +797,111 @@ end
 function ContainerSlot:set(instance)
     container.slotSet(self.backingObject, instance)
 end
+
+local ChatComponent = class(function(this, type, child)
+    this.type = type
+    this.child = child
+end)
+
+function ChatComponent:append(component)
+    if self.child == nil then
+        self.child = component
+    else
+        self.child:append(component)
+    end
+    return self
+end
+
+function ChatComponent:getAppendage()
+    return self.child
+end
+
+function ChatComponent:getDisplayWithChildren()
+    local s = self:getDisplayString()
+    if not self.child == nil then
+        s = s .. self.child:getDisplayWithChildren()
+    end
+    return s
+end
+
+function ChatComponent:getUnformattedWithChildren()
+    local s = self:getUnformattedString()
+    if not self.child == nil then
+        s = s .. self.child:getUnformattedWithChildren()
+    end
+    return s
+end
+
+function ChatComponent:__tostring()
+    return self:getUnformattedWithChildren()
+end
+
+function ChatComponent.__concat(left, right)
+    if type(right) == "table" then
+        if type(right.type) == "string" then
+            return left:append(right)
+        else
+            error(2, "Can't concatenate ChatComponent and table of unknown type")
+        end
+    elseif type(right) == "string" then
+        return left:append(ChatComponentText(right))
+    else
+        error(2, "Can't concatenate ChatComponent and value of type " .. type(right))
+    end
+end
+
+ChatComponentEmpty = class(ChatComponent, function(this, child)
+    ChatComponent.init(this, "ChatComponentEmpty", child)
+end)
+
+function ChatComponentEmpty:getDisplayString()
+    return ""
+end
+
+function ChatComponentEmpty:getUnformattedString()
+    return ""
+end
+
+ChatComponentText = class(ChatComponent, function(this, text, child)
+    ChatComponent.init(this, "ChatComponentText", child)
+    if type(text) == "string" then
+        this.text = text
+    else
+        error(2, "Expected a string value for argument 'text'")
+    end
+end)
+
+function ChatComponentText:getDisplayString()
+    return self.text
+end
+
+function ChatComponentText:getUnformattedString()
+    return self.text
+end
+
+ChatComponentTranslation = class(ChatComponent, function(this, key, formatting, child)
+    ChatComponent.init(this, "ChatComponentTranslation", child)
+    if type(key) == "string" then
+        this.key = key
+    else
+        error(2, "Expected a string value for argument 'key'")
+    end
+
+    if type(formatting) == "table" then
+        this.formatting = formatting
+    elseif type(formatting) == "string" then
+        this.formatting = {formatting}
+    elseif formatting == nil then
+        this.formatting = {}
+    else
+        error(2, "Expected a table, string or nil value for argument 'formatting'")
+    end
+end)
+
+function ChatComponentTranslation:getDisplayString()
+    return assetManager.localize(self.key, self.formatting)
+end
+
+function ChatComponentTranslation:getUnformattedString()
+    return "Locale(" .. self.key .. ", [" .. table.concat(self.formatting, ",") .. "])"
+end

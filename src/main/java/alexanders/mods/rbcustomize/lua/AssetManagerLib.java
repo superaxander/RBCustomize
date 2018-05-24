@@ -16,6 +16,7 @@ public class AssetManagerLib extends TwoArgFunction {
     public LuaValue call(LuaValue arg1, LuaValue env) {
         LuaTable assetManager = new LuaTable();
         assetManager.set("getTexture", new FunctionWrapper(this::getTexture));
+        assetManager.set("localize", new FunctionWrapper(this::localize));
         env.set("assetManager", assetManager);
         return assetManager;
     }
@@ -27,4 +28,19 @@ public class AssetManagerLib extends TwoArgFunction {
         ITexture texture = manager.getTexture(new ResourceName(sPath));
         return userdataOf(texture);
     }
+
+    private Varargs localize(Varargs varargs) {
+        if(manager == null) return error("The AssetManager is not available");
+        String sName = varargs.checkjstring(1);
+        if(!Util.isResourceName(sName)) return argerror(1, "Expected a ResourceName for argument 'unloc'");
+        if(varargs.istable(2)) {
+            LuaTable args = varargs.checktable(2);
+            String[] outArgs = new String[args.length()];
+            for (int i = 1; i <= args.length(); i++) {
+                outArgs[i-1] = args.get(i).checkjstring();
+            }
+            return valueOf(manager.localize(new ResourceName(sName), (Object[]) outArgs));
+        }else return valueOf(manager.localize(new ResourceName(sName)));
+    }
+
 }

@@ -9,6 +9,7 @@
       "toast": "Toast",
       "gui_item": "Gui Item",
       "portable_chest": "Portable Chest"
-    }
+    },
+    "pickaxe_break": "Pickaxe has broken %s tiles"
   }
 }

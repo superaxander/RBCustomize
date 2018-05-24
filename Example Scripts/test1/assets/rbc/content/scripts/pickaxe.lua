@@ -5,7 +5,7 @@ items.add("rbc/test_pick", { "First line", "Second line" }, nil, { ToolLevel("PI
             print("Created set")
             instance.set = DataSet(data.createModBased())
         end
-        print("adding int: " .. (instance.set:getInt("rbc/breakCount") + 1))
+        chat.sendMessageTo(player, ChatComponentText(FormattingCode.GREEN..FormattingCode.BOLD) .. ChatComponentTranslation("rbc/pickaxe_break", tostring(instance.set:getInt("rbc/breakCount") + 1)) .. ChatComponentText(FormattingCode.RESET_COLOR..FormattingCode.RESET_PROPS.." piece of unformatted text " .. FormattingCode.PINK .. FormattingCode.UNDERLINED .. "this" .. FormattingCode.RESET_PROPS .. " is a piece of fixed text"))
         instance.set:addInt("rbc/breakCount", instance.set:getInt("rbc/breakCount") + 1)
         inventory.set(entity.getInv(player), entity.getSelectedSlot(player), instance)
     end
