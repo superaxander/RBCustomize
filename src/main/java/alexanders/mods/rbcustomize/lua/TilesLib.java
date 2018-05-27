@@ -106,7 +106,7 @@ public class TilesLib extends TwoArgFunction {
 
         Entity entity;
         if (varargs.isnil(5)) entity = null;
-        else entity = EntityLib.parseUUID(varargs, 5);
+        else entity = EntitiesLib.parseUUID(varargs, 5);
         if (entity == null || entity instanceof AbstractEntityPlayer) {
             return valueOf(tile.canPlace(WorldLib.world, x, y, layer, (AbstractEntityPlayer) entity));
         } else {
@@ -148,7 +148,7 @@ public class TilesLib extends TwoArgFunction {
 
         Entity entity;
         if (varargs.isnil(5)) entity = null;
-        else entity = EntityLib.parseUUID(varargs, 5);
+        else entity = EntitiesLib.parseUUID(varargs, 5);
         if (entity == null || entity instanceof AbstractEntityPlayer) {
             return valueOf(tile.canBreak(WorldLib.world, x, y, layer, (AbstractEntityPlayer) entity, isRightTool));
         } else {
@@ -242,7 +242,7 @@ public class TilesLib extends TwoArgFunction {
 
         Entity entity;
         if (varargs.isnil(5)) entity = null;
-        else entity = EntityLib.parseUUID(varargs, 5);
+        else entity = EntitiesLib.parseUUID(varargs, 5);
         if (entity == null || entity instanceof AbstractEntityPlayer) {
             tile.doPlace(WorldLib.world, x, y, layer, ItemsLib.parseItemInstance(5, varargs.checktable(5)), (AbstractEntityPlayer) entity);
         } else {
@@ -284,7 +284,7 @@ public class TilesLib extends TwoArgFunction {
 
         Entity entity;
         if (varargs.isnil(5)) entity = null;
-        else entity = EntityLib.parseUUID(varargs, 5);
+        else entity = EntitiesLib.parseUUID(varargs, 5);
         if (entity == null || entity instanceof AbstractEntityPlayer) {
             tile.doBreak(WorldLib.world, x, y, layer, (AbstractEntityPlayer) entity, !varargs.isnil(6) && varargs.checkboolean(6), !varargs.isnil(7) && varargs.checkboolean(7));
         } else {

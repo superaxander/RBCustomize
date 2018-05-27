@@ -3,7 +3,6 @@ package alexanders.mods.rbcustomize.lua;
 import alexanders.mods.rbcustomize.RBCustomize;
 import de.ellpeck.rockbottom.api.RockBottomAPI;
 import de.ellpeck.rockbottom.api.assets.IAssetManager;
-import de.ellpeck.rockbottom.api.data.set.DataSet;
 import de.ellpeck.rockbottom.api.data.set.ModBasedDataSet;
 import de.ellpeck.rockbottom.api.entity.player.AbstractEntityPlayer;
 import de.ellpeck.rockbottom.api.item.Item;
@@ -230,8 +229,8 @@ public class ItemsLib extends TwoArgFunction {
                 instance.setAmount(lInstance.get("amount").checkint());
                 instance.setMeta(lInstance.get("meta").checkint());
                 LuaValue set = lInstance.get("set");
-                if(set.isnil()) instance.setAdditionalData(null);
-                else instance.setAdditionalData((ModBasedDataSet)set.get("backingData").checkuserdata(ModBasedDataSet.class));
+                if (set.isnil()) instance.setAdditionalData(null);
+                else instance.setAdditionalData((ModBasedDataSet) set.get("backingData").checkuserdata(ModBasedDataSet.class));
                 if (returnVal.arg1().isboolean()) {
                     return returnVal.arg1().toboolean();
                 }

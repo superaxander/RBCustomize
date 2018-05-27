@@ -1,7 +1,5 @@
 package alexanders.mods.rbcustomize.lua;
 
-import de.ellpeck.rockbottom.api.util.Util;
-import de.ellpeck.rockbottom.api.util.reg.ResourceName;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.Varargs;
@@ -19,8 +17,8 @@ public class UtilsLib extends TwoArgFunction {
         env.set("utils", utils);
         return utils;
     }
-    
-    
+
+
     private Varargs getEnumValues(Varargs varargs) {
         String enumName = varargs.checkjstring(1);
         try {

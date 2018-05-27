@@ -19,14 +19,12 @@ import org.luaj.vm2.lib.TwoArgFunction;
 
 import java.util.UUID;
 
-import static alexanders.mods.rbcustomize.Util.luaToStringList;
-import static alexanders.mods.rbcustomize.Util.toLuaPrimitiveList;
-import static alexanders.mods.rbcustomize.Util.toLuaStringList;
+import static alexanders.mods.rbcustomize.Util.*;
 
 public class ChatLib extends TwoArgFunction {
     private final IChatLog chatLog;
 
-    public ChatLib(IChatLog chatLog) {this.chatLog = chatLog;}
+    ChatLib(IChatLog chatLog) {this.chatLog = chatLog;}
 
     @Override
     public LuaValue call(LuaValue arg1, LuaValue env) {
@@ -120,7 +118,7 @@ public class ChatLib extends TwoArgFunction {
                 break;
             case "ChatComponentTranslation":
                 String sKey = lComponent.get("key").checkjstring();
-                if(!Util.isResourceName(sKey)) error("ChatComponentTranslation key must be a resource name");
+                if (!Util.isResourceName(sKey)) error("ChatComponentTranslation key must be a resource name");
                 component = new ChatComponentTranslation(new ResourceName(sKey), luaToStringList(lComponent.get("formatting").checktable()).toArray(new String[0]));
                 break;
             default:
@@ -129,7 +127,7 @@ public class ChatLib extends TwoArgFunction {
                 break;
         }
         LuaValue lChild = lComponent.get("child");
-        if(lChild.istable()) {
+        if (lChild.istable()) {
             return component.append(parseChatComponent(lChild));
         }
         return component;

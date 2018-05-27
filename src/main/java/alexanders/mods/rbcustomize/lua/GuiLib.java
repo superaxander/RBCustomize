@@ -63,7 +63,7 @@ public class GuiLib extends TwoArgFunction {
         LuaGuiData data = LuaGui.GUI_REGISTRY.get(name);
         if (data == null) return argerror("The specified gui could not be found");
 
-        Entity e = EntityLib.parseUUID(varargs, 2);
+        Entity e = EntitiesLib.parseUUID(varargs, 2);
         if (e instanceof AbstractEntityPlayer) {
             int sizeX = varargs.checkint(3);
             int sizeY = varargs.checkint(4);

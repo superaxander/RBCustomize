@@ -40,7 +40,7 @@ public final class LuaEnvironment {
         globals.load(new ItemsLib());
         globals.load(new TilesLib());
         globals.load(new WorldLib());
-        globals.load(new EntityLib());
+        globals.load(new EntitiesLib());
         globals.load(new InventoryLib());
         globals.load(new GameLib(game));
         globals.load(new InputLib(game.getInput()));
@@ -53,7 +53,7 @@ public final class LuaEnvironment {
         globals.load(new TexturesLib());
         globals.load(new GuiLib());
         globals.load(new NetLib());
-        globals.load(new ContainerLib());
+        globals.load(new ContainersLib());
         LoadState.install(globals);
         LuaC.install(globals);
         LuaTable codeTable = new LuaTable();
@@ -62,7 +62,7 @@ public final class LuaEnvironment {
             if (code.getColor() == Colors.NO_COLOR) if (code.getProp() == FontProp.NONE) throw new IllegalStateException("FormattingCode without color or font prop found");
             else name = code.getProp().name();
             else name = getColorName(code.getColor());
-            if(name.equals("RESET")) name = "RESET_PROPS";
+            if (name.equals("RESET")) name = "RESET_PROPS";
             codeTable.set(name, code.toString());
         });
         globals.set("FormattingCode", codeTable);

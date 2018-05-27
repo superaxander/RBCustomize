@@ -779,7 +779,7 @@ function ComponentInputField:setText(text)
 end
 
 ContainerSlot = class(function(this, inventory, slot, x, y)
-    this.backingObject = container.instantiateSlot(inventory, slot, x, y)
+    this.backingObject = containers.instantiateSlot(inventory, slot, x, y)
     this.inventory = inventory
     this.slot = slot
     this.x = x
@@ -787,15 +787,15 @@ ContainerSlot = class(function(this, inventory, slot, x, y)
 end)
 
 function ContainerSlot:addToContainer(containerObject)
-    container.addSlot(containerObject, self.backingObject);
+    containers.addSlot(containerObject, self.backingObject);
 end
 
 function ContainerSlot:get()
-    return container.slotGet(self.backingObject)
+    return containers.slotGet(self.backingObject)
 end
 
 function ContainerSlot:set(instance)
-    container.slotSet(self.backingObject, instance)
+    containers.slotSet(self.backingObject, instance)
 end
 
 local ChatComponent = class(function(this, type, child)
@@ -890,7 +890,7 @@ ChatComponentTranslation = class(ChatComponent, function(this, key, formatting, 
     if type(formatting) == "table" then
         this.formatting = formatting
     elseif type(formatting) == "string" then
-        this.formatting = {formatting}
+        this.formatting = { formatting }
     elseif formatting == nil then
         this.formatting = {}
     else

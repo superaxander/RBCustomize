@@ -30,17 +30,17 @@ public class AssetManagerLib extends TwoArgFunction {
     }
 
     private Varargs localize(Varargs varargs) {
-        if(manager == null) return error("The AssetManager is not available");
+        if (manager == null) return error("The AssetManager is not available");
         String sName = varargs.checkjstring(1);
-        if(!Util.isResourceName(sName)) return argerror(1, "Expected a ResourceName for argument 'unloc'");
-        if(varargs.istable(2)) {
+        if (!Util.isResourceName(sName)) return argerror(1, "Expected a ResourceName for argument 'unloc'");
+        if (varargs.istable(2)) {
             LuaTable args = varargs.checktable(2);
             String[] outArgs = new String[args.length()];
             for (int i = 1; i <= args.length(); i++) {
-                outArgs[i-1] = args.get(i).checkjstring();
+                outArgs[i - 1] = args.get(i).checkjstring();
             }
             return valueOf(manager.localize(new ResourceName(sName), (Object[]) outArgs));
-        }else return valueOf(manager.localize(new ResourceName(sName)));
+        } else return valueOf(manager.localize(new ResourceName(sName)));
     }
 
 }

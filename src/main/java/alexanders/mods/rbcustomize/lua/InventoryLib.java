@@ -27,7 +27,7 @@ public class InventoryLib extends TwoArgFunction {
         int size = varargs.checkint(1);
         return userdataOf(new Inventory(size));
     }
-    
+
     private Varargs load(Varargs varargs) { // inventory, set
         LuaValue lInv = varargs.arg(1);
         if (!lInv.isuserdata(Inventory.class)) return argerror(1, "Expected an Inventory value for argument 'inventory'");
