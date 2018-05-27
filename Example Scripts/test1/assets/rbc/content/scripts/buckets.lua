@@ -1,8 +1,8 @@
 items.add("rbc/empty_bucket", nil, 1, nil, nil, function(x, y, layer, mouseX, mouseY, player, instance)
     if layer == "rockbottom/liquids" then
         local currentState = world.getState(x, y, layer);
-        local selected = entity.getSelectedSlot(player)
-        local inv = entity.getInv(player)
+        local selected = entities.getSelectedSlot(player)
+        local inv = entities.getInv(player)
         if currentState:sub(1, 16) == "rockbottom/water" then
             local level = tonumber(currentState:sub(24));
             if level - 1 < 0 then
@@ -27,8 +27,8 @@ items.add("rbc/water_bucket", nil, 1, nil, nil, function(x, y, layer, mouseX, mo
     if layer == "rockbottom/liquids" then
         local currentState = world.getState(x, y, layer);
         local currentStateMain = world.getState(x, y, "rockbottom/main");
-        local selected = entity.getSelectedSlot(player)
-        local inv = entity.getInv(player)
+        local selected = entities.getSelectedSlot(player)
+        local inv = entities.getInv(player)
         if currentState == "rockbottom/air" and currentStateMain == "rockbottom/air" then
             inventory.set(inv, selected, ItemInstance("rbc/empty_bucket", 1))
             world.setState(x, y, layer, "rockbottom/water;level@0")
@@ -44,8 +44,8 @@ items.add("rbc/goo_bucket", nil, 1, nil, nil, function(x, y, layer, mouseX, mous
     if layer == "rockbottom/liquids" then
         local currentState = world.getState(x, y, layer);
         local currentStateMain = world.getState(x, y, "rockbottom/main");
-        local selected = entity.getSelectedSlot(player)
-        local inv = entity.getInv(player)
+        local selected = entities.getSelectedSlot(player)
+        local inv = entities.getInv(player)
         if currentState == "rockbottom/air" and currentStateMain == "rockbottom/air" then
             inventory.set(inv, selected, ItemInstance("rbc/empty_bucket", 1))
             world.setState(x, y, layer, "rockbottom/remains_goo")

@@ -1,7 +1,7 @@
 if input.wasKeyPressed(input.keys.APOSTROPHE) then
     local player = game.getPlayer()
-    local selectedSlot = entity.getSelectedSlot(player)
-    local inv = entity.getInv(player)
+    local selectedSlot = entitiesgetSelectedSlot(player)
+    local inv = entities.getInv(player)
     local instance = inventory.get(inv, selectedSlot)
     if instance then
         if instance.set then

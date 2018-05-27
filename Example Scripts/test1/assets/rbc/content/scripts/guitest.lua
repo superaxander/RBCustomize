@@ -17,16 +17,16 @@ gui.add("rbc/test_gui", function(g)
 end)
 
 items.add("rbc/gui_item", nil, 1, nil, nil, function(x, y, layer, mouseX, mouseY, player, instance)
-    entity.openGui(player, gui.instantiate("rbc/test_gui", 100, 100))
+    entities.openGui(player, gui.instantiate("rbc/test_gui", 100, 100))
 end)
 
 gui.add("rbc/portable_chest_gui");
 
 local currentInv, currentInstance
 
-container.add("rbc/portable_chest_container", function (c, player)
-    container.addSlotGrid(c, currentInv, 0, inventory.getSlotAmount(currentInv), 0, 0, 8)
-    container.addPlayerInventory(c, player, 0, 80)
+containers.add("rbc/portable_chest_container", function (c, player)
+    containers.addSlotGrid(c, currentInv, 0, inventory.getSlotAmount(currentInv), 0, 0, 8)
+    containers.addPlayerInventory(c, player, 0, 80)
 end, nil, function(c, player)
     print("Saving")
     local set = DataSet(data.create())
@@ -41,5 +41,5 @@ items.add("rbc/portable_chest", nil, 1, nil, nil, function(x, y, layer, mouseX, 
     if data:hasKey("rbc/inventory") then
         inventory.load(currentInv, data:getDataSet("rbc/inventory").backingData)
     end
-    entity.openGuiContainer(player, gui.instantiateContainer("rbc/portable_chest_gui", player, 136, 152), container.instantiate("rbc/portable_chest_container", player))
+    entities.openGuiContainer(player, gui.instantiateContainer("rbc/portable_chest_gui", player, 136, 152), containers.instantiate("rbc/portable_chest_container", player))
 end)

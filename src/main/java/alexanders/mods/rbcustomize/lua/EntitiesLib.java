@@ -15,7 +15,7 @@ import org.luaj.vm2.lib.TwoArgFunction;
 
 import java.util.UUID;
 
-public class EntityLib extends TwoArgFunction {
+public class EntitiesLib extends TwoArgFunction {
     public static Entity parseUUID(Varargs varargs, int i) {
         Entity entity = null;
         LuaValue lUUID = varargs.arg(i);
@@ -33,20 +33,20 @@ public class EntityLib extends TwoArgFunction {
 
     @Override
     public LuaValue call(LuaValue arg1, LuaValue env) {
-        LuaTable entity = new LuaTable();
-        entity.set("remove", new FunctionWrapper(this::remove));
-        entity.set("getMotionX", new FunctionWrapper(this::getMotionX));
-        entity.set("getMotionY", new FunctionWrapper(this::getMotionY));
-        entity.set("setMotionX", new FunctionWrapper(this::setMotionX));
-        entity.set("setMotionY", new FunctionWrapper(this::setMotionY));
-        entity.set("isOnGround", new FunctionWrapper(this::isOnGround));
-        entity.set("getSelectedSlot", new FunctionWrapper(this::getSelectedSlot));
-        entity.set("getInv", new FunctionWrapper(this::getInv));
-        entity.set("getFacing", new FunctionWrapper(this::getFacing));
-        entity.set("openGui", new FunctionWrapper(this::openGui));
-        entity.set("openGuiContainer", new FunctionWrapper(this::openGuiContainer));
-        env.set("entity", entity);
-        return entity;
+        LuaTable entities = new LuaTable();
+        entities.set("remove", new FunctionWrapper(this::remove));
+        entities.set("getMotionX", new FunctionWrapper(this::getMotionX));
+        entities.set("getMotionY", new FunctionWrapper(this::getMotionY));
+        entities.set("setMotionX", new FunctionWrapper(this::setMotionX));
+        entities.set("setMotionY", new FunctionWrapper(this::setMotionY));
+        entities.set("isOnGround", new FunctionWrapper(this::isOnGround));
+        entities.set("getSelectedSlot", new FunctionWrapper(this::getSelectedSlot));
+        entities.set("getInv", new FunctionWrapper(this::getInv));
+        entities.set("getFacing", new FunctionWrapper(this::getFacing));
+        entities.set("openGui", new FunctionWrapper(this::openGui));
+        entities.set("openGuiContainer", new FunctionWrapper(this::openGuiContainer));
+        env.set("entities", entities);
+        return entities;
     }
 
     private Varargs openGui(Varargs varargs) { // uuid, gui
@@ -75,7 +75,7 @@ public class EntityLib extends TwoArgFunction {
         Entity entity = parseUUID(varargs, 1);
         GuiContainer gui = (GuiContainer) varargs.checkuserdata(2, GuiContainer.class);
         ItemContainer container = (ItemContainer) varargs.checkuserdata(3, ItemContainer.class);
-        
+
         if (entity instanceof AbstractEntityPlayer) {
             return valueOf(((AbstractEntityPlayer) entity).openGuiContainer(gui, container));
         } else {

@@ -15,26 +15,26 @@ import org.luaj.vm2.lib.TwoArgFunction;
 
 import static alexanders.mods.rbcustomize.Util.nilToNull;
 
-public class ContainerLib extends TwoArgFunction {
+public class ContainersLib extends TwoArgFunction {
     @Override
     public LuaValue call(LuaValue arg1, LuaValue env) {
-        LuaTable container = new LuaTable();
-        container.set("add", new FunctionWrapper(this::add));
-        container.set("remove", new FunctionWrapper(this::remove));
-        container.set("instantiate", new FunctionWrapper(this::instantiate));
-        container.set("instantiateSlot", new FunctionWrapper(this::instantiateSlot));
-        container.set("addPlayerInventory", new FunctionWrapper(this::addPlayerInventory));
-        container.set("addSlotGrid", new FunctionWrapper(this::addSlotGrid));
-        container.set("addSlot", new FunctionWrapper(this::addSlot));
-        container.set("slotGet", new FunctionWrapper(this::slotGet));
-        container.set("slotSet", new FunctionWrapper(this::slotSet));
-        env.set("container", container);
-        return container;
+        LuaTable containers = new LuaTable();
+        containers.set("add", new FunctionWrapper(this::add));
+        containers.set("remove", new FunctionWrapper(this::remove));
+        containers.set("instantiate", new FunctionWrapper(this::instantiate));
+        containers.set("instantiateSlot", new FunctionWrapper(this::instantiateSlot));
+        containers.set("addPlayerInventory", new FunctionWrapper(this::addPlayerInventory));
+        containers.set("addSlotGrid", new FunctionWrapper(this::addSlotGrid));
+        containers.set("addSlot", new FunctionWrapper(this::addSlot));
+        containers.set("slotGet", new FunctionWrapper(this::slotGet));
+        containers.set("slotSet", new FunctionWrapper(this::slotSet));
+        env.set("containers", containers);
+        return containers;
     }
 
     private Varargs addPlayerInventory(Varargs varargs) { // container, player, x, y
         ItemContainer container = (ItemContainer) varargs.checkuserdata(1, ItemContainer.class);
-        Entity e = EntityLib.parseUUID(varargs, 2);
+        Entity e = EntitiesLib.parseUUID(varargs, 2);
         int x = varargs.checkint(3);
         int y = varargs.checkint(4);
         if (e instanceof AbstractEntityPlayer) {
@@ -105,7 +105,7 @@ public class ContainerLib extends TwoArgFunction {
         String sName = varargs.checkjstring(1);
         if (!Util.isResourceName(sName)) return argerror(1, "Expected a resource name for argument 'name'");
         ResourceName name = new ResourceName(sName);
-        Entity e = EntityLib.parseUUID(varargs, 2);
+        Entity e = EntitiesLib.parseUUID(varargs, 2);
         if (e instanceof AbstractEntityPlayer) {
             if (LuaContainer.CONTAINER_REGISTRY.get(name) == null) return error("No container with that name was found");
             return userdataOf(new LuaContainer((AbstractEntityPlayer) e, name));

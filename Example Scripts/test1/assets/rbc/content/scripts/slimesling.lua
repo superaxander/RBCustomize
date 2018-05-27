@@ -5,9 +5,9 @@ end
 
 items.add("rbc/slimesling", nil, 1, nil, nil, function(x, y, layer, mouseX, mouseY, player, instance)
     local additionalX, additionalY = angle()
-    if entity.isOnGround(player) then
-        entity.setMotionX(player, -3 * additionalX);
-        entity.setMotionY(player, additionalY);
+    if entities.isOnGround(player) then
+        entities.setMotionX(player, -3 * additionalX);
+        entities.setMotionY(player, additionalY);
     end
 end)
 

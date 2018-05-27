@@ -7,7 +7,7 @@ items.add("rbc/test_pick", { "First line", "Second line" }, nil, { ToolLevel("PI
         end
         chat.sendMessageTo(player, ChatComponentText(FormattingCode.GREEN..FormattingCode.BOLD) .. ChatComponentTranslation("rbc/pickaxe_break", tostring(instance.set:getInt("rbc/breakCount") + 1)) .. ChatComponentText(FormattingCode.RESET_COLOR..FormattingCode.RESET_PROPS.." piece of unformatted text " .. FormattingCode.PINK .. FormattingCode.UNDERLINED .. "this" .. FormattingCode.RESET_PROPS .. " is a piece of fixed text"))
         instance.set:addInt("rbc/breakCount", instance.set:getInt("rbc/breakCount") + 1)
-        inventory.set(entity.getInv(player), entity.getSelectedSlot(player), instance)
+        inventory.set(entities.getInv(player), entities.getSelectedSlot(player), instance)
     end
     return true;
 end)
