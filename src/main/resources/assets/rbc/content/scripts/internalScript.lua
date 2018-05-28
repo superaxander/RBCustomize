@@ -839,11 +839,21 @@ end
 function ChatComponent.__concat(left, right)
     if type(right) == "table" then
         if type(right.type) == "string" then
-            return left:append(right)
+            if type(left) == "table" then
+                if type(left.type) == "string" then
+                    return left:append(right)
+                else
+                    error(2, "Can't concatenate ChatComponent and table of unknown type")
+                end
+            elseif type(left) == "string" then -- We know for sure that right is a chat component
+                return ChatComponentText(left):append(right)
+            else
+                error(2, "Can't concatenate ChatComponent and value of type " .. type(left))
+            end
         else
             error(2, "Can't concatenate ChatComponent and table of unknown type")
         end
-    elseif type(right) == "string" then
+    elseif type(right) == "string" then -- We know for sure that left is a chat component
         return left:append(ChatComponentText(right))
     else
         error(2, "Can't concatenate ChatComponent and value of type " .. type(right))
