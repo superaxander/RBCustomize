@@ -8,7 +8,7 @@ commands.add("rbc/tileInfo", "Returns information about the tile. Usage: tileInf
         return FormattingCode.RED .. ChatComponentTranslation("rbc/tileInfoUsage")
     end
     if not math.modf(x) == 0 or math.modf(y) == 0 then
-        return FormattingCode.RED .. ChatComponentTranslation("rbc/IntegersOnly")
+        return FormattingCode.RED .. ChatComponentTranslation("rbc/integersOnly")
     end
     local ret = ChatComponentEmpty()
     local layers = world.getLayers()
