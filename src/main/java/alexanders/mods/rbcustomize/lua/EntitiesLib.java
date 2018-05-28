@@ -35,6 +35,8 @@ public class EntitiesLib extends TwoArgFunction {
     public LuaValue call(LuaValue arg1, LuaValue env) {
         LuaTable entities = new LuaTable();
         entities.set("remove", new FunctionWrapper(this::remove));
+        entities.set("getX", new FunctionWrapper(this::getX));
+        entities.set("getY", new FunctionWrapper(this::getY));
         entities.set("getMotionX", new FunctionWrapper(this::getMotionX));
         entities.set("getMotionY", new FunctionWrapper(this::getMotionY));
         entities.set("setMotionX", new FunctionWrapper(this::setMotionX));
@@ -98,6 +100,16 @@ public class EntitiesLib extends TwoArgFunction {
     private Varargs isOnGround(Varargs varargs) { // uuid --> isOnGround
         Entity entity = parseUUID(varargs, 1);
         return valueOf(entity.onGround);
+    }
+
+    private Varargs getX(Varargs varargs) { // uuid --> x
+        Entity entity = parseUUID(varargs, 1);
+        return valueOf(entity.x);
+    }
+
+    private Varargs getY(Varargs varargs) { // uuid --> y
+        Entity entity = parseUUID(varargs, 1);
+        return valueOf(entity.y);
     }
 
     private Varargs getMotionX(Varargs varargs) { // uuid --> motionX

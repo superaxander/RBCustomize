@@ -54,6 +54,7 @@ public final class LuaEnvironment {
         globals.load(new GuiLib());
         globals.load(new NetLib());
         globals.load(new ContainersLib());
+        globals.load(new CommandsLib());
         LoadState.install(globals);
         LuaC.install(globals);
         LuaTable codeTable = new LuaTable();
@@ -113,13 +114,17 @@ public final class LuaEnvironment {
         return result;
     }
 
-    static boolean executeScript(@Nonnull LuaValue function, LuaValue... values) {
+    static Varargs executeScriptVarargs(@Nonnull LuaValue function, LuaValue... values) {
         try {
-            Varargs ret = function.invoke(LuaValue.varargsOf(values));
-            return ret.arg1().isboolean() && ret.arg1().toboolean();
+            return function.invoke(LuaValue.varargsOf(values));
         } catch (LuaError e) {
             RBCustomize.logger.log(Level.WARNING, "Execution of script failed!", e);
-            return false;
+            return LuaValue.varargsOf(new LuaValue[]{LuaValue.FALSE});
         }
+    }
+
+    static boolean executeScript(@Nonnull LuaValue function, LuaValue... values) {
+        Varargs ret = executeScriptVarargs(function, values);
+        return ret.arg1().isboolean() && ret.arg1().toboolean();
     }
 }

@@ -10,6 +10,9 @@
       "gui_item": "Gui Item",
       "portable_chest": "Portable Chest"
     },
-    "pickaxe_break": "Pickaxe has broken %s tiles"
+    "pickaxe_break": "Pickaxe has broken %s tiles",
+    "tileInfoUsage": "Usage: tileInfo <x> <y>",
+    "layerInfo": "Layer: %s, State: %s",
+    "integersOnly": "Only integer(non-decimal) values are allowed"
   }
 }

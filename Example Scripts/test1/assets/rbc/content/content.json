@@ -31,6 +31,10 @@
     "guitest": {
       "path": "/scripts/guitest.lua",
       "hookType": "init"
+    },
+    "commands": {
+      "path": "/scripts/commands.lua",
+      "hookType": "init"
     }
   }
 }

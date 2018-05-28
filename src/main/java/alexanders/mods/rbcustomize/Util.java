@@ -17,7 +17,8 @@ public final class Util {
 
     public static <T> LuaValue toLuaStringList(Collection<T> collection) {
         LuaTable table = new LuaTable();
-        for (T t : collection) table.add(LuaValue.valueOf(t.toString()));
+        int i = 0;
+        for (T t : collection) table.set(++i, LuaValue.valueOf(t.toString()));
         return table;
     }
 
@@ -37,7 +38,8 @@ public final class Util {
 
     public static LuaValue toLuaCharacterList(Collection<Character> collection) {
         LuaTable table = new LuaTable();
-        for (Character t : collection) table.add(LuaValue.valueOf(t));
+        int i = 0;
+        for (Character t : collection) table.set(i, LuaValue.valueOf(t));
         return table;
     }
 
@@ -47,7 +49,8 @@ public final class Util {
 
     public static LuaValue toLuaShortList(Collection<Short> collection) {
         LuaTable table = new LuaTable();
-        for (Short t : collection) table.add(LuaValue.valueOf(t));
+        int i = 0;
+        for (Short t : collection) table.set(++i, LuaValue.valueOf(t));
         return table;
     }
 
@@ -57,7 +60,8 @@ public final class Util {
 
     public static LuaValue toLuaIntegerList(Collection<Integer> collection) {
         LuaTable table = new LuaTable();
-        for (Integer t : collection) table.add(LuaValue.valueOf(t));
+        int i = 0;
+        for (Integer t : collection) table.set(++i,LuaValue.valueOf(t));
         return table;
     }
 
@@ -67,7 +71,8 @@ public final class Util {
 
     public static LuaValue toLuaLongList(Collection<Long> collection) {
         LuaTable table = new LuaTable();
-        for (Long t : collection) table.add(LuaValue.valueOf(t));
+        int i = 0;
+        for (Long t : collection) table.set(++i,LuaValue.valueOf(t));
         return table;
     }
 
@@ -77,7 +82,8 @@ public final class Util {
 
     public static LuaValue toLuaFloatList(Collection<Float> collection) {
         LuaTable table = new LuaTable();
-        for (Float t : collection) table.add(LuaValue.valueOf(t));
+        int i = 0;
+        for (Float t : collection) table.set(++i,LuaValue.valueOf(t));
         return table;
     }
 
@@ -87,7 +93,8 @@ public final class Util {
 
     public static LuaValue toLuaDoubleList(Collection<Double> collection) {
         LuaTable table = new LuaTable();
-        for (Double t : collection) table.add(LuaValue.valueOf(t));
+        int i = 0;
+        for (Double t : collection) table.set(++i,LuaValue.valueOf(t));
         return table;
     }
 
@@ -123,7 +130,8 @@ public final class Util {
             }
         } else {
             LuaTable table = new LuaTable();
-            for (T t : collection) table.add(preTransform.apply(t));
+            int i = 0;
+            for (T t : collection) table.set(++i,preTransform.apply(t));
             return table;
         }
     }

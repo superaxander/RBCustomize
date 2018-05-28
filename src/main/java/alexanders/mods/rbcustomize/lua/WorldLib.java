@@ -13,6 +13,9 @@ import org.luaj.vm2.lib.TwoArgFunction;
 
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
+import static alexanders.mods.rbcustomize.Util.toLuaStringList;
 
 public class WorldLib extends TwoArgFunction {
     public static IWorld world = null;
@@ -24,8 +27,13 @@ public class WorldLib extends TwoArgFunction {
         world.set("getState", new FunctionWrapper(this::getState));
         world.set("setState", new FunctionWrapper(this::setState));
         world.set("getPlayers", new FunctionWrapper(this::getPlayers));
+        world.set("getLayers", new FunctionWrapper(this::getLayers));
         env.set("world", world);
         return world;
+    }
+
+    private Varargs getLayers(Varargs varargs) {
+        return toLuaStringList(TileLayer.getAllLayers().stream().map(TileLayer::toString).collect(Collectors.toList()));
     }
 
     private Varargs getPlayers(Varargs varargs) {

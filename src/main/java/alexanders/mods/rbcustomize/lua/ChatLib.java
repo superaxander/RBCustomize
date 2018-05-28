@@ -39,9 +39,13 @@ public class ChatLib extends TwoArgFunction {
         chat.set("getLastInputs", new FunctionWrapper(this::getLastInputs));
         chat.set("getPlayerIdFromString", new FunctionWrapper(this::getPlayerIdFromString));
         chat.set("getPlayerSuggestions", new FunctionWrapper(this::getPlayerSuggestions));
-
+        chat.set("getUUID", new FunctionWrapper(this::getUUID));
         env.set("chat", chat);
         return chat;
+    }
+    
+    private Varargs getUUID(Varargs varargs) {
+        return valueOf(parseCommandSender(varargs, 1).getUniqueId().toString());
     }
 
     private Varargs displayMessage(Varargs varargs) {
@@ -71,7 +75,7 @@ public class ChatLib extends TwoArgFunction {
     }
 
     private Varargs getMessages(Varargs varargs) {
-        return toLuaPrimitiveList(ChatComponent.class, chatLog.getMessages(), this::chatComponentToLua, null);
+        return toLuaPrimitiveList(ChatComponent.class, chatLog.getMessages(), ChatLib::chatComponentToLua, null);
     }
 
     private Varargs getLastInputs(Varargs varargs) {
@@ -101,12 +105,12 @@ public class ChatLib extends TwoArgFunction {
         return null;
     }
 
-    private ChatComponent parseChatComponent(Varargs varargs, int arg) {
+    static ChatComponent parseChatComponent(Varargs varargs, int arg) {
         LuaValue lComponent = varargs.checktable(arg);
         return parseChatComponent(lComponent);
     }
 
-    private ChatComponent parseChatComponent(LuaValue lComponent) {
+    private static ChatComponent parseChatComponent(LuaValue lComponent) {
         String type = lComponent.get("type").checkjstring();
         ChatComponent component;
         switch (type) {
@@ -133,7 +137,7 @@ public class ChatLib extends TwoArgFunction {
         return component;
     }
 
-    private LuaValue chatComponentToLua(ChatComponent component) {
+    private static LuaValue chatComponentToLua(ChatComponent component) {
         LuaValue lComponent;
         if (component instanceof ChatComponentEmpty) {
             lComponent = LuaEnvironment.globals.get("ChatComponentEmpty").call();
