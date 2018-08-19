@@ -61,7 +61,7 @@ public final class Util {
     public static LuaValue toLuaIntegerList(Collection<Integer> collection) {
         LuaTable table = new LuaTable();
         int i = 0;
-        for (Integer t : collection) table.set(++i,LuaValue.valueOf(t));
+        for (Integer t : collection) table.set(++i, LuaValue.valueOf(t));
         return table;
     }
 
@@ -72,7 +72,7 @@ public final class Util {
     public static LuaValue toLuaLongList(Collection<Long> collection) {
         LuaTable table = new LuaTable();
         int i = 0;
-        for (Long t : collection) table.set(++i,LuaValue.valueOf(t));
+        for (Long t : collection) table.set(++i, LuaValue.valueOf(t));
         return table;
     }
 
@@ -83,7 +83,7 @@ public final class Util {
     public static LuaValue toLuaFloatList(Collection<Float> collection) {
         LuaTable table = new LuaTable();
         int i = 0;
-        for (Float t : collection) table.set(++i,LuaValue.valueOf(t));
+        for (Float t : collection) table.set(++i, LuaValue.valueOf(t));
         return table;
     }
 
@@ -94,7 +94,7 @@ public final class Util {
     public static LuaValue toLuaDoubleList(Collection<Double> collection) {
         LuaTable table = new LuaTable();
         int i = 0;
-        for (Double t : collection) table.set(++i,LuaValue.valueOf(t));
+        for (Double t : collection) table.set(++i, LuaValue.valueOf(t));
         return table;
     }
 
@@ -131,7 +131,7 @@ public final class Util {
         } else {
             LuaTable table = new LuaTable();
             int i = 0;
-            for (T t : collection) table.set(++i,preTransform.apply(t));
+            for (T t : collection) table.set(++i, preTransform.apply(t));
             return table;
         }
     }
@@ -178,6 +178,18 @@ public final class Util {
                 return "MAGENTA";
             case Colors.GREEN:
                 return "GREEN";
+            case Colors.PURPLE:
+                return "PURPLE";
+            case Colors.CYAN:
+                return "CYAN";
+            case Colors.BROWN:
+                return "BROWN";
+            case Colors.LIME:
+                return "LIME";
+            case Colors.BLUE:
+                return "BLUE";
+            case Colors.LIGHT_BLUE:
+                return "LIGHT_BLUE";
             default:
                 throw new IllegalArgumentException("Unrecognized color");
         }

@@ -1,5 +1,6 @@
 package alexanders.mods.rbcustomize.lua;
 
+import de.ellpeck.rockbottom.api.Registries;
 import de.ellpeck.rockbottom.api.RockBottomAPI;
 import de.ellpeck.rockbottom.api.entity.Entity;
 import de.ellpeck.rockbottom.api.tile.state.TileState;
@@ -78,7 +79,7 @@ public class WorldLib extends TwoArgFunction {
         } catch (IllegalArgumentException e) {
             return argerror(4, "Specified state was not a resource name");
         }
-        state = RockBottomAPI.TILE_STATE_REGISTRY.get(stateName);
+        state = Registries.TILE_STATE_REGISTRY.get(stateName);
         if (state == null) return argerror(4, "Specified state was not found");
 
         world.setState(layer, x, y, state);

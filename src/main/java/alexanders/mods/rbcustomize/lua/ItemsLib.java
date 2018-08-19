@@ -1,6 +1,7 @@
 package alexanders.mods.rbcustomize.lua;
 
 import alexanders.mods.rbcustomize.RBCustomize;
+import de.ellpeck.rockbottom.api.Registries;
 import de.ellpeck.rockbottom.api.RockBottomAPI;
 import de.ellpeck.rockbottom.api.assets.IAssetManager;
 import de.ellpeck.rockbottom.api.data.set.ModBasedDataSet;
@@ -46,7 +47,7 @@ public class ItemsLib extends TwoArgFunction {
         } catch (IllegalArgumentException e) {
             throw new LuaError(argerror(i, "Specified name is not a valid resource name"));
         }
-        Item item = RockBottomAPI.ITEM_REGISTRY.get(name);
+        Item item = Registries.ITEM_REGISTRY.get(name);
         if (item == null) throw new LuaError(argerror(i, "No item with the specified name was found"));
         int meta = lMeta.toint();
         if (meta > item.getHighestPossibleMeta()) throw new LuaError(argerror(i, "The specified meta is too high for this item"));
@@ -85,14 +86,14 @@ public class ItemsLib extends TwoArgFunction {
     private Varargs remove(Varargs varargs) {
         String lName = varargs.checkjstring(1);
         if (!Util.isResourceName(lName)) return argerror(1, "Expected a ResourceName for argument 'item'");
-        RockBottomAPI.ITEM_REGISTRY.unregister(new ResourceName(lName));
+        Registries.ITEM_REGISTRY.unregister(new ResourceName(lName));
         return NIL;
     }
 
     private Varargs isDataSensitive(Varargs varargs) {
         String sItem = varargs.checkjstring(1);
         if (!Util.isResourceName(sItem)) return argerror(1, "Expected a resource name for argument 'item'");
-        Item item = RockBottomAPI.ITEM_REGISTRY.get(new ResourceName(sItem));
+        Item item = Registries.ITEM_REGISTRY.get(new ResourceName(sItem));
         if (item == null) return argerror(1, "No item with the specified name was found");
         return valueOf(item.isDataSensitive(parseItemInstance(2, varargs.checktable(2))));
     }
@@ -100,7 +101,7 @@ public class ItemsLib extends TwoArgFunction {
     private Varargs getMaxAmount(Varargs varargs) {
         String sItem = varargs.checkjstring(1);
         if (!Util.isResourceName(sItem)) return argerror(1, "Expected a resource name for argument 'item'");
-        Item item = RockBottomAPI.ITEM_REGISTRY.get(new ResourceName(sItem));
+        Item item = Registries.ITEM_REGISTRY.get(new ResourceName(sItem));
         if (item == null) return argerror(1, "No item with the specified name was found");
         return valueOf(item.getMaxAmount());
     }
@@ -116,7 +117,7 @@ public class ItemsLib extends TwoArgFunction {
             return argerror(1, "Specified name was not a resource name");
         }
 
-        if (RockBottomAPI.ITEM_REGISTRY.get(name) != null) return argerror(1, "Specified name already in use");
+        if (Registries.ITEM_REGISTRY.get(name) != null) return argerror(1, "Specified name already in use");
 
         String[] description;
         LuaValue lDescription = varargs.arg(2);
@@ -215,8 +216,8 @@ public class ItemsLib extends TwoArgFunction {
         }
 
         @Override
-        public float getMiningSpeed(IWorld world, int x, int y, TileLayer layer, Tile tile, boolean isRightTool) {
-            return super.getMiningSpeed(world, x, y, layer, tile, isRightTool) * miningSpeed;
+        public float getMiningSpeed(IWorld world, int x, int y, TileLayer layer, Tile tile, boolean isRightTool, ItemInstance instance) {
+            return super.getMiningSpeed(world, x, y, layer, tile, isRightTool, instance) * miningSpeed;
         }
 
         @Override

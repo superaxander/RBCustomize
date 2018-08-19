@@ -1,5 +1,6 @@
 package alexanders.mods.rbcustomize.lua;
 
+import de.ellpeck.rockbottom.api.Registries;
 import de.ellpeck.rockbottom.api.RockBottomAPI;
 import de.ellpeck.rockbottom.api.entity.Entity;
 import de.ellpeck.rockbottom.api.entity.player.AbstractEntityPlayer;
@@ -88,7 +89,7 @@ public class EntitiesLib extends TwoArgFunction {
     private Varargs remove(Varargs varargs) {
         String lName = varargs.checkjstring(1);
         if (!Util.isResourceName(lName)) return argerror(1, "Expected a ResourceName for argument 'entity'");
-        RockBottomAPI.ENTITY_REGISTRY.unregister(new ResourceName(lName));
+        Registries.ENTITY_REGISTRY.unregister(new ResourceName(lName));
         return NIL;
     }
 
@@ -104,12 +105,12 @@ public class EntitiesLib extends TwoArgFunction {
 
     private Varargs getX(Varargs varargs) { // uuid --> x
         Entity entity = parseUUID(varargs, 1);
-        return valueOf(entity.x);
+        return valueOf(entity.getX());
     }
 
     private Varargs getY(Varargs varargs) { // uuid --> y
         Entity entity = parseUUID(varargs, 1);
-        return valueOf(entity.y);
+        return valueOf(entity.getY());
     }
 
     private Varargs getMotionX(Varargs varargs) { // uuid --> motionX

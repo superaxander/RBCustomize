@@ -1,8 +1,13 @@
 package alexanders.mods.rbcustomize.lua;
 
+import com.google.common.collect.Lists;
 import de.ellpeck.rockbottom.api.data.set.AbstractDataSet;
 import de.ellpeck.rockbottom.api.data.set.DataSet;
 import de.ellpeck.rockbottom.api.data.set.ModBasedDataSet;
+import de.ellpeck.rockbottom.api.data.set.part.DataPart;
+import de.ellpeck.rockbottom.api.data.set.part.num.PartByte;
+import de.ellpeck.rockbottom.api.data.set.part.num.PartInt;
+import de.ellpeck.rockbottom.api.data.set.part.num.PartShort;
 import de.ellpeck.rockbottom.api.util.reg.ResourceName;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
@@ -252,16 +257,16 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
         String key = getString(varargs.arg(2), 2, "key");
         LuaValue lValue = varargs.arg(3);
         if (!lValue.istable()) return argerror(3, "Expected a table(array) value for argument 'value'");
-        byte[] value = new byte[lValue.length()];
+        PartByte[] value = new PartByte[lValue.length()];
         for (int i = 1; i <= value.length; i++) {
-            value[i - 1] = (byte) lValue.checkint(i); // TODO: this is a bit hacky
+            value[i - 1] = new PartByte((byte) lValue.checkint(i)); // TODO: this is a bit hacky
         }
 
         if (dataSet instanceof DataSet) {
-            ((DataSet) dataSet).addByteArray(key, value);
+            ((DataSet) dataSet).addList(key, Lists.newArrayList(value));
         } else if (dataSet instanceof ModBasedDataSet) {
             try {
-                ((ModBasedDataSet) dataSet).addByteArray(new ResourceName(key), value);
+                ((ModBasedDataSet) dataSet).addList(key, Lists.newArrayList(value));
             } catch (IllegalArgumentException e) {
                 return argerror(2, "Key must be a resource name");
             }
@@ -274,16 +279,16 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
         String key = getString(varargs.arg(2), 2, "key");
         LuaValue lValue = varargs.arg(3);
         if (!lValue.istable()) return argerror(3, "Expected a table(array) value for argument 'value'");
-        int[] value = new int[lValue.length()];
+        PartInt[] value = new PartInt[lValue.length()];
         for (int i = 1; i <= value.length; i++) {
-            value[i - 1] = lValue.checkint(i); // TODO: this is a bit hacky
+            value[i - 1] = new PartInt(lValue.checkint(i)); // TODO: this is a bit hacky
         }
 
         if (dataSet instanceof DataSet) {
-            ((DataSet) dataSet).addIntArray(key, value);
+            ((DataSet) dataSet).addList(key, Lists.newArrayList(value));
         } else if (dataSet instanceof ModBasedDataSet) {
             try {
-                ((ModBasedDataSet) dataSet).addIntArray(new ResourceName(key), value);
+                ((ModBasedDataSet) dataSet).addList(key, Lists.newArrayList(value));
             } catch (IllegalArgumentException e) {
                 return argerror(2, "Key must be a resource name");
             }
@@ -296,16 +301,16 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
         String key = getString(varargs.arg(2), 2, "key");
         LuaValue lValue = varargs.arg(3);
         if (!lValue.istable()) return argerror(3, "Expected a table(array) value for argument 'value'");
-        short[] value = new short[lValue.length()];
+        PartShort[] value = new PartShort[lValue.length()];
         for (int i = 1; i <= value.length; i++) {
-            value[i - 1] = (short) lValue.checkint(i); // TODO: this is a bit hacky
+            value[i - 1] = new PartShort((short) lValue.checkint(i)); // TODO: this is a bit hacky
         }
 
         if (dataSet instanceof DataSet) {
-            ((DataSet) dataSet).addShortArray(key, value);
+            ((DataSet) dataSet).addList(key, Lists.newArrayList(value));
         } else if (dataSet instanceof ModBasedDataSet) {
             try {
-                ((ModBasedDataSet) dataSet).addShortArray(new ResourceName(key), value);
+                ((ModBasedDataSet) dataSet).addList(key, Lists.newArrayList(value));
             } catch (IllegalArgumentException e) {
                 return argerror(2, "Key must be a resource name");
             }
@@ -487,12 +492,12 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
     private Varargs getByteArray(Varargs varargs) { // backingData, key --> value
         AbstractDataSet dataSet = getDataSet(varargs.arg(1), 1, "backingData");
         String key = getString(varargs.arg(2), 2, "key");
-        byte[] array;
+        Byte[] array;
         if (dataSet instanceof DataSet) {
-            array = ((DataSet) dataSet).getByteArray(key, 0);
+            array = ((DataSet) dataSet).getList(key).stream().map(DataPart::get).toArray(Byte[]::new);
         } else if (dataSet instanceof ModBasedDataSet) {
             try {
-                array = ((ModBasedDataSet) dataSet).getByteArray(new ResourceName(key), 0);
+                array = ((ModBasedDataSet) dataSet).getList(key).stream().map(DataPart::get).toArray(Byte[]::new);
             } catch (IllegalArgumentException e) {
                 return argerror(2, "Key must be a resource name");
             }
@@ -511,12 +516,12 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
     private Varargs getIntArray(Varargs varargs) { // backingData, key --> value
         AbstractDataSet dataSet = getDataSet(varargs.arg(1), 1, "backingData");
         String key = getString(varargs.arg(2), 2, "key");
-        int[] array;
+        Integer[] array;
         if (dataSet instanceof DataSet) {
-            array = ((DataSet) dataSet).getIntArray(key, 0);
+            array = ((DataSet) dataSet).getList(key).stream().map(DataPart::get).toArray(Integer[]::new);
         } else if (dataSet instanceof ModBasedDataSet) {
             try {
-                array = ((ModBasedDataSet) dataSet).getIntArray(new ResourceName(key), 0);
+                array = ((ModBasedDataSet) dataSet).getList(key).stream().map(DataPart::get).toArray(Integer[]::new);
             } catch (IllegalArgumentException e) {
                 return argerror(2, "Key must be a resource name");
             }
@@ -535,12 +540,12 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
     private Varargs getShortArray(Varargs varargs) { // backingData, key --> value
         AbstractDataSet dataSet = getDataSet(varargs.arg(1), 1, "backingData");
         String key = getString(varargs.arg(2), 2, "key");
-        short[] array;
+        Short[] array;
         if (dataSet instanceof DataSet) {
-            array = ((DataSet) dataSet).getShortArray(key, 0);
+            array = ((DataSet) dataSet).getList(key).stream().map(DataPart::get).toArray(Short[]::new);
         } else if (dataSet instanceof ModBasedDataSet) {
             try {
-                array = ((ModBasedDataSet) dataSet).getShortArray(new ResourceName(key), 0);
+                array = ((ModBasedDataSet) dataSet).getList(key).stream().map(DataPart::get).toArray(Short[]::new);
             } catch (IllegalArgumentException e) {
                 return argerror(2, "Key must be a resource name");
             }

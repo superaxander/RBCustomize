@@ -1,5 +1,6 @@
 package alexanders.mods.rbcustomize.lua;
 
+import alexanders.mods.rbcustomize.RBCustomize;
 import de.ellpeck.rockbottom.api.IGameInstance;
 import de.ellpeck.rockbottom.api.IRenderer;
 import de.ellpeck.rockbottom.api.RockBottomAPI;
@@ -472,7 +473,7 @@ public class GuiLib extends TwoArgFunction {
     }
 
     private static final class LuaGui extends Gui {
-        private static final NameRegistry<LuaGuiData> GUI_REGISTRY = new NameRegistry<>("LuaGuiRegistry", true);
+        private static final NameRegistry<LuaGuiData> GUI_REGISTRY = new NameRegistry<>(RBCustomize.createRes("LuaGuiRegistry"), true);
 
         private final ResourceName name;
         private final LuaGuiData data;

@@ -11,4 +11,4 @@ items.add("rbc/test_pick", { "First line", "Second line" }, nil, { ToolLevel("PI
     end
     return true;
 end)
-recipes.add("manual", "rbc/test_pick_recipe", ItemInstance("rbc/test_pick"), ResUseInfo("soil", 4), ItemInstance("rockbottom/brittle_pickaxe"), ItemInstance("rockbottom/brittle_pickaxe"), ItemInstance("rockbottom/brittle_pickaxe"))
+recipes.add("manual", "rbc/test_pick_recipe", ItemInstance("rbc/test_pick"), 0, ResUseInfo("soil", 4), ItemInstance("rockbottom/brittle_pickaxe"), ItemInstance("rockbottom/brittle_pickaxe"), ItemInstance("rockbottom/brittle_pickaxe"))

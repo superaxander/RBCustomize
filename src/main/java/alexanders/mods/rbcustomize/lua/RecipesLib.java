@@ -1,5 +1,6 @@
 package alexanders.mods.rbcustomize.lua;
 
+import de.ellpeck.rockbottom.api.Registries;
 import de.ellpeck.rockbottom.api.RockBottomAPI;
 import de.ellpeck.rockbottom.api.construction.BasicRecipe;
 import de.ellpeck.rockbottom.api.construction.IRecipe;
@@ -30,18 +31,19 @@ public class RecipesLib extends TwoArgFunction {
         String lName = varargs.checkjstring(1);
         if (!Util.isResourceName(lName)) return argerror(1, "Expected a ResourceName for argument 'item'");
         ResourceName name = new ResourceName(lName);
-        IRecipe recipe = RockBottomAPI.ALL_CONSTRUCTION_RECIPES.get(name);
-        if (recipe instanceof BasicRecipe) RockBottomAPI.MANUAL_CONSTRUCTION_RECIPES.unregister(name);
-        RockBottomAPI.ALL_CONSTRUCTION_RECIPES.unregister(name);
+        IRecipe recipe = Registries.ALL_CONSTRUCTION_RECIPES.get(name);
+        if (recipe instanceof BasicRecipe) Registries.MANUAL_CONSTRUCTION_RECIPES.unregister(name);
+        Registries.ALL_CONSTRUCTION_RECIPES.unregister(name);
         return NIL;
     }
 
-    private Varargs addRecipe(Varargs varargs) { // type, name, output, inputs... --> recipe, ok //TODO: add support for supplying knowledge based recipe information names
+    private Varargs addRecipe(Varargs varargs) { // type, name, output, skillReward, inputs... --> recipe, ok //TODO: add support for supplying knowledge based recipe information names
         if (varargs.narg() < 4) return argerror("Expected at least 4 arguments");
         LuaValue lType = varargs.arg(1);
         LuaValue lName = varargs.arg(2);
         LuaValue lOutput = varargs.arg(3);
-        Varargs lInputs = varargs.subargs(4);
+        float skillReward = (float) varargs.checkdouble(4);
+        Varargs lInputs = varargs.subargs(5);
 
         int inputSize = lInputs.narg();
         IUseInfo[] inputs = new IUseInfo[inputSize];
@@ -77,17 +79,17 @@ public class RecipesLib extends TwoArgFunction {
         } catch (IllegalArgumentException e) {
             return argerror(2, "Specified name is not a valid resource name");
         }
-        IRecipe recipe = RockBottomAPI.ALL_CONSTRUCTION_RECIPES.get(name);
+        IRecipe recipe = Registries.ALL_CONSTRUCTION_RECIPES.get(name);
 
         ItemInstance output = ItemsLib.parseItemInstance(3, lOutput);
 
         if (recipe == null) {
             switch (type) {
                 case "manual":
-                    recipe = new BasicRecipe(name, output, inputs).registerManual();
+                    recipe = new BasicRecipe(name, skillReward, output, inputs).registerManual();
                     break;
                 case "manual_knowledge":
-                    recipe = new KnowledgeBasedRecipe(name, output, inputs).registerManual();
+                    recipe = new KnowledgeBasedRecipe(name, skillReward, output, inputs).registerManual();
                     break;
                 default:
                     return argerror(1, "Unrecognized recipe type");

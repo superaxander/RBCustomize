@@ -2,6 +2,7 @@ package alexanders.mods.rbcustomize.lua;
 
 import de.ellpeck.rockbottom.api.IGameInstance;
 import de.ellpeck.rockbottom.api.IRenderer;
+import de.ellpeck.rockbottom.api.Registries;
 import de.ellpeck.rockbottom.api.RockBottomAPI;
 import de.ellpeck.rockbottom.api.assets.IAssetManager;
 import de.ellpeck.rockbottom.api.entity.Entity;
@@ -57,9 +58,9 @@ public class TilesLib extends TwoArgFunction {
         String lName = varargs.checkjstring(1);
         if (!Util.isResourceName(lName)) return argerror(1, "Expected a ResourceName for argument 'tile'");
         ResourceName name = new ResourceName(lName);
-        RockBottomAPI.TILE_STATE_REGISTRY.keySet().stream().filter(it -> it.toString().startsWith(lName) && it.equals(name) || it.toString().charAt(lName.length()) == '@')
-                .forEach(RockBottomAPI.TILE_STATE_REGISTRY::unregister);
-        RockBottomAPI.TILE_REGISTRY.unregister(name);
+        Registries.TILE_STATE_REGISTRY.keySet().stream().filter(it -> it.toString().startsWith(lName) && it.equals(name) || it.toString().charAt(lName.length()) == '@')
+                .forEach(Registries.TILE_STATE_REGISTRY::unregister);
+        Registries.TILE_REGISTRY.unregister(name);
         return NIL;
     }
 
@@ -68,7 +69,7 @@ public class TilesLib extends TwoArgFunction {
         if (!lTile.isstring()) return argerror(1, "Expected a string value for argument 'tile'");
         String sTile = lTile.tojstring();
         if (!Util.isResourceName(sTile)) return argerror(1, "Specified tile was not a resource name");
-        Tile tile = RockBottomAPI.TILE_REGISTRY.get(new ResourceName(sTile));
+        Tile tile = Registries.TILE_REGISTRY.get(new ResourceName(sTile));
         if (tile == null) return argerror(1, "Specified tile was not found");
 
         return valueOf(tile.getDefState().getName().toString());
@@ -80,7 +81,7 @@ public class TilesLib extends TwoArgFunction {
         if (!lTile.isstring()) return argerror(1, "Expected a string value for argument 'tile'");
         String sTile = lTile.tojstring();
         if (!Util.isResourceName(sTile)) return argerror(1, "Specified tile was not a resource name");
-        Tile tile = RockBottomAPI.TILE_REGISTRY.get(new ResourceName(sTile));
+        Tile tile = Registries.TILE_REGISTRY.get(new ResourceName(sTile));
         if (tile == null) return argerror(1, "Specified tile was not found");
 
         LuaValue lX = varargs.arg(2);
@@ -120,7 +121,7 @@ public class TilesLib extends TwoArgFunction {
         if (!lTile.isstring()) return argerror(1, "Expected a string value for argument 'tile'");
         String sTile = lTile.tojstring();
         if (!Util.isResourceName(sTile)) return argerror(1, "Specified tile was not a resource name");
-        Tile tile = RockBottomAPI.TILE_REGISTRY.get(new ResourceName(sTile));
+        Tile tile = Registries.TILE_REGISTRY.get(new ResourceName(sTile));
         if (tile == null) return argerror(1, "Specified tile was not found");
 
         LuaValue lX = varargs.arg(2);
@@ -161,7 +162,7 @@ public class TilesLib extends TwoArgFunction {
         if (!lTile.isstring()) return argerror(1, "Expected a string value for argument 'tile'");
         String sTile = lTile.tojstring();
         if (!Util.isResourceName(sTile)) return argerror(1, "Specified tile was not a resource name");
-        Tile tile = RockBottomAPI.TILE_REGISTRY.get(new ResourceName(sTile));
+        Tile tile = Registries.TILE_REGISTRY.get(new ResourceName(sTile));
         if (tile == null) return argerror(1, "Specified tile was not found");
 
         return valueOf(tile.isFullTile());
@@ -172,7 +173,7 @@ public class TilesLib extends TwoArgFunction {
         if (!lTile.isstring()) return argerror(1, "Expected a string value for argument 'tile'");
         String sTile = lTile.tojstring();
         if (!Util.isResourceName(sTile)) return argerror(1, "Specified tile was not a resource name");
-        Tile tile = RockBottomAPI.TILE_REGISTRY.get(new ResourceName(sTile));
+        Tile tile = Registries.TILE_REGISTRY.get(new ResourceName(sTile));
         if (tile == null) return argerror(1, "Specified tile was not found");
 
         return valueOf(tile.isLiquid());
@@ -184,7 +185,7 @@ public class TilesLib extends TwoArgFunction {
         if (!lTile.isstring()) return argerror(1, "Expected a string value for argument 'tile'");
         String sTile = lTile.tojstring();
         if (!Util.isResourceName(sTile)) return argerror(1, "Specified tile was not a resource name");
-        Tile tile = RockBottomAPI.TILE_REGISTRY.get(new ResourceName(sTile));
+        Tile tile = Registries.TILE_REGISTRY.get(new ResourceName(sTile));
         if (tile == null) return argerror(1, "Specified tile was not found");
 
         LuaValue lX = varargs.arg(2);
@@ -216,7 +217,7 @@ public class TilesLib extends TwoArgFunction {
         if (!lTile.isstring()) return argerror(1, "Expected a string value for argument 'tile'");
         String sTile = lTile.tojstring();
         if (!Util.isResourceName(sTile)) return argerror(1, "Specified tile was not a resource name");
-        Tile tile = RockBottomAPI.TILE_REGISTRY.get(new ResourceName(sTile));
+        Tile tile = Registries.TILE_REGISTRY.get(new ResourceName(sTile));
         if (tile == null) return argerror(1, "Specified tile was not found");
 
         LuaValue lX = varargs.arg(2);
@@ -258,7 +259,7 @@ public class TilesLib extends TwoArgFunction {
         if (!lTile.isstring()) return argerror(1, "Expected a string value for argument 'tile'");
         String sTile = lTile.tojstring();
         if (!Util.isResourceName(sTile)) return argerror(1, "Specified tile was not a resource name");
-        Tile tile = RockBottomAPI.TILE_REGISTRY.get(new ResourceName(sTile));
+        Tile tile = Registries.TILE_REGISTRY.get(new ResourceName(sTile));
         if (tile == null) return argerror(1, "Specified tile was not found");
 
         LuaValue lX = varargs.arg(2);
@@ -335,7 +336,7 @@ public class TilesLib extends TwoArgFunction {
             return argerror(1, "Specified name was not a resource name");
         }
 
-        if (RockBottomAPI.TILE_REGISTRY.get(name) != null) return argerror(1, "Specified name already in use");
+        if (Registries.TILE_REGISTRY.get(name) != null) return argerror(1, "Specified name already in use");
 
         String[] description;
         LuaValue lDescription = varargs.arg(2);
@@ -581,7 +582,7 @@ public class TilesLib extends TwoArgFunction {
                         valueOf(placer.getUniqueId().toString())}));
                 String sState = ret.checkjstring(1);
                 if (!Util.isResourceName(sState)) error("getPlacementState must return a valid resource name");
-                TileState state = RockBottomAPI.TILE_STATE_REGISTRY.get(new ResourceName(sState));
+                TileState state = Registries.TILE_STATE_REGISTRY.get(new ResourceName(sState));
                 if (state == null) error("getPlacementState must return a registered state");
                 return state;
             }

@@ -1,5 +1,6 @@
 package alexanders.mods.rbcustomize.lua;
 
+import alexanders.mods.rbcustomize.RBCustomize;
 import de.ellpeck.rockbottom.api.entity.Entity;
 import de.ellpeck.rockbottom.api.entity.player.AbstractEntityPlayer;
 import de.ellpeck.rockbottom.api.gui.container.ContainerSlot;
@@ -115,7 +116,7 @@ public class ContainersLib extends TwoArgFunction {
     }
 
     private static final class LuaContainer extends ItemContainer {
-        private static final NameRegistry<LuaContainerData> CONTAINER_REGISTRY = new NameRegistry<>("LuaContainerRegistry", true);
+        private static final NameRegistry<LuaContainerData> CONTAINER_REGISTRY = new NameRegistry<>(RBCustomize.createRes("LuaContainerRegistry"), true);
 
         private final ResourceName name;
         private final LuaContainerData data;

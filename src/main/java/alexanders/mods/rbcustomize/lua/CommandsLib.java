@@ -2,6 +2,7 @@ package alexanders.mods.rbcustomize.lua;
 
 import alexanders.mods.rbcustomize.RBCustomize;
 import de.ellpeck.rockbottom.api.IGameInstance;
+import de.ellpeck.rockbottom.api.Registries;
 import de.ellpeck.rockbottom.api.RockBottomAPI;
 import de.ellpeck.rockbottom.api.net.chat.Command;
 import de.ellpeck.rockbottom.api.net.chat.IChatLog;
@@ -58,7 +59,7 @@ public class CommandsLib extends TwoArgFunction {
     private Varargs remove(Varargs varargs) {
         String sName = varargs.checkjstring(1);
         if (!Util.isResourceName(sName)) return argerror(1, "Expected a ResourceName for argument 'name'");
-        RockBottomAPI.COMMAND_REGISTRY.unregister(new ResourceName(sName));
+        Registries.COMMAND_REGISTRY.unregister(new ResourceName(sName));
         return NIL;
     }
 
