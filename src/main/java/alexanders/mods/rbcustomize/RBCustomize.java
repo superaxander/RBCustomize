@@ -1,10 +1,10 @@
 package alexanders.mods.rbcustomize;
 
 import alexanders.mods.rbcustomize.lua.LuaEnvironment;
-import de.ellpeck.rockbottom.api.IApiHandler;
-import de.ellpeck.rockbottom.api.IGameInstance;
-import de.ellpeck.rockbottom.api.Registries;
-import de.ellpeck.rockbottom.api.RockBottomAPI;
+import alexanders.mods.rbcustomize.questing.QuestBook;
+import alexanders.mods.rbcustomize.questing.QuestBookItem;
+import alexanders.mods.rbcustomize.questing.QuestEventListener;
+import de.ellpeck.rockbottom.api.*;
 import de.ellpeck.rockbottom.api.event.IEventHandler;
 import de.ellpeck.rockbottom.api.event.impl.WorldLoadEvent;
 import de.ellpeck.rockbottom.api.event.impl.WorldTickEvent;
@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 public class RBCustomize implements IMod {
     public static RBCustomize instance;
     public static Logger logger;
+    public static QuestBook questBook = null;
 
     public RBCustomize() {
         instance = this;
@@ -66,6 +67,8 @@ public class RBCustomize implements IMod {
         logger = RockBottomAPI.createLogger("RBCustomize");
         LuaEnvironment.init(game);
         Registries.CONTENT_LOADER_REGISTRY.register(Script.ID, new ScriptContentLoader());
+        new QuestEventListener();
+        new QuestBookItem().register();
     }
 
     @Override

@@ -1,2 +1,15 @@
 {
+  "tex.": {
+    "quest_book_background": "/quest_book_background.png",
+    "quest_book_add_chapter": "/quest_book_add_chapter.png",
+    "quest_book_delete_chapter": "/quest_book_delete_chapter.png",
+    "quest_book_edit_chapter": "/quest_book_edit_chapter.png",
+    "quest_book_edit_chapter_toggled": "/quest_book_edit_chapter_toggled.png",
+    "chapter_quest_add": "/chapter_quest_add.png",
+    "chapter_quest_delete": "/chapter_quest_delete.png",
+    "dropdown_icon": "/dropdown_icon.png",
+    "items.": {
+      "quest_book": "/quest_book.png"
+    }
+  }
 }

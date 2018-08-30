@@ -3,7 +3,6 @@ package alexanders.mods.rbcustomize.lua;
 import alexanders.mods.rbcustomize.RBCustomize;
 import de.ellpeck.rockbottom.api.IGameInstance;
 import de.ellpeck.rockbottom.api.Registries;
-import de.ellpeck.rockbottom.api.RockBottomAPI;
 import de.ellpeck.rockbottom.api.net.chat.Command;
 import de.ellpeck.rockbottom.api.net.chat.IChatLog;
 import de.ellpeck.rockbottom.api.net.chat.ICommandSender;

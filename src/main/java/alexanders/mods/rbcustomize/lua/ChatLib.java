@@ -26,6 +26,61 @@ public class ChatLib extends TwoArgFunction {
 
     ChatLib(IChatLog chatLog) {this.chatLog = chatLog;}
 
+    static ChatComponent parseChatComponent(Varargs varargs, int arg) {
+        LuaValue lComponent = varargs.checktable(arg);
+        return parseChatComponent(lComponent);
+    }
+
+    private static ChatComponent parseChatComponent(LuaValue lComponent) {
+        String type = lComponent.get("type").checkjstring();
+        ChatComponent component;
+        switch (type) {
+            case "ChatComponentEmpty":
+                component = new ChatComponentEmpty();
+                break;
+            case "ChatComponentText":
+                component = new ChatComponentText(lComponent.get("text").checkjstring());
+                break;
+            case "ChatComponentTranslation":
+                String sKey = lComponent.get("key").checkjstring();
+                if (!Util.isResourceName(sKey)) error("ChatComponentTranslation key must be a resource name");
+                component = new ChatComponentTranslation(new ResourceName(sKey), luaToStringList(lComponent.get("formatting").checktable()).toArray(new String[0]));
+                break;
+            default:
+                component = null;
+                error("Unrecognized ChatComponent!");
+                break;
+        }
+        LuaValue lChild = lComponent.get("child");
+        if (lChild.istable()) {
+            return component.append(parseChatComponent(lChild));
+        }
+        return component;
+    }
+
+    private static LuaValue chatComponentToLua(ChatComponent component) {
+        LuaValue lComponent;
+        if (component instanceof ChatComponentEmpty) {
+            lComponent = LuaEnvironment.globals.get("ChatComponentEmpty").call();
+        } else if (component instanceof ChatComponentText) {
+            lComponent = LuaEnvironment.globals.get("ChatComponentText").call(valueOf(component.getUnformattedString()));
+        } else if (component instanceof ChatComponentTranslation) {
+            String[] parts = component.getUnformattedString().substring(7).split(",", 2);
+            if (Util.isResourceName(parts[0])) throw new IllegalStateException("Expected a resource name, this is a bug");
+            String[] formatting = parts[1].substring(2, parts[1].length() - 2).split(",");
+            lComponent = LuaEnvironment.globals.get("ChatComponentTranslation").call(valueOf(parts[0]), toLuaStringList(formatting));
+        } else {
+            RBCustomize.logger.severe("Unrecognized ChatComponent turning into a text component");
+            lComponent = LuaEnvironment.globals.get("ChatComponentText")
+                    .call(valueOf(component.getDisplayString(RockBottomAPI.getGame(), RockBottomAPI.getGame().getAssetManager())));
+        }
+        if (component.getAppendage() == null) {
+            return lComponent;
+        } else {
+            return lComponent.get("append").call(lComponent, chatComponentToLua(component.getAppendage()));
+        }
+    }
+
     @Override
     public LuaValue call(LuaValue arg1, LuaValue env) {
         LuaTable chat = new LuaTable();
@@ -43,7 +98,7 @@ public class ChatLib extends TwoArgFunction {
         env.set("chat", chat);
         return chat;
     }
-    
+
     private Varargs getUUID(Varargs varargs) {
         return valueOf(parseCommandSender(varargs, 1).getUniqueId().toString());
     }
@@ -103,60 +158,5 @@ public class ChatLib extends TwoArgFunction {
             return player;
         } else argerror(arg, "Expected a ICommandSender or string value for argument 'sender'");
         return null;
-    }
-
-    static ChatComponent parseChatComponent(Varargs varargs, int arg) {
-        LuaValue lComponent = varargs.checktable(arg);
-        return parseChatComponent(lComponent);
-    }
-
-    private static ChatComponent parseChatComponent(LuaValue lComponent) {
-        String type = lComponent.get("type").checkjstring();
-        ChatComponent component;
-        switch (type) {
-            case "ChatComponentEmpty":
-                component = new ChatComponentEmpty();
-                break;
-            case "ChatComponentText":
-                component = new ChatComponentText(lComponent.get("text").checkjstring());
-                break;
-            case "ChatComponentTranslation":
-                String sKey = lComponent.get("key").checkjstring();
-                if (!Util.isResourceName(sKey)) error("ChatComponentTranslation key must be a resource name");
-                component = new ChatComponentTranslation(new ResourceName(sKey), luaToStringList(lComponent.get("formatting").checktable()).toArray(new String[0]));
-                break;
-            default:
-                component = null;
-                error("Unrecognized ChatComponent!");
-                break;
-        }
-        LuaValue lChild = lComponent.get("child");
-        if (lChild.istable()) {
-            return component.append(parseChatComponent(lChild));
-        }
-        return component;
-    }
-
-    private static LuaValue chatComponentToLua(ChatComponent component) {
-        LuaValue lComponent;
-        if (component instanceof ChatComponentEmpty) {
-            lComponent = LuaEnvironment.globals.get("ChatComponentEmpty").call();
-        } else if (component instanceof ChatComponentText) {
-            lComponent = LuaEnvironment.globals.get("ChatComponentText").call(valueOf(component.getUnformattedString()));
-        } else if (component instanceof ChatComponentTranslation) {
-            String[] parts = component.getUnformattedString().substring(7).split(",", 2);
-            if (Util.isResourceName(parts[0])) throw new IllegalStateException("Expected a resource name, this is a bug");
-            String[] formatting = parts[1].substring(2, parts[1].length() - 2).split(",");
-            lComponent = LuaEnvironment.globals.get("ChatComponentTranslation").call(valueOf(parts[0]), toLuaStringList(formatting));
-        } else {
-            RBCustomize.logger.severe("Unrecognized ChatComponent turning into a text component");
-            lComponent = LuaEnvironment.globals.get("ChatComponentText")
-                    .call(valueOf(component.getDisplayString(RockBottomAPI.getGame(), RockBottomAPI.getGame().getAssetManager())));
-        }
-        if (component.getAppendage() == null) {
-            return lComponent;
-        } else {
-            return lComponent.get("append").call(lComponent, chatComponentToLua(component.getAppendage()));
-        }
     }
 }

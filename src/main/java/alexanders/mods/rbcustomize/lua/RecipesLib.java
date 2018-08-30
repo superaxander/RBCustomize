@@ -95,7 +95,7 @@ public class RecipesLib extends TwoArgFunction {
                     return argerror(1, "Unrecognized recipe type");
             }
         } else {
-            return varargsOf(NIL, LuaBoolean.FALSE);
+            return varargsOf(NIL, LuaValue.FALSE);
         }
 
         return varargsOf(valueOf(recipe.getName().toString()), TRUE); //TODO: support multiple outputs

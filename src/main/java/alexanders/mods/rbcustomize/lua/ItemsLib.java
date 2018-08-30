@@ -2,7 +2,6 @@ package alexanders.mods.rbcustomize.lua;
 
 import alexanders.mods.rbcustomize.RBCustomize;
 import de.ellpeck.rockbottom.api.Registries;
-import de.ellpeck.rockbottom.api.RockBottomAPI;
 import de.ellpeck.rockbottom.api.assets.IAssetManager;
 import de.ellpeck.rockbottom.api.data.set.ModBasedDataSet;
 import de.ellpeck.rockbottom.api.entity.player.AbstractEntityPlayer;
