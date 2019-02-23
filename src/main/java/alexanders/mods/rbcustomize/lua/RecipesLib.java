@@ -2,16 +2,19 @@ package alexanders.mods.rbcustomize.lua;
 
 import de.ellpeck.rockbottom.api.Registries;
 import de.ellpeck.rockbottom.api.RockBottomAPI;
-import de.ellpeck.rockbottom.api.construction.BasicRecipe;
-import de.ellpeck.rockbottom.api.construction.IRecipe;
-import de.ellpeck.rockbottom.api.construction.KnowledgeBasedRecipe;
+import de.ellpeck.rockbottom.api.construction.compendium.CompendiumCategory;
+import de.ellpeck.rockbottom.api.construction.compendium.ICompendiumRecipe;
+import de.ellpeck.rockbottom.api.construction.compendium.construction.ConstructionRecipe;
+import de.ellpeck.rockbottom.api.construction.compendium.construction.KnowledgeConstructionRecipe;
 import de.ellpeck.rockbottom.api.construction.resource.IUseInfo;
 import de.ellpeck.rockbottom.api.construction.resource.ItemUseInfo;
 import de.ellpeck.rockbottom.api.construction.resource.ResUseInfo;
 import de.ellpeck.rockbottom.api.item.ItemInstance;
 import de.ellpeck.rockbottom.api.util.Util;
+import de.ellpeck.rockbottom.api.util.reg.IRegistry;
+import de.ellpeck.rockbottom.api.util.reg.NameRegistry;
 import de.ellpeck.rockbottom.api.util.reg.ResourceName;
-import org.luaj.vm2.LuaBoolean;
+import java.util.Optional;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.Varargs;
@@ -31,9 +34,20 @@ public class RecipesLib extends TwoArgFunction {
         String lName = varargs.checkjstring(1);
         if (!Util.isResourceName(lName)) return argerror(1, "Expected a ResourceName for argument 'item'");
         ResourceName name = new ResourceName(lName);
-        IRecipe recipe = Registries.ALL_CONSTRUCTION_RECIPES.get(name);
-        if (recipe instanceof BasicRecipe) Registries.MANUAL_CONSTRUCTION_RECIPES.unregister(name);
-        Registries.ALL_CONSTRUCTION_RECIPES.unregister(name);
+        for (CompendiumCategory category : Registries.COMPENDIUM_CATEGORY_REGISTRY.values()) {
+            Optional<IRegistry> optional = Registries.REGISTRIES.values().stream().filter(it -> it.values() == category.getRecipes()).findFirst();
+            if (optional.isPresent() && optional.get() instanceof NameRegistry) {
+                NameRegistry<?> registry = (NameRegistry<?>) optional.get();
+                if (registry.get(name) != null) {
+                    registry.unregister(name);
+                }
+            }
+        }
+
+        //Registries.
+        //ICompendiumRecipe recipe = Registries.ALL_CONSTRUCTION_RECIPES.get(name);
+        //if (recipe instanceof ConstructionRecipe) Registries.MANUAL_CONSTRUCTION_RECIPES.unregister(name);
+        //Registries.ALL_CONSTRUCTION_RECIPES.unregister(name);
         return NIL;
     }
 
@@ -79,17 +93,31 @@ public class RecipesLib extends TwoArgFunction {
         } catch (IllegalArgumentException e) {
             return argerror(2, "Specified name is not a valid resource name");
         }
-        IRecipe recipe = Registries.ALL_CONSTRUCTION_RECIPES.get(name);
+        ICompendiumRecipe recipe = null;
+
+        // Try to find the recipe in any of the registries
+        for (CompendiumCategory category : Registries.COMPENDIUM_CATEGORY_REGISTRY.values()) {
+            Optional<IRegistry> optional = Registries.REGISTRIES.values().stream().filter(it -> it.values() == category.getRecipes()).findFirst();
+            if (optional.isPresent() && optional.get() instanceof NameRegistry) {
+                NameRegistry<?> registry = (NameRegistry<?>) optional.get();
+                Object o = registry.get(name);
+
+                if (o instanceof ICompendiumRecipe) {
+                    recipe = (ICompendiumRecipe) o;
+                    break;
+                }
+            }
+        }
 
         ItemInstance output = ItemsLib.parseItemInstance(3, lOutput);
 
         if (recipe == null) {
             switch (type) {
                 case "manual":
-                    recipe = new BasicRecipe(name, skillReward, output, inputs).registerManual();
+                    recipe = new ConstructionRecipe(name, skillReward, output, inputs).registerManual();
                     break;
                 case "manual_knowledge":
-                    recipe = new KnowledgeBasedRecipe(name, skillReward, output, inputs).registerManual();
+                    recipe = new KnowledgeConstructionRecipe(name, skillReward, output, inputs).registerManual();
                     break;
                 default:
                     return argerror(1, "Unrecognized recipe type");

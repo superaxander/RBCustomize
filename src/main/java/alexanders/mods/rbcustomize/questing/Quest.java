@@ -1,7 +1,7 @@
 package alexanders.mods.rbcustomize.questing;
 
 import com.google.gson.annotations.JsonAdapter;
-import de.ellpeck.rockbottom.api.construction.IRecipe;
+import de.ellpeck.rockbottom.api.construction.compendium.ICompendiumRecipe;
 import de.ellpeck.rockbottom.api.item.Item;
 import de.ellpeck.rockbottom.api.tile.Tile;
 import de.ellpeck.rockbottom.api.util.reg.ResourceName;
@@ -79,8 +79,8 @@ public class Quest {
                 }
                 break;
             case CONSTRUCT_ITEM:
-                if (triggerObject instanceof IRecipe) {
-                    QuestEventListener.addConstructTrigger(this, (IRecipe) triggerObject);
+                if (triggerObject instanceof ICompendiumRecipe) {
+                    QuestEventListener.addConstructTrigger(this, (ICompendiumRecipe) triggerObject);
                 } else {
                     throw new IllegalArgumentException("Expected the trigger object of a construct_item quest to be a recipe");
                 }

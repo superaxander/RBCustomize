@@ -1,4 +1,4 @@
-items.add("rbc/test_pick", { "First line", "Second line" }, nil, { ToolLevel("PICKAXE", 2) }, 2.5, function(x, y, layer, mouseX, mouseY, player, instance)
+items.add("rbc/test_pick", { "First line", "Second line" }, nil, { ToolLevel("rockbottom/pickaxe", 2) }, 2.5, function(x, y, layer, mouseX, mouseY, player, instance)
     if layer == "rockbottom/main" then
         world.destroyTile(x, y, "rockbottom/main");
         if not instance.set then

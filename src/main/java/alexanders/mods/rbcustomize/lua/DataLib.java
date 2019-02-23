@@ -266,7 +266,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
             ((DataSet) dataSet).addList(key, Lists.newArrayList(value));
         } else if (dataSet instanceof ModBasedDataSet) {
             try {
-                ((ModBasedDataSet) dataSet).addList(key, Lists.newArrayList(value));
+                ((ModBasedDataSet) dataSet).addList(new ResourceName(key), Lists.newArrayList(value));
             } catch (IllegalArgumentException e) {
                 return argerror(2, "Key must be a resource name");
             }
@@ -288,7 +288,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
             ((DataSet) dataSet).addList(key, Lists.newArrayList(value));
         } else if (dataSet instanceof ModBasedDataSet) {
             try {
-                ((ModBasedDataSet) dataSet).addList(key, Lists.newArrayList(value));
+                ((ModBasedDataSet) dataSet).addList(new ResourceName(key), Lists.newArrayList(value));
             } catch (IllegalArgumentException e) {
                 return argerror(2, "Key must be a resource name");
             }
@@ -310,7 +310,7 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
             ((DataSet) dataSet).addList(key, Lists.newArrayList(value));
         } else if (dataSet instanceof ModBasedDataSet) {
             try {
-                ((ModBasedDataSet) dataSet).addList(key, Lists.newArrayList(value));
+                ((ModBasedDataSet) dataSet).addList(new ResourceName(key), Lists.newArrayList(value));
             } catch (IllegalArgumentException e) {
                 return argerror(2, "Key must be a resource name");
             }
@@ -494,10 +494,10 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
         String key = getString(varargs.arg(2), 2, "key");
         Byte[] array;
         if (dataSet instanceof DataSet) {
-            array = ((DataSet) dataSet).getList(key).stream().map(DataPart::get).toArray(Byte[]::new);
+            array = ((DataSet) dataSet).<DataPart<Byte>>getList(key).stream().map(DataPart::get).toArray(Byte[]::new);
         } else if (dataSet instanceof ModBasedDataSet) {
             try {
-                array = ((ModBasedDataSet) dataSet).getList(key).stream().map(DataPart::get).toArray(Byte[]::new);
+                array = ((ModBasedDataSet) dataSet).<DataPart<Byte>>getList(new ResourceName(key)).stream().map(DataPart::get).toArray(Byte[]::new);
             } catch (IllegalArgumentException e) {
                 return argerror(2, "Key must be a resource name");
             }
@@ -518,10 +518,10 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
         String key = getString(varargs.arg(2), 2, "key");
         Integer[] array;
         if (dataSet instanceof DataSet) {
-            array = ((DataSet) dataSet).getList(key).stream().map(DataPart::get).toArray(Integer[]::new);
+            array = ((DataSet) dataSet).<DataPart<Integer>>getList(key).stream().map(DataPart::get).toArray(Integer[]::new);
         } else if (dataSet instanceof ModBasedDataSet) {
             try {
-                array = ((ModBasedDataSet) dataSet).getList(key).stream().map(DataPart::get).toArray(Integer[]::new);
+                array = ((ModBasedDataSet) dataSet).<DataPart<Integer>>getList(new ResourceName(key)).stream().map(DataPart::get).toArray(Integer[]::new);
             } catch (IllegalArgumentException e) {
                 return argerror(2, "Key must be a resource name");
             }
@@ -542,10 +542,10 @@ public class DataLib extends TwoArgFunction { //TODO: We should probably give an
         String key = getString(varargs.arg(2), 2, "key");
         Short[] array;
         if (dataSet instanceof DataSet) {
-            array = ((DataSet) dataSet).getList(key).stream().map(DataPart::get).toArray(Short[]::new);
+            array = ((DataSet) dataSet).<DataPart<Short>>getList(key).stream().map(DataPart::get).toArray(Short[]::new);
         } else if (dataSet instanceof ModBasedDataSet) {
             try {
-                array = ((ModBasedDataSet) dataSet).getList(key).stream().map(DataPart::get).toArray(Short[]::new);
+                array = ((ModBasedDataSet) dataSet).<DataPart<Short>>getList(new ResourceName(key)).stream().map(DataPart::get).toArray(Short[]::new);
             } catch (IllegalArgumentException e) {
                 return argerror(2, "Key must be a resource name");
             }

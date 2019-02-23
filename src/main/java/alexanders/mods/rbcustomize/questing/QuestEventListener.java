@@ -2,7 +2,7 @@ package alexanders.mods.rbcustomize.questing;
 
 import alexanders.mods.rbcustomize.RBCustomize;
 import de.ellpeck.rockbottom.api.RockBottomAPI;
-import de.ellpeck.rockbottom.api.construction.IRecipe;
+import de.ellpeck.rockbottom.api.construction.compendium.ICompendiumRecipe;
 import de.ellpeck.rockbottom.api.event.Event;
 import de.ellpeck.rockbottom.api.event.IEventListener;
 import de.ellpeck.rockbottom.api.event.impl.*;
@@ -24,7 +24,7 @@ public final class QuestEventListener {
     private static final HashMap<Item, Quest> itemPickupTriggers;
     private static final HashMap<Tile, Quest> tileBreakTriggers;
     private static final HashMap<Tile, Quest> tilePlaceTriggers;
-    private static final HashMap<IRecipe, Quest> constructTriggers;
+    private static final HashMap<ICompendiumRecipe, Quest> constructTriggers;
 
     static {
         listeners = new ArrayList<>();
@@ -117,7 +117,7 @@ public final class QuestEventListener {
         tilePlaceTriggers.put(triggerObject, quest);
     }
 
-    public static void addConstructTrigger(Quest quest, IRecipe triggerObject) {
+    public static void addConstructTrigger(Quest quest, ICompendiumRecipe triggerObject) {
         constructTriggers.put(triggerObject, quest);
     }
 

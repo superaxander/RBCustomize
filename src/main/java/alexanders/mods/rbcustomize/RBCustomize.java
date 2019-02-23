@@ -73,6 +73,7 @@ public class RBCustomize implements IMod {
 
     @Override
     public void postInit(IGameInstance game, IApiHandler apiHandler, IEventHandler eventHandler) {
+        logger.info(Registries.COMPENDIUM_CATEGORY_REGISTRY.entrySet().toString());
         LuaEnvironment.initExecution(game);
         LuaEnvironment.executeScripts(HookType.INIT);
 

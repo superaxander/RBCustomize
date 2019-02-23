@@ -8,20 +8,19 @@ import de.ellpeck.rockbottom.api.entity.player.AbstractEntityPlayer;
 import de.ellpeck.rockbottom.api.item.Item;
 import de.ellpeck.rockbottom.api.item.ItemBasic;
 import de.ellpeck.rockbottom.api.item.ItemInstance;
-import de.ellpeck.rockbottom.api.item.ToolType;
+import de.ellpeck.rockbottom.api.item.ToolProperty;
 import de.ellpeck.rockbottom.api.tile.Tile;
 import de.ellpeck.rockbottom.api.util.Util;
 import de.ellpeck.rockbottom.api.util.reg.ResourceName;
 import de.ellpeck.rockbottom.api.world.IWorld;
 import de.ellpeck.rockbottom.api.world.layer.TileLayer;
-import org.luaj.vm2.*;
-import org.luaj.vm2.lib.TwoArgFunction;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
+import org.luaj.vm2.*;
+import org.luaj.vm2.lib.TwoArgFunction;
 
 public class ItemsLib extends TwoArgFunction {
     public static LuaValue itemInstanceToLua(ItemInstance instance) {
@@ -77,7 +76,6 @@ public class ItemsLib extends TwoArgFunction {
         items.set("add", new FunctionWrapper(this::addItem));
         items.set("remove", new FunctionWrapper(this::remove));
         items.set("getMaxAmount", new FunctionWrapper(this::getMaxAmount));
-        items.set("isDataSensitive", new FunctionWrapper(this::isDataSensitive));
         env.set("items", items);
         return items;
     }
@@ -87,14 +85,6 @@ public class ItemsLib extends TwoArgFunction {
         if (!Util.isResourceName(lName)) return argerror(1, "Expected a ResourceName for argument 'item'");
         Registries.ITEM_REGISTRY.unregister(new ResourceName(lName));
         return NIL;
-    }
-
-    private Varargs isDataSensitive(Varargs varargs) {
-        String sItem = varargs.checkjstring(1);
-        if (!Util.isResourceName(sItem)) return argerror(1, "Expected a resource name for argument 'item'");
-        Item item = Registries.ITEM_REGISTRY.get(new ResourceName(sItem));
-        if (item == null) return argerror(1, "No item with the specified name was found");
-        return valueOf(item.isDataSensitive(parseItemInstance(2, varargs.checktable(2))));
     }
 
     private Varargs getMaxAmount(Varargs varargs) {
@@ -145,24 +135,26 @@ public class ItemsLib extends TwoArgFunction {
             return argerror(3, "Expected an int or nil value for argument 'maxAmount'");
         }
 
-        HashMap<ToolType, Integer> toolTypes = new HashMap<>();
-        LuaValue lToolTypes = varargs.arg(4);
-        if (lToolTypes.istable()) {
-            for (int i = 1; i <= lToolTypes.length(); i++) {
-                LuaValue lToolType = lToolTypes.get(i);
-                if (!lToolType.istable()) return argerror(4, "Specified toolTypes table must contain only tables");
+        HashMap<ToolProperty, Integer> toolProperties = new HashMap<>();
+        LuaValue lToolProperties = varargs.arg(4);
+        if (lToolProperties.istable()) {
+            for (int i = 1; i <= lToolProperties.length(); i++) {
+                LuaValue lToolProperty = lToolProperties.get(i);
+                if (!lToolProperty.istable()) return argerror(4, "Specified toolLevels table must contain only tables");
                 try {
-                    LuaValue lType = lToolType.get("tp");
-                    if (!lType.isstring()) return argerror(4, "Specified type(tp) in ToolType table must be a string value");
-                    LuaValue lLevel = lToolType.get("level");
-                    if (!lLevel.isint()) return argerror(4, "Specified level in ToolType table must be a int value");
-                    toolTypes.put(ToolType.valueOf(lType.tojstring()), lLevel.toint());
+                    LuaValue lType = lToolProperty.get("tp");
+                    if (!lType.isstring()) return argerror(4, "Specified property(tp) in ToolLevel table must be a string value");
+                    String sType = lType.tojstring();
+                    if (!Util.isResourceName(sType)) return argerror(4, "Specified property(tp) in ToolLevel table must be a resource name");
+                    LuaValue lLevel = lToolProperty.get("level");
+                    if (!lLevel.isint()) return argerror(4, "Specified level in ToolLevel table must be a int value");
+                    toolProperties.put(Registries.TOOL_PROPERTY_REGISTRY.get(new ResourceName(sType)), lLevel.toint());
                 } catch (IllegalArgumentException e) {
-                    return argerror(4, "Specified ToolType was not recognized!");
+                    return argerror(4, "Specified ToolProperty was not recognized!");
                 }
             }
-        } else if (!lToolTypes.isnil()) {
-            return argerror(4, "Expected a table or nil value for argument 'toolType'");
+        } else if (!lToolProperties.isnil()) {
+            return argerror(4, "Expected a table or nil value for argument 'toolProperty'");
         }
 
 
@@ -184,21 +176,21 @@ public class ItemsLib extends TwoArgFunction {
             return argerror(6, " Expected a function or nil value for argument 'interactionFunction'");
         }
 
-        new LuaItem(name, description, maxAmount, toolTypes, miningspeed, function).register();
+        new LuaItem(name, description, maxAmount, toolProperties, miningspeed, function).register();
         return varargsOf(valueOf(name.toString()), TRUE);
     }
 
     private static class LuaItem extends ItemBasic {
         private final String[] description;
-        private final Map<ToolType, Integer> toolTypes;
+        private final Map<ToolProperty, Integer> toolProperties;
         private final float miningSpeed;
         private final LuaFunction function;
 
-        private LuaItem(ResourceName name, String[] description, int maxAmount, HashMap<ToolType, Integer> toolTypes, float miningspeed, LuaFunction function) {
+        private LuaItem(ResourceName name, String[] description, int maxAmount, HashMap<ToolProperty, Integer> toolProperties, float miningspeed, LuaFunction function) {
             super(name);
             this.description = description;
             setMaxAmount(maxAmount);
-            this.toolTypes = Collections.unmodifiableMap(toolTypes);
+            this.toolProperties = Collections.unmodifiableMap(toolProperties);
             this.miningSpeed = miningspeed;
             this.function = function;
         }
@@ -207,16 +199,6 @@ public class ItemsLib extends TwoArgFunction {
         public void describeItem(IAssetManager manager, ItemInstance instance, List<String> desc, boolean isAdvanced) {
             super.describeItem(manager, instance, desc, isAdvanced);
             Collections.addAll(desc, description);
-        }
-
-        @Override
-        public Map<ToolType, Integer> getToolTypes(ItemInstance instance) {
-            return Collections.unmodifiableMap(toolTypes);
-        }
-
-        @Override
-        public float getMiningSpeed(IWorld world, int x, int y, TileLayer layer, Tile tile, boolean isRightTool, ItemInstance instance) {
-            return super.getMiningSpeed(world, x, y, layer, tile, isRightTool, instance) * miningSpeed;
         }
 
         @Override
@@ -238,6 +220,16 @@ public class ItemsLib extends TwoArgFunction {
                 RBCustomize.logger.log(Level.WARNING, "Execution of script assigned to item: " + getName() + " failed!", e);
             }
             return super.onInteractWith(world, x, y, layer, mouseX, mouseY, player, instance);
+        }
+
+        @Override
+        public Map<ToolProperty, Integer> getToolProperties(ItemInstance instance) {
+            return Collections.unmodifiableMap(toolProperties);
+        }
+
+        @Override
+        public float getMiningSpeed(IWorld world, int x, int y, TileLayer layer, Tile tile, boolean isRightTool, ItemInstance instance) {
+            return super.getMiningSpeed(world, x, y, layer, tile, isRightTool, instance) * miningSpeed;
         }
     }
 }
